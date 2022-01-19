@@ -54,8 +54,8 @@ public class User {
         return "User{" +
                 "id='" + id + '\'' +
                 ", privilage='" + privilage + '\'' +
-                ", userGroups='" + usergroups + '\'' +
                 ", username='" + username + '\'' +
+                ", userGroups='" + usergroups + '\'' +
                 '}';
     }
 }
