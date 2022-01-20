@@ -10,6 +10,7 @@ public class StasaProjectApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(StasaProjectApplication.class, args);
 		// UserService userService = new UserService();
-		// System.out.println(userService.getUserCollection());
+		 //System.out.println(userService.getUserCollection());
+		System.out.println("Nu tar vi helg");
 	}
 }
