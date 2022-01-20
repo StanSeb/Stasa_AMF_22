@@ -11,3 +11,42 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.thread{
+  margin-left: 10vw;
+  width: 80vw;
+  border: 1px solid gray;
+}
+
+.threadHeader{
+  margin-left: 4vw;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.threadHeader > * {
+  margin: 5px;
+}
+
+.threadTitle{
+  font-size: large;
+  font-weight: bold;
+}
+
+.threadMain > * {
+  width: 98%;
+  height: 20vh;
+  border: 1px solid gray;
+  margin: 1%;
+}
+
+.threadFooter{
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.threadSocialButtons{
+  width: 16%;
+  display: flex;
+  justify-content: space-evenly;
+}

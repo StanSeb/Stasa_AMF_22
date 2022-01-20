@@ -11,7 +11,4 @@ public class ThreadController {
 
     @Autowired
     private ThreadService threadService;
-
-
-
 }

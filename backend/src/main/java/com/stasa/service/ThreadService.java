@@ -16,7 +16,6 @@ public class ThreadService {
     private Firestore db = FirestoreClient.getFirestore();
 
     public ResponseEntity<List<Thread>> getUserThreads(String userUID) {
-
         System.out.println("Getting user threads for user with UID " + userUID);
 
         var threads = db.collection("threads");
@@ -34,5 +33,4 @@ public class ThreadService {
             return null;
         }
     }
-
 }

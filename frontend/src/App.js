@@ -1,6 +1,7 @@
 import React, { Component, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import Thread from "./components/Thread.jsx"
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -81,6 +82,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Thread/>
         <div id="login">
           <label>Email</label>
           <input id="email" type="text" />

@@ -19,5 +19,4 @@ public class MyRestController {
     public User getUser(@RequestHeader String name) throws ExecutionException, InterruptedException {
         return firebaseService.getUser(name);
     }
-
 }
