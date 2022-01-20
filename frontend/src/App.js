@@ -92,6 +92,7 @@ class App extends Component {
         
 
       <div className="App">
+        <Thread/>
         <div id="login">
           <label>Email</label>
           <input id="email" type="text" />
