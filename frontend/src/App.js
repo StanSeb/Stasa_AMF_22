@@ -1,5 +1,13 @@
 import React, { Component, useState } from "react";
 import "./App.css";
+import { BrowserRouter as Router,
+   Route, 
+   Routes 
+} from "react-router-dom";
+import Profile from './pages/Profile'
+import Navbar from './components/Navbar'
+
+ 
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -79,6 +87,9 @@ class App extends Component {
 
   render() {
     return (
+      <Router>
+        
+
       <div className="App">
         <div id="login">
           <label>Email</label>
@@ -89,8 +100,13 @@ class App extends Component {
         </div>
         <div id="login-status">{this.getLoginStatus()}</div>
         <div id="my-comments"></div>
-        
-      </div>
+        </div>  
+        <Navbar/>  
+        <Routes>
+        <Route path="/profile" element={<Profile/>} />
+
+        </Routes>    
+      </Router>
     );
   }
 }
