@@ -1,7 +1,18 @@
+import { render } from '@testing-library/react';
 import React, { Component } from 'react';
+import {useNavigate} from 'react-router-dom'
 
-export default class Profile extends Component {
-  render() {
-    return <div> Welcome to profile</div>;
-  }
+
+export default function Profile() {
+    let navigate = useNavigate();
+
+    
+    return <div>
+        <div> Welcome to profile </div> 
+        <button onClick={()=> {
+            navigate("/createGroup");
+        }}>Create a group</button>  
+        </div>;
+  
 }
+

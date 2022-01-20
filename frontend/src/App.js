@@ -6,6 +6,7 @@ import { BrowserRouter as Router,
 } from "react-router-dom";
 import Profile from './pages/Profile'
 import Navbar from './components/Navbar'
+import RegisterGroup from './components/RegisterGroup'
 
  
 
@@ -104,6 +105,7 @@ class App extends Component {
         <Navbar/>  
         <Routes>
         <Route path="/profile" element={<Profile/>} />
+        <Route path="/createGroup" element={<RegisterGroup/>} />
 
         </Routes>    
       </Router>

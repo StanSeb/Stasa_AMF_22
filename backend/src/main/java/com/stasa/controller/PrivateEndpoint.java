@@ -22,6 +22,7 @@ public class PrivateEndpoint {
     @Autowired
     private ThreadService threadService;
 
+
     @GetMapping("user-details")
     public ResponseEntity<User> getUserInfo(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(user);
@@ -37,4 +38,7 @@ public class PrivateEndpoint {
     public ResponseEntity<List<Thread>> getThreadsForUser(@RequestParam String userId) {
         return threadService.getUserThreads(userId);
     }
+
+
+
 }

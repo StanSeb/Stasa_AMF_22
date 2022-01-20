@@ -11,5 +11,6 @@ public class StasaProjectApplication {
 		SpringApplication.run(StasaProjectApplication.class, args);
 		// UserService userService = new UserService();
 		// System.out.println(userService.getUserCollection());
+		System.out.println("Im alive...!");
 	}
 }
