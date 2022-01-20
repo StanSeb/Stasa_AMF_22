@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+#login {
+  display: flex;
+  flex-direction: column;
+  padding: 50px;
+  background-color: rgb(206, 206, 206);
+}
