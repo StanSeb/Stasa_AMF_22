@@ -1,5 +1,4 @@
 import React, { Component, useState } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 
 // Import the functions you need from the SDKs you need
@@ -90,13 +89,7 @@ class App extends Component {
         </div>
         <div id="login-status">{this.getLoginStatus()}</div>
         <div id="my-comments"></div>
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        
       </div>
     );
   }
