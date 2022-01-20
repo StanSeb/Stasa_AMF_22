@@ -1,20 +1,19 @@
 import React from "react";
 
-class Thread extends React.Component {
+class ThreadCard extends React.Component {
 	render() {
 		return (
 			<div className="thread">
 				<div className="threadHeader">
-					<span className="threadTitle">Title</span>
-					<span>/Username</span>
+					<span className="threadTitle">{this.props.thread.title}</span>
+					<span>/{this.props.thread.username}</span>
 				</div>
 				<div className="threadMain">
-					<div>
-						<span>Contents</span>
-					</div>
+					<p>{this.props.thread.content}</p>
 				</div>
 				<div className="threadFooter">
 					<div className="threadSocialButtons">
+						<button>Comment</button>
 						<button>Like</button>
 						<button>Dislike</button>
 						<button>Share</button>
@@ -25,4 +24,4 @@ class Thread extends React.Component {
 	}
 }
 
-export default Thread;
+export default ThreadCard;

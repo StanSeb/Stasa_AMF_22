@@ -13,13 +13,14 @@ code {
 }
 
 .thread{
-  margin-left: 10vw;
-  width: 80vw;
+  margin: 1em;
+  margin-left: 6vw;
+  width: 60vw;
   border: 1px solid gray;
 }
 
 .threadHeader{
-  margin-left: 4vw;
+  margin-left: .5vw;
   display: flex;
   justify-content: flex-start;
 }
@@ -34,6 +35,7 @@ code {
 }
 
 .threadMain > * {
+  text-align: left;
   width: 98%;
   height: 20vh;
   border: 1px solid gray;
@@ -43,10 +45,33 @@ code {
 .threadFooter{
   width: 100%;
   margin-bottom: 5px;
+  display: flex;
 }
 
 .threadSocialButtons{
-  width: 16%;
+  width: 28%;
   display: flex;
   justify-content: space-evenly;
+}
+
+.newThread{
+  width: 40%;
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid gray;
+}
+
+.newThread > input {
+  width: 98%;
+  margin: 1%;
+}
+
+.newThread > textarea {
+  width: 98%;
+  height: 8em;
+  margin: 1%;
+}
+
+.newThread > label {
+  margin-left: 1%;
 }
