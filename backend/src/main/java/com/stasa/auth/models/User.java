@@ -15,4 +15,5 @@ public class User implements Serializable {
 	public String issuer;
 	public String picture;
 
+
 }

@@ -1,16 +1,27 @@
 package com.stasa.controller;
 
+import com.stasa.auth.models.User;
+import com.stasa.models.Users;
+import com.stasa.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.ExecutionException;
 
 @RestController
-@RequestMapping("public")
+@RequestMapping("/public")
 public class PublicEndpoints {
+    @Autowired
+    private UserService userService;
 
     @GetMapping("test")
     ResponseEntity<String> getPublic() {
         return ResponseEntity.ok("OK");
+    }
+
+    @PostMapping("/register")
+    public String registerUser(@RequestBody Users user) throws ExecutionException, InterruptedException {
+        return userService.registerUser(user);
     }
 }

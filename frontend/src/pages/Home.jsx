@@ -2,9 +2,6 @@ import React from 'react';
 import {useNavigate} from "react-router-dom";
 
 function Home() {
-
-    // hämtar ut browseId
-   // const { id } = props.match.params
    const navigate=useNavigate();
 
     return (
