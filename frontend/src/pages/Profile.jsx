@@ -12,6 +12,9 @@ export default function Profile() {
         <button onClick={()=> {
             navigate("/createGroup");
         }}>Create a group</button>  
+        <button onClick={()=> {
+            navigate("/getGroups");
+        }}>Get groups</button> 
         </div>;
   
 }

@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 @Data
 public class Group implements Serializable {
-    private static final long serialVersionUID = -2475121625136709592L;
+    private static final long serialVersionUID = -4630796735954508532L;
     @DocumentId
     public String id;
     public String admin;

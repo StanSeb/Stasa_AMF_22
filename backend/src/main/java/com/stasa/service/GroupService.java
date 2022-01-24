@@ -1,6 +1,8 @@
 package com.stasa.service;
 
+import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
 import com.stasa.models.Group;
 import com.stasa.models.Thread;
@@ -34,5 +36,12 @@ public class GroupService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public String register(Group group) throws ExecutionException, InterruptedException {
+        System.out.println("Posting thread for user with UID " + group.id);
+        ApiFuture<WriteResult> collectionsApiFuture =
+                db.collection("groups").document().set(group);
+        return collectionsApiFuture.get().getUpdateTime().toString();
     }
 }

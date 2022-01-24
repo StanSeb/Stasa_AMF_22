@@ -7,17 +7,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
-@RequestMapping("private")
+@RequestMapping("groups")
 public class GroupController {
 
     @Autowired
     private GroupService groupService;
 
-    @GetMapping("groups")
+    @GetMapping("getforusers")
     @ResponseBody
     public ResponseEntity<List<Group>> getGroupsForUser(@RequestParam String user) {
         return groupService.getUserGroups(user);
+    }
+
+
+    @PostMapping("register")
+    public String registerGroup(@RequestBody Group group) throws ExecutionException,
+            InterruptedException {
+            System.out.println(group);
+            return groupService.register(group);
+
     }
 }

@@ -7,7 +7,7 @@ import { BrowserRouter as Router,
 import Profile from './pages/Profile'
 import Navbar from './components/Navbar'
 import RegisterGroup from './components/RegisterGroup'
-
+import GroupComponent from './components/GroupComponent'
  
 
 // Import the functions you need from the SDKs you need
@@ -106,6 +106,7 @@ class App extends Component {
         <Routes>
         <Route path="/profile" element={<Profile/>} />
         <Route path="/createGroup" element={<RegisterGroup/>} />
+        <Route path="/getGroups" element={<GroupComponent/>} />
 
         </Routes>    
       </Router>
