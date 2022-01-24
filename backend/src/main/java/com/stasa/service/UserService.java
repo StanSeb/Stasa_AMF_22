@@ -4,7 +4,11 @@ import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import com.google.api.core.ApiFuture;
 import com.stasa.models.Users;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -28,8 +32,18 @@ public class UserService {
         }
     }
 
+
+    // email sendVerificationEmail...
+    public void sendVerificationEmail(Users user) throws MessagingException {
+        String email = user.getEmail();
+
+    }
+
     // regirerar en användare
-    public void registerUser(Users user) throws ExecutionException, InterruptedException {
+    public void registerUser(Users user) throws ExecutionException, InterruptedException, MessagingException {
+        // skickar länk till email:en
+        //sendVerificationEmail(user);
+
         // ansluter till firestor
         Firestore fis = FirestoreClient.getFirestore();
 

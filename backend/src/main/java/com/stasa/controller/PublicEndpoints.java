@@ -1,12 +1,12 @@
 package com.stasa.controller;
 
-import com.stasa.auth.models.User;
 import com.stasa.models.Users;
 import com.stasa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.util.concurrent.ExecutionException;
 
 @RestController
@@ -21,7 +21,7 @@ public class PublicEndpoints {
     }
 
     @PostMapping("/register")
-    public void registerUser(@RequestBody Users user) throws ExecutionException, InterruptedException {
+    public void registerUser(@RequestBody Users user) throws ExecutionException, InterruptedException, MessagingException {
         userService.registerUser(user);
     }
 }

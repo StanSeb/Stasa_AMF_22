@@ -8,13 +8,9 @@ function Register() {
 
     // POST request using fetch with async/await
     function createPost(){
-        // Simple POST request with a JSON body using axios
-        
-        // skapa objektet för användaren:
-        // user = {email: 1, username: 2, password: 3}
-
-        let token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjNhYTE0OGNkMDcyOGUzMDNkMzI2ZGU1NjBhMzVmYjFiYTMyYTUxNDkiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vc3Rhc2EtZGEzZDUiLCJhdWQiOiJzdGFzYS1kYTNkNSIsImF1dGhfdGltZSI6MTY0MzAxNzkyMywidXNlcl9pZCI6Illaa3VWZDZRY3RaQllmU3RWbHQ1bkFvcjk1bzEiLCJzdWIiOiJZWmt1VmQ2UWN0WkJZZlN0Vmx0NW5Bb3I5NW8xIiwiaWF0IjoxNjQzMDE3OTIzLCJleHAiOjE2NDMwMjE1MjMsImVtYWlsIjoicnAudWxsc3RvcnA5MkBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsicnAudWxsc3RvcnA5MkBnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.JtfSd4ujSmgaSsj0WXiiJpjb9pVfKrwSSD_L_nswfHkxQ-b7LMdJQM7SfTplN33ZMtHoPTJaJWMdFi2_u-Ut4ebXfDcnhxKo9Bk0txUeRH-ZQDCW-_hOE5Uk7rbqjsiwHSFoR6Nwuka0UTf3471EyW5rznvH-yEc5AsoW3QGhgNz4K82iQK8ZsibmcbM9O7giBFSQh3VHvydASd3zauogp6hunEeXzIZkFyyT6Bdp3823yEKmqFjED1AdYCLyHVq1uOM5T2GFUGJ7uWMKW2K6wad-3hiC1-xv3GF6DKvltpSAfTTQDI1egQJH0nE7sfQYZZmFloXW7NRgUbQLfO-oQ";
+        let token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjNhYTE0OGNkMDcyOGUzMDNkMzI2ZGU1NjBhMzVmYjFiYTMyYTUxNDkiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vc3Rhc2EtZGEzZDUiLCJhdWQiOiJzdGFzYS1kYTNkNSIsImF1dGhfdGltZSI6MTY0MzAzMjk0MSwidXNlcl9pZCI6IjhXRHE1TzdHZEFTdm5ZbXp6V201ZmUzcWhMWjIiLCJzdWIiOiI4V0RxNU83R2RBU3ZuWW16eldtNWZlM3FoTFoyIiwiaWF0IjoxNjQzMDMyOTQxLCJleHAiOjE2NDMwMzY1NDEsImVtYWlsIjoiY29udGFjdGFiYmFzMDdAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImNvbnRhY3RhYmJhczA3QGdtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.UnbBg6pz-uqjKCGA_8H8VIeau3vvd55gbnLneTAflQ367SeEMTioszSxXyIhn6ltHW9QD5PTy1YgeZWYblc0P_fXeXRpuJdb_x0IRzAmMKxqYSFvD8zFwFPBU7zrjLp20DWUQLjNEksQfApsC7UMKy9lnKYrt5yvQe5X2fnuOioVMypdoHUSNGPv9Lm7yunifzyNNBsdH_BzYUUdMP6W6yuOldt4FUh3B-gMxIoyVUxc6ZHqts3MvSmh84SapgQHLY1s6AgJvT91bEKrVvs-WPWBe2KlF_1sAvk5LO6-IfjdJf4_n_LzjXAcuSsXngRvrquwXOekq3RR8SUwD-Gu_A";
         const registerObject = { email: getEmail, password: getPassword, privilage: 'user', usergroups: "test", username: getName};
+        
         Axios({
             method: "POST",
             url: "http://localhost:8080/public/register",
@@ -27,18 +23,15 @@ function Register() {
             .catch(err => {
             console.log(err)
           })
-       
-        // const headers = { 
-        //     'Authorization': 'Bearer ' + token,
-        // };
-        // axios.post('http://localhost:8080/api/post', article, { headers })
-        //     .then(response => console.log(response));
 
     }
 
    const handleSubmit =(event)=>{
        event.preventDefault();
-       createPost();
+       // kontrollerar att lösenordet är större eller lika med 6 characters.
+       // om det är mindre än 6st så skapas inte kontot => felmeddelande.
+       // större än 6 så skapas kontot
+       getPassword.length >= 6 ? createPost():alert("Fel: Lösenordet måste vara större än 5 tecken!"); 
    }
 
     return (
@@ -54,7 +47,7 @@ function Register() {
                 <input type="text" value={getName} onChange={(e)=>setName(e.target.value)} id="userName-input" placeholder='User name'></input>
                 </div>
                 <div> 
-                <input type="text" value={getPassword} onChange={(e) => setPassword(e.target.value)} id="password-input" placeholder='Password'></input>
+                <input type="password" value={getPassword} onChange={(e) => setPassword(e.target.value)} id="password-input" placeholder='Password'></input>
                 </div>
             </label>
 

@@ -15,5 +15,6 @@ public class Users implements Serializable {
     private String privilage;
     private String usergroups;
     private String username;
-
+    private String verificationCode;
+    private boolean valid;
 }
