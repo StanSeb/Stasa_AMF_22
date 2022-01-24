@@ -29,7 +29,7 @@ public class UserService {
     }
 
     // regirerar en användare
-    public String registerUser(Users user) throws ExecutionException, InterruptedException {
+    public void registerUser(Users user) throws ExecutionException, InterruptedException {
         // ansluter till firestor
         Firestore fis = FirestoreClient.getFirestore();
 
@@ -40,6 +40,6 @@ public class UserService {
         ApiFuture<WriteResult> collectionFuture = fis.collection(COLLECTION_NAME).document(id).set(user);
 
         // returnera datum.
-        return collectionFuture.get().getUpdateTime().toString();
+        collectionFuture.get().getUpdateTime().toString();
     }
 }

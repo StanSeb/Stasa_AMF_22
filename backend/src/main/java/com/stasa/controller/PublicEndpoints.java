@@ -21,7 +21,7 @@ public class PublicEndpoints {
     }
 
     @PostMapping("/register")
-    public String registerUser(@RequestBody Users user) throws ExecutionException, InterruptedException {
-        return userService.registerUser(user);
+    public void registerUser(@RequestBody Users user) throws ExecutionException, InterruptedException {
+        userService.registerUser(user);
     }
 }
