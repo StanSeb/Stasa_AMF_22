@@ -33,7 +33,7 @@ public class UserService {
         // ansluter till firestor
         Firestore fis = FirestoreClient.getFirestore();
 
-        //Hämtar document id
+        //Hämtar dokument id
         String id = db.collection(COLLECTION_NAME).document().getId();
 
         // spara ner userObjektet i firestore
