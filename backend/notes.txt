@@ -1,8 +1,0 @@
-Firebase auth:
-https://medium.com/@purikunal22/securing-springboot-api-using-firebase-authentication-16d72dd250cc
-
-Intressant att kolla på:
-https://github.com/firebase/firebaseui-web-react
-
-Bra video:
-https://www.youtube.com/watch?v=ScsID2yPB8k&ab_channel=HackerHeap
