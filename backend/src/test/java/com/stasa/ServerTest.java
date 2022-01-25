@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.stasa;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

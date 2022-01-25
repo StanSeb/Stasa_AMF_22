@@ -1,15 +1,13 @@
-package com.example.demo.configurations;
+package com.stasa.configurations;
 
-import com.example.demo.entities.User;
-import com.example.demo.repositories.UserRepo;
+import com.stasa.entities.User;
+import com.stasa.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import javax.annotation.PostConstruct;
 
 @Configuration
 public class MyUserDetailsService implements UserDetailsService {

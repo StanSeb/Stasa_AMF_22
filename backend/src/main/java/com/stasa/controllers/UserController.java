@@ -1,7 +1,7 @@
-package com.example.demo.controllers;
+package com.stasa.controllers;
 
-import com.example.demo.entities.User;
-import com.example.demo.services.UserService;
+import com.stasa.entities.User;
+import com.stasa.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

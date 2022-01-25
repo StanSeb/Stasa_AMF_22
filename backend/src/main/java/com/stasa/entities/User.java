@@ -1,4 +1,4 @@
-package com.example.demo.entities;
+package com.stasa.entities;
 
 import javax.persistence.*;
 import lombok.Data;

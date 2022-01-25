@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.stasa;
 
 
 import org.springframework.boot.SpringApplication;

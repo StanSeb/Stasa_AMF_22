@@ -1,8 +1,8 @@
-package com.example.demo.services;
+package com.stasa.services;
 
-import com.example.demo.configurations.MyUserDetailsService;
-import com.example.demo.entities.User;
-import com.example.demo.repositories.UserRepo;
+import com.stasa.configurations.MyUserDetailsService;
+import com.stasa.entities.User;
+import com.stasa.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,7 +17,6 @@ import javax.persistence.Id;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
