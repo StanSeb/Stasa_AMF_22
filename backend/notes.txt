@@ -1,0 +1,5 @@
+För att ignorera ändringar i en fil utan att den är i .gitignore:
+git update-index --assume-unchanged FILE_NAME
+
+För att undo:a det:
+git update-index --no-assume-unchanged FILE_NAME
