@@ -10,7 +10,7 @@ public class StasaApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(StasaApplication.class, args);
 
-		System.out.println("Im finally Alive,!");
+		System.out.println("Here we go again... ¯\\_(ツ)_/¯");
 
 	}
 }

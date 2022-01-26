@@ -1,31 +1,53 @@
 package com.stasa.entities;
 
-import javax.persistence.*;
-import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import javax.persistence.*;
+import java.time.Instant;
 import java.util.List;
 
+@Table(name = "users")
 @Entity
-@Data
-@Table(name="users", schema = "stasa", catalog = "stasa")
-public class User  {
-
+@Getter
+@Setter
+public class User {
     @Id
-    @Column(name = "id")
-    @GeneratedValue(generator = "NATIVE")
-    @GenericGenerator(name = "NATIVE", strategy = "native")
-    private long id;
-    @Column(name = "user_name")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
+
+    @Column(name = "user_name", nullable = false, length = 50)
     private String username;
-    @Column(name = "password")
+
+    @Column(name = "email", nullable = false, length = 50)
+    private String email;
+
+    @Column(name = "password", nullable = false, length = 80)
     private String password;
 
+    @Column(name = "enabled", nullable = false)
+    private boolean enabled = false;
 
+    @Column(name = "deletion_timestamp")
+    private Instant deletionTimestamp;
+
+    @Column(name = "verified", nullable = false)
+    private boolean verified = false;
+
+    @OneToMany(mappedBy = "user")
+    public List<VerificationCode> verificationCodes;
+
+    @JsonIgnore
+    public String getPassword() {
+        return password;
+    }
+
+    @JsonProperty
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
 }

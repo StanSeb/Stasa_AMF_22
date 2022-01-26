@@ -52,8 +52,6 @@ public class UserService {
         return null;
     }
 
-
-
     public void deleteById(long id) {
         userRepo.deleteById(id);
     }
@@ -78,14 +76,26 @@ public class UserService {
         }
     }
 
-    public User findCurrentUser() {
+    /**
+     * @return The logged-in user or null if not logged in.
+     */
+    public User whoAmI() {
         // the login session is stored between page reloads,
         // and we can access the current authenticated user with this
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepo.findByUsername(username);
+        // SecurityContextHolder.getContext() taps into the current session
+        // getAuthentication() returns the current logged in user
+        // getName() returns the logged in username (email in this case)
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication != null) {
+            String username = authentication.getName();
+            return userRepo.findByUsername(username);
+        }
+
+        return null;
     }
 
     public User login(User user, HttpServletRequest req) {
+        System.out.println("LOGIN ATTEMPT!");
         try {
             UsernamePasswordAuthenticationToken authReq
                     = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
@@ -95,10 +105,11 @@ public class UserService {
             sc.setAuthentication(auth);
             HttpSession session = req.getSession(true);
             session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
+            System.out.println("NO EXCEPTION YET!");
         } catch(BadCredentialsException err) {
             throw new BadCredentialsException("Bad Credentials");
         }
 
-        return findCurrentUser();
+        return whoAmI();
     }
 }
