@@ -25,4 +25,10 @@ public class ThreadService {
         }
         return null;
     }
+
+    public String postNewThread(Thread thread){
+        System.out.println(thread + " from service");
+        threadRepo.save(thread);
+        return "Post OK";
+    }
 }

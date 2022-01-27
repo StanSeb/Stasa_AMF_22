@@ -30,4 +30,11 @@ public class ThreadController {
     public List<Thread> getByGroupId(@PathVariable long id) {
         return threadService.findByGroupId(id);
     }
+
+    @PostMapping("newThread")
+    public String postNewThread(@RequestBody Thread thread){
+        System.out.println(thread + " from controller");
+
+        return threadService.postNewThread(thread);
+    }
 }

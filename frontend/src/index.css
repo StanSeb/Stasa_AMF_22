@@ -98,12 +98,14 @@ code {
 	border: 1px solid gray;
 }
 
-.new-thread > input {
+.new-thread-title {
+	resize: none;
 	width: 98%;
+	height: 1em;
 	margin: 1%;
 }
 
-.new-thread > textarea {
+.new-thread-content {
 	width: 98%;
 	height: 8em;
 	margin: 1%;

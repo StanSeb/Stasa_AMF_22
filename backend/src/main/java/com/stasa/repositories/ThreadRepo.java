@@ -12,4 +12,6 @@ public interface ThreadRepo extends JpaRepository<Thread, Long> {
     Thread findById(Integer id);
 
     List<Thread> findByGroupId(Long id);
+
+
 }
