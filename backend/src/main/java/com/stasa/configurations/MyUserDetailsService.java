@@ -18,8 +18,6 @@ public class MyUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepo userRepo;
 
-
-
 //  Springs way of calling the constructor
 //  @PostConstruct
 //  private void createDefaultUsers(){

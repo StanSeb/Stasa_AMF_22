@@ -1,7 +1,9 @@
 package com.stasa.services;
 
 import com.stasa.configurations.MyUserDetailsService;
+import com.stasa.entities.Group;
 import com.stasa.entities.User;
+import com.stasa.repositories.GroupRepo;
 import com.stasa.repositories.UserRepo;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,16 +115,22 @@ public class UserService {
     }
 
     public String terminateUser(User user){
-        for(User users: userRepo.findAll()){
-            if (user.getUsername().equals(users.getUsername())){
-                // stänger av användaren.
-                // detta ställs in i front-end.
-                userRepo.save(user);
+        //TODO: Kolla om användaren är admin eller ej
+        String role = userRepo.findUserRole();
+        System.out.println(role);
+        if (role.equals("Users")){
+            for(User users: userRepo.findAll()){
+                if (user.getEmail().equals(users.getEmail())){
+                    // stänger av användaren.
+                    // detta ställs in i front-end.
+                    userRepo.save(user);
 
-                //TODO: Ta bort alla inlägg från användaren.
-                
-                return user.getUsername() + " has been terminated!";
+                    return user.getUsername() + " has been terminated!";
+                }
             }
+        }
+        else if (role.equals("Admin")){
+            return "You have to delete your groups before deleting your account!";
         }
         return "Could not find user!";
     }

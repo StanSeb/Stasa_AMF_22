@@ -8,6 +8,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepo extends JpaRepository<User, Long> {
+
+    @Query(value = "SELECT member_roles.title FROM member_roles, members WHERE members.role_id = member_roles.id",nativeQuery = true)
+    String findUserRole();
+
     User findByUsername(String username);
 
     //test                                                                              MUY IMPORTANTE

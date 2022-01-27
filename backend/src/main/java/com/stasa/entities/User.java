@@ -49,4 +49,13 @@ public class User {
         this.password = password;
     }
 
+    @JsonProperty
+    public String getUsername() {
+        return "DeletedUser";
+    }
+
+    @JsonProperty
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }
