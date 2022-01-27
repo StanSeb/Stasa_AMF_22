@@ -12,5 +12,6 @@ public class StasaApplication {
 
 		System.out.println("Here we go again... ¯\\_(ツ)_/¯");
 
+
 	}
 }
