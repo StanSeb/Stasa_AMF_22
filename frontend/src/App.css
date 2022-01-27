@@ -36,6 +36,12 @@
     transform: rotate(360deg);
   }
 }
+#register-form{
+display: flex;
+justify-content: center;
+
+
+}
 
 #login {
   display: flex;

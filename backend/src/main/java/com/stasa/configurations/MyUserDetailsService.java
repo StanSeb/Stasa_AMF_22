@@ -37,6 +37,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
     public User addUser(User user){
         // encrypt password before saving
+        System.out.println(user);
         user.setPassword(encoder.encode(user.getPassword()));
         try {
             return userRepo.save(user); // skickar till db direkt.

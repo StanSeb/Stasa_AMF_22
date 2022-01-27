@@ -13,6 +13,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
   /*
       C - @PostMapping
@@ -24,16 +25,19 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    //test
+
+
     private String getSiteURL(HttpServletRequest request){
 
         String siteURL = request.getRequestURL().toString();
         return siteURL.replace(request.getServletPath(),"");
     }
 
-    //test
-    @GetMapping("/verify")
-    public String verifyUser(@Param("code")String code){
+
+    @GetMapping("/verify/{code}")
+    public String verifyUser(@PathVariable String code){
+
+        System.out.println(code);
         if (userService.verify(code)){
             return "verify_success";
 
@@ -58,14 +62,12 @@ public class UserController {
     @PutMapping("/rest/users/{id}")
     public void updateById(@RequestBody User user, @PathVariable long id) { userService.updateById(id, user); }
 
-    //vanlig register
-//    @PostMapping("/auth/register")
-//    public User register(@RequestBody User user){ return userService.register(user); }
 
 
-    //mail test grejen kanske bytar ut register
-    @PostMapping("/process_register")
-    public String processRegister(User user, HttpServletRequest request)
+
+
+    @PostMapping("/rest/process_register")
+    public String processRegister(@RequestBody User user, HttpServletRequest request)
     throws UnsupportedEncodingException, MessagingException {
         userService.register(user, getSiteURL(request));
         return "register_success";

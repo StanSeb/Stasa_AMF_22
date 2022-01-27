@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -13,6 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +29,7 @@ public class User {
 
     @Column(name = "password", nullable = false, length = 80)
     private String password;
-    @Column(name="verification_code",nullable=false,length=50)
+    @Column(name="verification_code",length=50)
     private String verificationCode;
 
     @Column(name = "enabled", nullable = false)
@@ -36,8 +38,6 @@ public class User {
     @Column(name = "deletion_timestamp")
     private String deletionTimestamp;
 
-    @Column(name = "verified", nullable = false)
-    private boolean verified = false;
 
     @JsonIgnore
     public String getPassword() {

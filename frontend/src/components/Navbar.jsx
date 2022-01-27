@@ -14,6 +14,10 @@ function Navbar() {
         <div onClick={()=> {
             navigate("/profile");
         }}>Profile</div>
+
+        <div onClick={()=> {
+            navigate("/register");
+        }}>Register</div>
         
         
 

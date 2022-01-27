@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Random;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
@@ -48,11 +50,12 @@ public class UserService {
     //test
     public User register(User user, String siteURL)
         throws UnsupportedEncodingException, MessagingException{
+        System.out.println(user);
             String verification = RandomString.make(50);
             user.setVerificationCode(verification);
             user.setEnabled(false);
+        detailsService.addUser(user);
         sendVerificationEmail(user,siteURL);
-        return detailsService.addUser(user);
     }
      // i my user detail service högst upp
      //test
@@ -75,8 +78,8 @@ public class UserService {
         helper.setTo(toAdress);
         helper.setSubject(subject);
 
-        content=content.replace("[[name]]", user.getUsername());
-        String verifyUrl = siteUrl+"/verify?code?"+user.getVerificationCode();
+        content=content.replace("[[name]]", user.getUsername()+rand);
+        String verifyUrl = siteUrl+"/verify/"+user.getVerificationCode();
 
         content = content.replace("[[URL]]", verifyUrl);
         helper.setText(content,true);
@@ -85,7 +88,7 @@ public class UserService {
 
     }
 
-    //test
+
     public boolean verify(String verificationCode){
         User user = userRepo.findByVerificationCode(verificationCode);
 
