@@ -24,7 +24,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
     //test
     private String getSiteURL(HttpServletRequest request){
 
@@ -59,7 +58,6 @@ public class UserController {
     @PutMapping("/rest/users/{id}")
     public void updateById(@RequestBody User user, @PathVariable long id) { userService.updateById(id, user); }
 
-
     //vanlig register
 //    @PostMapping("/auth/register")
 //    public User register(@RequestBody User user){ return userService.register(user); }
@@ -73,7 +71,6 @@ public class UserController {
         return "register_success";
     }
 
-
     @PostMapping("/login")
     public User login(@RequestBody User user, HttpServletRequest req) {
         System.out.println("LOGIN!");
@@ -83,5 +80,8 @@ public class UserController {
     @GetMapping("/auth/whoami")
     public User whoAmI() { return userService.whoAmI(); }
     
-
+    @PutMapping("/auth/terminateUser")
+    public String terminateUser(@RequestBody User user){
+        return userService.terminateUser(user);
+    }
 }

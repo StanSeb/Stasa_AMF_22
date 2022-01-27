@@ -39,13 +39,9 @@ public class UserService {
     @Autowired
     private JavaMailSender mailSender;
 
-
     // bean from your SecurityConfig
     @Resource(name="authenticationManager")
     private AuthenticationManager authManager;
-
-
-
 
     //test
     public User register(User user, String siteURL)
@@ -58,6 +54,7 @@ public class UserService {
     }
      // i my user detail service högst upp
      //test
+
     private void sendVerificationEmail(User user, String siteUrl)
     throws MessagingException, UnsupportedEncodingException{
         String toAdress = user.getEmail();
@@ -115,8 +112,24 @@ public class UserService {
         return null;
     }
 
+    public String terminateUser(User user){
+        for(User users: userRepo.findAll()){
+            if (user.getUsername().equals(users.getUsername())){
+                // stänger av användaren.
+                // detta ställs in i front-end.
+                userRepo.save(user);
+
+                //TODO: Ta bort alla inlägg från användaren.
+                
+                return user.getUsername() + " has been terminated!";
+            }
+        }
+        return "Could not find user!";
+    }
+
     public void deleteById(long id) {
-        userRepo.deleteById(id);
+
+       // userRepo.deleteById(id);
     }
 
     public void updateById(long id, User user) {
