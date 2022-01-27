@@ -35,6 +35,7 @@ README.txt
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
+application.properties
 
 # Gradle
 .idea/**/gradle.xml

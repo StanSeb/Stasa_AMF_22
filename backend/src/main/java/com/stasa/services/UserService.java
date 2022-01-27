@@ -2,21 +2,30 @@ package com.stasa.services;
 
 import com.stasa.configurations.MyUserDetailsService;
 import com.stasa.entities.User;
+import com.stasa.entities.VerificationCode;
 import com.stasa.repositories.UserRepo;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.persistence.Id;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.sql.ClientInfoStatus;
 import java.util.List;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
@@ -29,13 +38,70 @@ public class UserService {
     @Autowired
     private MyUserDetailsService detailsService;
 
+    //test
+    @Autowired
+    private JavaMailSender mailSender;
+
+
     // bean from your SecurityConfig
     @Resource(name="authenticationManager")
     private AuthenticationManager authManager;
 
-    public User register(User user) {
+
+
+
+    //test
+    public User register(User user, String siteURL)
+        throws UnsupportedEncodingException, MessagingException{
+            String verification = RandomString.make(50);
+            user.setVerificationCode(verification);
+            user.setEnabled(false);
+        sendVerificationEmail(user,siteURL);
         return detailsService.addUser(user);
-    } // i my user detail service högst upp
+    }
+     // i my user detail service högst upp
+     //test
+    private void sendVerificationEmail(User user, String siteUrl)
+    throws MessagingException, UnsupportedEncodingException{
+        String toAdress = user.getEmail();
+        String fromAddress = "Stasa.Bestmail.com";
+        String senderName = "SuperTeamAllstarsStraightAAAAS";
+        String subject = "Please verify you registration";
+        String content ="Dear [[name]],<br>"
+                + "Please click the link below to verify your registration:<br>"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+                + "Thank you,<br>"
+                + "SuperTeamAllstarsStraightAAAAS.";
+        MimeMessage message= mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(fromAddress,senderName);
+        helper.setTo(toAdress);
+        helper.setSubject(subject);
+
+        content=content.replace("[[name]]", user.getUsername());
+        String verifyUrl = siteUrl+"/verify?code?"+user.getVerificationCode();
+
+        content = content.replace("[[URL]]", verifyUrl);
+        helper.setText(content,true);
+
+        mailSender.send(message);
+
+    }
+
+    //test
+    public boolean verify(String verificationCode){
+        User user = userRepo.findByVerificationCode(verificationCode);
+
+        if(user==null || user.isEnabled()){
+            return false;
+        }else{
+            user.setVerificationCode(null);
+            user.setEnabled(true);
+            userRepo.save(user);
+            return true;
+        }
+    }
 
     public List<User> getAll() {
         return userRepo.findAll();

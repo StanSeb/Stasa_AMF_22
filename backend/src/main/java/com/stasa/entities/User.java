@@ -27,6 +27,8 @@ public class User {
 
     @Column(name = "password", nullable = false, length = 80)
     private String password;
+    @Column(name="verification_code",nullable=false,length=50)
+    private String verificationCode;
 
     @Column(name = "enabled", nullable = false)
     private boolean enabled = false;
@@ -37,8 +39,6 @@ public class User {
     @Column(name = "verified", nullable = false)
     private boolean verified = false;
 
-    @OneToMany(mappedBy = "user")
-    public List<VerificationCode> verificationCodes;
 
     @JsonIgnore
     public String getPassword() {

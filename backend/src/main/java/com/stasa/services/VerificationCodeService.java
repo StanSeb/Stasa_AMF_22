@@ -2,7 +2,7 @@ package com.stasa.services;
 
 import com.stasa.entities.User;
 import com.stasa.entities.VerificationCode;
-import com.stasa.entities.VerificationCodeRepository;
+import com.stasa.repositories.VerificationCodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +29,9 @@ public class VerificationCodeService {
             // Don't generate verification code if user is already verified.
             return ResponseEntity.badRequest().body(false);
         } else {
+
+
+
             String generatedCode = String.valueOf(new Random().nextInt(899999) + 100000);
             var code = new VerificationCode(generatedCode, userService.whoAmI());
             try {
