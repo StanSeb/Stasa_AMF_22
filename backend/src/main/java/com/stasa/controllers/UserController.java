@@ -1,9 +1,7 @@
 package com.stasa.controllers;
 
 import com.stasa.entities.User;
-import com.stasa.entities.VerificationCode;
 import com.stasa.services.UserService;
-import com.stasa.services.VerificationCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +24,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private VerificationCodeService verificationCodeService;
 
     //test
     private String getSiteURL(HttpServletRequest request){
@@ -86,10 +82,6 @@ public class UserController {
 
     @GetMapping("/auth/whoami")
     public User whoAmI() { return userService.whoAmI(); }
-
-    @PostMapping("/auth/generate-verification-code")
-    public ResponseEntity<Boolean> generateVerificationCode() {
-        return verificationCodeService.generateVerificationCode();
-    }
+    
 
 }
