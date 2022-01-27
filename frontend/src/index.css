@@ -205,13 +205,13 @@ code {
 }
 
 .group-members > * > button {
-  background-color: lightgray;
+	background-color: lightgray;
 	border: 1px solid gray;
 	outline: none;
 }
 
 .group-members > *:hover > button:hover {
-  background-color: gray;
+	background-color: gray;
 }
 #group-admin {
 	background-color: rgba(255, 75, 50);

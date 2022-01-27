@@ -5,6 +5,8 @@ import com.stasa.entities.Thread;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ThreadService {
     @Autowired
@@ -17,9 +19,9 @@ public class ThreadService {
         return null;
     }
 
-    public Thread findByGroupId(long id){
-        if(threadRepo.findByGroupId(id).isPresent()){
-            return threadRepo.findByGroupId(id).get();
+    public List<Thread> findByGroupId(long id){
+        if(threadRepo.findByGroupId(id) != null){
+            return threadRepo.findByGroupId(id);
         }
         return null;
     }

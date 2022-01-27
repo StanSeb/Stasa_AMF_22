@@ -18,7 +18,7 @@ public class Thread {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private long id;
 
     @Column(name = "title", nullable = false, length = 50)
     private String title;
@@ -27,10 +27,10 @@ public class Thread {
     private String content;
 
     @Column(name = "group_id", nullable = false, length = 80)
-    private String groupId;
+    private long groupId;
 
     @Column(name = "creator_id", nullable = false, length = 80)
-    private String creatorId;
+    private long creatorId;
 
     @Column(name = "deletion_timestamp", nullable = false, length = 80)
     private Time deletionTimestamp;
