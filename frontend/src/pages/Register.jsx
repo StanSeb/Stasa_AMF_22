@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Axios from 'axios';
 
 function Register() {
@@ -6,57 +6,53 @@ function Register() {
     const [getEmail, setEmail] = useState("");
     const [getPassword, setPassword] = useState("");
 
+
     // POST request using fetch with async/await
-    function createPost() {
-        // Simple POST request with a JSON body using axios
+    function registerUser() {
 
-        // skapa objektet för användaren:
-        // user = {email: 1, username: 2, password: 3}
+            
+        const newUserObject = { username: getName, email: getEmail, password: getPassword };
+        console.log(newUserObject);
+        if(newUserObject.username===''||newUserObject.email===''||newUserObject.password===''){
+            alert('you need to fill in the entire form!')
+        }
+        else{
 
-        let token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjNhYTE0OGNkMDcyOGUzMDNkMzI2ZGU1NjBhMzVmYjFiYTMyYTUxNDkiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vc3Rhc2EtZGEzZDUiLCJhdWQiOiJzdGFzYS1kYTNkNSIsImF1dGhfdGltZSI6MTY0MzAxNzkyMywidXNlcl9pZCI6Illaa3VWZDZRY3RaQllmU3RWbHQ1bkFvcjk1bzEiLCJzdWIiOiJZWmt1VmQ2UWN0WkJZZlN0Vmx0NW5Bb3I5NW8xIiwiaWF0IjoxNjQzMDE3OTIzLCJleHAiOjE2NDMwMjE1MjMsImVtYWlsIjoicnAudWxsc3RvcnA5MkBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsicnAudWxsc3RvcnA5MkBnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.JtfSd4ujSmgaSsj0WXiiJpjb9pVfKrwSSD_L_nswfHkxQ-b7LMdJQM7SfTplN33ZMtHoPTJaJWMdFi2_u-Ut4ebXfDcnhxKo9Bk0txUeRH-ZQDCW-_hOE5Uk7rbqjsiwHSFoR6Nwuka0UTf3471EyW5rznvH-yEc5AsoW3QGhgNz4K82iQK8ZsibmcbM9O7giBFSQh3VHvydASd3zauogp6hunEeXzIZkFyyT6Bdp3823yEKmqFjED1AdYCLyHVq1uOM5T2GFUGJ7uWMKW2K6wad-3hiC1-xv3GF6DKvltpSAfTTQDI1egQJH0nE7sfQYZZmFloXW7NRgUbQLfO-oQ";
-        const registerObject = { email: getEmail, password: getPassword, privilage: 'user', usergroups: "test", username: getName };
-        Axios({
-            method: "POST",
-            url: "http://localhost:8080/process_register",
-            data: registerObject,
-            headers: { Authorization: "Bearer " + token }
-        })
-            .then(res => {
-                console.log(res)
-            })
-            .catch(err => {
-                console.log(err)
-            })
-
-        // const headers = { 
-        //     'Authorization': 'Bearer ' + token,
-        // };
-        // axios.post('http://localhost:8080/api/post', article, { headers })
-        //     .then(response => console.log(response));
+            
+            Axios.post('http://localhost:8080/rest/process_register', newUserObject)
+            
+            .then(response => console.log(response.data))
+        }
 
     }
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        createPost();
+        registerUser();
     }
 
     return (
         <div id="register-form">
             <form onSubmit={handleSubmit}>
-                <label>Register account
-                    <div>
+                <div>
+                    <label>Register account</label>
+                </div>
+                <div className='stuff-container'>
 
-                        <input type="text" value={getEmail} onChange={(e) => setEmail(e.target.value)} id="email-input" placeholder='E-mail'></input>
+                <input type="text" value={getEmail} onChange={(e) => setEmail(e.target.value)}
+                    id="email-input" placeholder='E-mail'></input>
                     </div>
-                    <div>
 
-                        <input type="text" value={getName} onChange={(e) => setName(e.target.value)} id="userName-input" placeholder='User name'></input>
-                    </div>
-                    <div>
-                        <input type="text" value={getPassword} onChange={(e) => setPassword(e.target.value)} id="password-input" placeholder='Password'></input>
-                    </div>
-                </label>
+                <div className='stuff-container'>
+                    <input type="text" value={getName} onChange={(e) => setName(e.target.value)}
+                        id="userName-input" placeholder='User name'></input>
+                </div>
+                <div className='stuff-container'>
+                    <input type="password" value={getPassword} onChange={(e) => setPassword(e.target.value)}
+                        id="password-input" placeholder='Password'></input>
+                </div>
+
+                <button type="submit">Register new account</button>
             </form>
         </div>
     )

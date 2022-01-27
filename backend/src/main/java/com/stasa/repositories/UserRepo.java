@@ -10,7 +10,8 @@ import org.springframework.stereotype.Repository;
 public interface UserRepo extends JpaRepository<User, Long> {
     User findByUsername(String username);
 
-    //test                                                                              MUY IMPORTANTE
-    @Query(value = "SELECT user_name FROM users WHERE users.verification_code=:code", nativeQuery = true)
-    User findByVerificationCode(@Param("code") String code);
+    //                                                                     MUY IMPORTANTE
+    @Query(value = "SELECT * FROM users WHERE users.verification_code=?1", nativeQuery = true)
+    User findByVerificationCode(String code);
+
 }
