@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import "./index.css";
 import GroupPage from "./pages/GroupPage";
+import Navbar from "./components/Navbar";
 
 class App extends Component {
 	constructor() {
@@ -19,10 +20,11 @@ class App extends Component {
 	render() {
 		return (
 			<div className="App">
-				<GroupPage
+        <Navbar/>
+				{/* <GroupPage
 					group={this.state.group}
 					loggedInUser={this.state.loggedInUser}
-				/>
+				/> */}
 			</div>
 		);
 	}

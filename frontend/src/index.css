@@ -3,7 +3,6 @@ html {
 	padding: 0;
 	height: 100vh;
 	width: 100vw;
-	overflow: hidden;
 }
 
 body {
@@ -166,7 +165,7 @@ code {
 .group-side-panel {
 	width: 30vw;
 	right: 0;
-	top: -0.1em;
+	top: 5.7em;
 	margin: 1em;
 	position: fixed;
 }
@@ -220,4 +219,57 @@ code {
 
 #group-moderator:hover {
 	background-color: rgba(50, 75, 150);
+}
+
+nav {
+	width: 100vw;
+	background: white;
+	position: fixed;
+}
+
+.containerNavbar>nav>ul {
+	display: flex;
+	justify-content: space-evenly;
+	list-style-type: none;
+}
+
+.containerNavbar>nav>ul>li>a {
+	color: black;
+	text-decoration: none;
+}
+
+.containerNavbar>nav>ul>li>a:hover {
+	cursor: pointer;
+	text-decoration: underline;	
+}
+
+.containerNavbar>nav>ul>li>a:active {
+	color: rgb(255, 0, 221);
+	text-decoration: underline;
+}
+
+.rulesContainer {
+	padding-top: 8em;
+	overflow: auto;
+}
+
+.paragraphContainer>ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.paragraphContainer>ul>li:nth-child(odd) {
+	background-color: rgb(240, 240, 240);
+}
+
+.moreInfoClick {
+	cursor: pointer;
+	color: grey;
+}
+
+.rulesParagraphContainer>ul{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
 }
