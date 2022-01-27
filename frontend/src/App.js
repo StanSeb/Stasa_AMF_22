@@ -1,6 +1,14 @@
 import React, { Component, useState } from "react";
-import logo from "./logo.svg";
 import "./App.css";
+import { BrowserRouter as Router,
+   Route, 
+   Routes 
+} from "react-router-dom";
+import Profile from './pages/Profile'
+import Navbar from './components/Navbar'
+import RegisterGroup from './components/RegisterGroup'
+import GroupComponent from './components/GroupComponent'
+ 
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -80,6 +88,9 @@ class App extends Component {
 
   render() {
     return (
+      <Router>
+        
+
       <div className="App">
         <div id="login">
           <label>Email</label>
@@ -90,14 +101,15 @@ class App extends Component {
         </div>
         <div id="login-status">{this.getLoginStatus()}</div>
         <div id="my-comments"></div>
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+        </div>  
+        <Navbar/>  
+        <Routes>
+        <Route path="/profile" element={<Profile/>} />
+        <Route path="/createGroup" element={<RegisterGroup/>} />
+        <Route path="/getGroups" element={<GroupComponent/>} />
+
+        </Routes>    
+      </Router>
     );
   }
 }
