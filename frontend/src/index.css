@@ -20,6 +20,7 @@ code {
 		monospace;
 }
 
+/*#region Threads*/
 .thread {
 	margin: 1em;
 	width: 65vw;
@@ -87,7 +88,9 @@ code {
 .thread-tags > * {
 	margin-right: 1em;
 }
+/*#endregion */
 
+/*#region new-thread*/
 .new-thread {
 	width: 40%;
 	display: flex;
@@ -109,7 +112,9 @@ code {
 .new-thread > label {
 	margin-left: 1%;
 }
+/*#endregion */
 
+/*#region user-dropdown*/
 .user-drop {
 	position: relative;
 	display: inline-block;
@@ -146,7 +151,9 @@ code {
 .user-drop:hover .user-drop-button {
 	background-color: lightgray;
 }
+/*#endregion*/
 
+/*#region group-page*/
 .group-page {
 	position: relative;
 	margin: 0;
@@ -221,3 +228,4 @@ code {
 #group-moderator:hover {
 	background-color: rgba(50, 75, 150);
 }
+/*#endregion*/
