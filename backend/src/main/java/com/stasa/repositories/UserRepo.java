@@ -5,8 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Repository
+@CrossOrigin(origins = "http://localhost:3000")
 public interface UserRepo extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT member_roles.title FROM member_roles, members WHERE members.role_id = member_roles.id",nativeQuery = true)
@@ -18,5 +20,8 @@ public interface UserRepo extends JpaRepository<User, Long> {
     @Query(value = "SELECT * FROM users WHERE users.verification_code=?1", nativeQuery = true)
     User findByVerificationCode(String code);
 
-    User findByEmail(String email);
+    @Query(value = "SELECT * FROM users WHERE users.email=?1", nativeQuery = true)
+    User findByEmailInDatabase(String email);
+
+
 }

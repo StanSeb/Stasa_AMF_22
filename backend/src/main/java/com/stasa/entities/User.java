@@ -18,21 +18,21 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private long id;
 
-    @Column(name = "user_name", nullable = false, length = 50)
+    @Column(name = "user_name",  length = 50)
     private String username;
 
-    @Column(name = "email", nullable = false, length = 50)
+    @Column(name = "email",  length = 50)
     private String email;
 
-    @Column(name = "password", nullable = false, length = 80)
+    @Column(name = "password",  length = 80)
     private String password;
     @Column(name="verification_code",length=50)
     private String verificationCode;
 
-    @Column(name = "enabled", nullable = false)
+    @Column(name = "enabled")
     private boolean enabled = false;
 
     @Column(name = "deletion_timestamp")
@@ -48,11 +48,11 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    @JsonProperty
-    public String getUsername() {
-        return "DeletedUser";
-    }
+//
+//    @JsonProperty
+//    public String getUsername() {
+//        return "DeletedUser";
+//    }
 
     @JsonProperty
     public void setUsername(String username) {

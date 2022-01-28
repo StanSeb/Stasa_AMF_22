@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
@@ -33,6 +34,7 @@ import java.util.Random;
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 @Service
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserService {
     @Autowired
     private UserRepo userRepo;
@@ -181,27 +183,24 @@ public class UserService {
 
     public User whoAmI(){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println("whoami rullar");
-        return userRepo.findByEmail(email);
+
+        System.out.println("whoami userService säger: "+email);
+        return userRepo.findByEmailInDatabase(email);
     }
 
 
-//    public User login(User user, HttpServletRequest req) {
-//        System.out.println("LOGIN ATTEMPT!");
-//        try {
-//            UsernamePasswordAuthenticationToken authReq
-//                    = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-//            Authentication auth = authManager.authenticate(authReq);
+//    public User login(User user) {
+//       System.out.println("LOGIN ATTEMPT!");
+//       try {
+//           UsernamePasswordAuthenticationToken authReq
+//                   = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
+//         Authentication auth = authManager.authenticate(authReq);
 //
-//            SecurityContext sc = SecurityContextHolder.getContext();
+//           SecurityContext sc = SecurityContextHolder.getContext();
 //            sc.setAuthentication(auth);
-//            HttpSession session = req.getSession(true);
-//            session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
-//            System.out.println("NO EXCEPTION YET!");
-//        } catch(BadCredentialsException err) {
-//            throw new BadCredentialsException("Bad Credentials");
-//        }
-//
-//        return whoAmI();
-//    }
+//           System.out.println("NO EXCEPTION YET!");
+//       } catch(BadCredentialsException err) {            throw new BadCredentialsException("Bad Credentials");
+//       }
+//       return whoAmI();
+//   }
 }

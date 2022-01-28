@@ -5,12 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.persistence.*;
 
 @Entity
 @Data
-
+@CrossOrigin(origins = "http://localhost:3000")
 @Table(name="groups", schema="stasa", catalog="stasa")
 public class Group {
     @Id

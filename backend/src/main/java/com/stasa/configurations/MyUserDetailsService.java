@@ -4,6 +4,7 @@ import com.stasa.entities.User;
 import com.stasa.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,11 +30,16 @@ public class MyUserDetailsService implements UserDetailsService {
 //  }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepo.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found by username: " + username);
+    public UserDetails loadUserByUsername(String email){
+        System.out.println("userDetails metoden rullar");
+       // String email1 ="andreas_93l@hotmail.com";
+        System.out.println(email);
+        User user = userRepo.findByEmailInDatabase(email);
+        System.out.println("myUserDetailService user: "+user+email);
+        if(user == null){
+            throw new UsernameNotFoundException("User not found by email:"+ email);
         }
+        System.out.println(user);
         return toUserDetails(user);
     }
 
