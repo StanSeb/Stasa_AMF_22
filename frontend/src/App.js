@@ -10,6 +10,7 @@ import Navbar from './components/Navbar'
 import RegisterGroup from './components/RegisterGroup'
 import GroupComponent from './components/GroupComponent'
 import Register from "./pages/Register";
+import Login from "./pages/Login";
 
 // Import the functions you need from the SDKs you need
 class App extends Component {
@@ -24,6 +25,7 @@ class App extends Component {
           <Route path="/createGroup" element={<RegisterGroup />} />
           <Route path="/getGroups" element={<GroupComponent />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </Router>
     )

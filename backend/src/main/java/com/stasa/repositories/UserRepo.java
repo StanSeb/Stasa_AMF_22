@@ -18,4 +18,5 @@ public interface UserRepo extends JpaRepository<User, Long> {
     @Query(value = "SELECT * FROM users WHERE users.verification_code=?1", nativeQuery = true)
     User findByVerificationCode(String code);
 
+    User findByEmail(String email);
 }

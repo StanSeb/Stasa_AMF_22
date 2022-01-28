@@ -164,37 +164,44 @@ public class UserService {
     /**
      * @return The logged-in user or null if not logged in.
      */
-    public User whoAmI() {
-        // the login session is stored between page reloads,
-        // and we can access the current authenticated user with this
-        // SecurityContextHolder.getContext() taps into the current session
-        // getAuthentication() returns the current logged in user
-        // getName() returns the logged in username (email in this case)
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication != null) {
-            String username = authentication.getName();
-            return userRepo.findByUsername(username);
-        }
+//    public User whoAmI() {
+//        // the login session is stored between page reloads,
+//        // and we can access the current authenticated user with this
+//        // SecurityContextHolder.getContext() taps into the current session
+//        // getAuthentication() returns the current logged in user
+//        // getName() returns the logged in username (email in this case)
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if(authentication != null) {
+//            String username = authentication.getName();
+//            return userRepo.findByUsername(username);
+//        }
+//
+//        return null;
+//    }
 
-        return null;
+    public User whoAmI(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println("whoami rullar");
+        return userRepo.findByEmail(email);
     }
 
-    public User login(User user, HttpServletRequest req) {
-        System.out.println("LOGIN ATTEMPT!");
-        try {
-            UsernamePasswordAuthenticationToken authReq
-                    = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-            Authentication auth = authManager.authenticate(authReq);
 
-            SecurityContext sc = SecurityContextHolder.getContext();
-            sc.setAuthentication(auth);
-            HttpSession session = req.getSession(true);
-            session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
-            System.out.println("NO EXCEPTION YET!");
-        } catch(BadCredentialsException err) {
-            throw new BadCredentialsException("Bad Credentials");
-        }
-
-        return whoAmI();
-    }
+//    public User login(User user, HttpServletRequest req) {
+//        System.out.println("LOGIN ATTEMPT!");
+//        try {
+//            UsernamePasswordAuthenticationToken authReq
+//                    = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+//            Authentication auth = authManager.authenticate(authReq);
+//
+//            SecurityContext sc = SecurityContextHolder.getContext();
+//            sc.setAuthentication(auth);
+//            HttpSession session = req.getSession(true);
+//            session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
+//            System.out.println("NO EXCEPTION YET!");
+//        } catch(BadCredentialsException err) {
+//            throw new BadCredentialsException("Bad Credentials");
+//        }
+//
+//        return whoAmI();
+//    }
 }

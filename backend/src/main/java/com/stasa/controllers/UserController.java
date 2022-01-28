@@ -73,14 +73,16 @@ public class UserController {
         return "register_success";
     }
 
-    @PostMapping("/login")
-    public User login(@RequestBody User user, HttpServletRequest req) {
-        System.out.println("LOGIN!");
-        return userService.login(user, req);
-    }
+//    @PostMapping("/rest/login")
+//    public User login(@RequestBody User user, HttpServletRequest req) {
+//        System.out.println("LOGIN!");
+//        return userService.login(user, req);
+//    }
 
     @GetMapping("/auth/whoami")
-    public User whoAmI() { return userService.whoAmI(); }
+    public User whoAmI() {
+        System.out.println("whoami works");
+        return userService.whoAmI(); }
     
     @PutMapping("/auth/terminateUser/{id}")
     public String terminateUser(@PathVariable long id){

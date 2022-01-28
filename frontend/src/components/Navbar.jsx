@@ -18,6 +18,9 @@ function Navbar() {
         <div onClick={()=> {
             navigate("/register");
         }}>Register</div>
+        <div onClick={()=> {
+            navigate("/login");
+        }}>Login</div>
         
         
 
