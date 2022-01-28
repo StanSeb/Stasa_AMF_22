@@ -49,6 +49,8 @@ public class MyUserDetailsService implements UserDetailsService {
 
     public User updateUser(User user){
         user.setPassword(encoder.encode(user.getPassword()));
+        user.setEnabled(false);
+        user.setDeletionTimestamp("2021-09-29");
         try {
             return userRepo.save(user);
         } catch (Exception ex) {

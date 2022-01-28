@@ -27,6 +27,7 @@ import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
@@ -48,7 +49,7 @@ public class UserService {
     private AuthenticationManager authManager;
 
     //test
-    public User register(User user, String siteURL)
+    public void register(User user, String siteURL)
         throws UnsupportedEncodingException, MessagingException{
         System.out.println(user);
             String verification = RandomString.make(50);
@@ -78,7 +79,7 @@ public class UserService {
         helper.setTo(toAdress);
         helper.setSubject(subject);
 
-        content=content.replace("[[name]]", user.getUsername()+rand);
+        content=content.replace("[[name]]", user.getUsername());
         String verifyUrl = siteUrl+"/verify/"+user.getVerificationCode();
 
         content = content.replace("[[URL]]", verifyUrl);
@@ -117,20 +118,17 @@ public class UserService {
         return null;
     }
 
-    public String terminateUser(User user){
+    // hämta id
+    // hämta user på id => myUserDetailService ändra värden.
+    public String terminateUser(long id){
         //TODO: Kolla om användaren är admin eller ej
         String role = userRepo.findUserRole();
-        System.out.println(role);
-        if (role.equals("Users")){
-            for(User users: userRepo.findAll()){
-                if (user.getEmail().equals(users.getEmail())){
-                    // stänger av användaren.
-                    // detta ställs in i front-end.
-                    userRepo.save(user);
 
-                    return user.getUsername() + " has been terminated!";
-                }
-            }
+        if (role.equals("Users")){
+            User user = userRepo.findById(id).get();
+            detailsService.updateUser(user);
+
+            return "user has been terminated!";
         }
         else if (role.equals("Admin")){
             return "You have to delete your groups before deleting your account!";

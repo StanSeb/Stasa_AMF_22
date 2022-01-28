@@ -82,8 +82,8 @@ public class UserController {
     @GetMapping("/auth/whoami")
     public User whoAmI() { return userService.whoAmI(); }
     
-    @PutMapping("/auth/terminateUser")
-    public String terminateUser(@RequestBody User user){
-        return userService.terminateUser(user);
+    @PutMapping("/auth/terminateUser/{id}")
+    public String terminateUser(@PathVariable long id){
+        return userService.terminateUser(id);
     }
 }
