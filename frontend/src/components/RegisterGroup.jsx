@@ -40,6 +40,7 @@ export default class RegisterGroup extends Component {
       console.log(this.state.group)
 			axios
 				.post("http://localhost:8080/register/group", this.state.group)
+        
 				.then((response) => {
 					console.log(response);
 				})
