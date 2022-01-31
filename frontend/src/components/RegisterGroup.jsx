@@ -13,6 +13,7 @@ export default class RegisterGroup extends Component {
         
 				
 			},
+      message: []
     
 		};
 
@@ -36,11 +37,17 @@ export default class RegisterGroup extends Component {
         id: 7}
 		};
     
+    
      fetch ("http://localhost:8080/register/group", {
        method: 'POST',
        headers: { "Content-Type": "application/json" },
       body: JSON.stringify(group)})
-      console.log(this.state.group);
+      .then((response) => response.data)
+    .then((data) =>{
+      this.setState({message: data});
+      console.log(this.state.groups);
+    });
+
   
   }
 

@@ -8,8 +8,8 @@ function Navbar() {
 
   return <div>
       <div onClick={()=> {
-            navigate("/");
-        }}>Home</div>
+            navigate("/homepage");
+        }}>Homepage</div>
 
         <div onClick={()=> {
             navigate("/profile");

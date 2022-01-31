@@ -5,6 +5,8 @@ import { BrowserRouter as Router,
    Routes 
 } from "react-router-dom";
 import Profile from './pages/Profile'
+import Homepage from './pages/Homepage'
+
 import Navbar from './components/Navbar'
 import RegisterGroup from './components/RegisterGroup'
 import GroupComponent from './components/GroupComponent'
@@ -104,6 +106,7 @@ class App extends Component {
         </div>  
         <Navbar/>  
         <Routes>
+        <Route path="/homepage" element={<Homepage/>} />
         <Route path="/profile" element={<Profile/>} />
         <Route path="/createGroup" element={<RegisterGroup/>} />
         <Route path="/getGroups" element={<GroupComponent/>} />

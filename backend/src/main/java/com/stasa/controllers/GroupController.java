@@ -18,6 +18,11 @@ public class GroupController {
     @Autowired
     private GroupService groupService;
 
+    @GetMapping("rest/getAllGroups")
+    public List <Group> getAll(){
+        return groupService.findAll();
+    }
+
     @GetMapping("/rest/getByUserId/{userid}")
     public List<Group> getByUserId(@PathVariable int userid) {
         return groupService.getByUserId(userid); }

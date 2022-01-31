@@ -23,7 +23,6 @@ public class GroupService {
         List <Group> filteredGroup = groupRepo.findAll();
         String response = "successful";
         for(Group filter : filteredGroup){
-            System.out.println(filter.getTitle());
             if(filter.getTitle().equalsIgnoreCase(group.getTitle())){
                 response = "failed";
 
@@ -31,10 +30,13 @@ public class GroupService {
 
 
         }
-        System.out.println(group.getTitle());
 
         if (response == "successful")
             groupRepo.save(group);
 
         return response;    }
+
+    public List<Group> findAll() {
+        return groupRepo.findAll();
+    }
 }
