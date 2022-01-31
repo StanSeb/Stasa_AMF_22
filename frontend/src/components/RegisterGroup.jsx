@@ -8,11 +8,12 @@ export default class RegisterGroup extends Component {
 			group: {
 				title: "",
 				description: "",
-				user: {
-          id: 7
-        }
+				user:{
+          id: 7}
+        
 				
 			},
+    
 		};
 
     this.titleChange = this.titleChange.bind(this);
@@ -33,7 +34,6 @@ export default class RegisterGroup extends Component {
 		let group = {
 			title: this.state.title,
 			description: this.state.description,
-			user_id: this.props.user_id
 		};
 
     this.setState({ group }, () => {
