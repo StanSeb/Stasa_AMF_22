@@ -140,7 +140,6 @@ class RulesPage extends React.Component {
 	}
 
 	render() {
-
 		return (
 			<div className="rulesContainer">
 				<div className="rulesTitleContainer">

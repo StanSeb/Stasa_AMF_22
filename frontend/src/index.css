@@ -342,3 +342,14 @@ footer::before {
 	margin: 2em 0 2em 0;
 	background-color: rgb(182, 182, 182);
 }
+
+.integrityContainer {
+	padding-top: 8em;
+	width: 80%;
+	margin: 0 auto;
+	overflow: auto;
+}
+
+.integritySubContainer {
+	margin: 5em 0 5em 0;
+}
