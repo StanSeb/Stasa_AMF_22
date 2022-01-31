@@ -9,8 +9,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Configuration
+@CrossOrigin(origins="http://localhost:3000")
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -22,12 +24,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/", "/rest/**").permitAll()
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/", "/rest/**","/login").permitAll()
+                .antMatchers("/auth/**","/login/").permitAll()
                 .antMatchers("/rest/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/","/login").permitAll()
                 .and()
                 .formLogin()
-//              .loginPage("/login")
+                .loginPage("/login")
+
         ;
     }
 
@@ -37,8 +41,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .userDetailsService(myUserDetailsService)
                 .passwordEncoder(myUserDetailsService.getEncoder());
     }
-
-    // if using custom login:
+    /*
+    denna används vid egen login sida för autentisering
+     */
     @Bean("authenticationManager")
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {

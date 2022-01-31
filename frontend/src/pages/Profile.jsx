@@ -7,7 +7,7 @@ export default function Profile() {
     let navigate = useNavigate();
 
     
-    return <div>
+    return <div className='profileContainer'>
         <div> Welcome to profile </div> 
         <button onClick={()=> {
             navigate("/createGroup");

@@ -1,20 +1,35 @@
 package com.stasa.entities;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import javax.persistence.*;
 
-@Table(name = "groups")
 @Entity
+@Data
+
+@Table(name="groups", schema="stasa", catalog="stasa")
 public class Group {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Integer id;
+    @Column(name = "id")
+    @GeneratedValue(generator = "NATIVE")
+    @GenericGenerator(name = "NATIVE", strategy = "native")
+    private long id;
 
-    public Integer getId() {
-        return id;
-    }
+    @Column(name = "title")
+    private String title;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @Column(name = "description")
+    private String description;
+
+    @ManyToOne
+    @JoinColumn(name ="user_id")
+    private User user;
+
 }
+
+    @Column(name = "id", nullable = false)
