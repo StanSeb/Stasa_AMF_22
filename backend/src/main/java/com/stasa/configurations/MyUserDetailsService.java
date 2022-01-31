@@ -4,7 +4,7 @@ import com.stasa.entities.User;
 import com.stasa.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.dao.DataAccessException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,7 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Configuration
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins="http://localhost:3000")
 public class MyUserDetailsService implements UserDetailsService {
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -31,20 +31,15 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email){
-        System.out.println("userDetails metoden rullar");
-       // String email1 ="andreas_93l@hotmail.com";
-        System.out.println(email);
-        User user = userRepo.findByEmailInDatabase(email);
-        System.out.println("myUserDetailService user: "+user+email);
+        User user = userRepo.findByEmail(email);
         if(user == null){
             throw new UsernameNotFoundException("User not found by email:"+ email);
         }
-        System.out.println(user);
         return toUserDetails(user);
     }
 
     public User addUser(User user){
-        // encrypt password before saving
+        //encrypt password before saving
         System.out.println(user);
         user.setPassword(encoder.encode(user.getPassword()));
         try {
@@ -71,7 +66,7 @@ public class MyUserDetailsService implements UserDetailsService {
         // If you have a User entity you have to
         // use the userdetails User for this to work
         return org.springframework.security.core.userdetails.User
-                .withUsername(user.getUsername())
+                .withUsername(user.getEmail())
                 .password(user.getPassword())
                 .roles("USER").build();
     }

@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 //@RequestMapping("private")
-@CrossOrigin(origins = "http://localhost:3000")
+
 public class GroupController {
 
 

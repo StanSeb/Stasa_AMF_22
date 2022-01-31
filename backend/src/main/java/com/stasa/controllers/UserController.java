@@ -79,7 +79,7 @@ public class UserController {
 //       return userService.login(user);
 //   }
 
-    @GetMapping("/auth/whoami")
+    @GetMapping("/rest/whoami")
     public User whoAmI() {
         System.out.println("whoami controller works");
         return userService.whoAmI(); }

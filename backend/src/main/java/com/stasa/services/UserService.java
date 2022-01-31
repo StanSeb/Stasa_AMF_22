@@ -34,7 +34,6 @@ import java.util.Random;
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 @Service
-@CrossOrigin(origins = "http://localhost:3000")
 public class UserService {
     @Autowired
     private UserRepo userRepo;
@@ -50,7 +49,7 @@ public class UserService {
     @Resource(name="authenticationManager")
     private AuthenticationManager authManager;
 
-    //test
+
     public void register(User user, String siteURL)
         throws UnsupportedEncodingException, MessagingException{
         System.out.println(user);
@@ -60,9 +59,6 @@ public class UserService {
         detailsService.addUser(user);
         sendVerificationEmail(user,siteURL);
     }
-     // i my user detail service högst upp
-     //test
-
     private void sendVerificationEmail(User user, String siteUrl)
     throws MessagingException, UnsupportedEncodingException{
         String toAdress = user.getEmail();
@@ -163,44 +159,9 @@ public class UserService {
         }
     }
 
-    /**
-     * @return The logged-in user or null if not logged in.
-     */
-//    public User whoAmI() {
-//        // the login session is stored between page reloads,
-//        // and we can access the current authenticated user with this
-//        // SecurityContextHolder.getContext() taps into the current session
-//        // getAuthentication() returns the current logged in user
-//        // getName() returns the logged in username (email in this case)
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if(authentication != null) {
-//            String username = authentication.getName();
-//            return userRepo.findByUsername(username);
-//        }
-//
-//        return null;
-//    }
-
     public User whoAmI(){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        System.out.println("whoami userService säger: "+email);
-        return userRepo.findByEmailInDatabase(email);
+        return userRepo.findByEmail(email);
     }
 
-
-//    public User login(User user) {
-//       System.out.println("LOGIN ATTEMPT!");
-//       try {
-//           UsernamePasswordAuthenticationToken authReq
-//                   = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
-//         Authentication auth = authManager.authenticate(authReq);
-//
-//           SecurityContext sc = SecurityContextHolder.getContext();
-//            sc.setAuthentication(auth);
-//           System.out.println("NO EXCEPTION YET!");
-//       } catch(BadCredentialsException err) {            throw new BadCredentialsException("Bad Credentials");
-//       }
-//       return whoAmI();
-//   }
 }

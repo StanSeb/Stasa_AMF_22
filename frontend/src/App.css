@@ -45,7 +45,6 @@ justify-content: center;
 
 #login-form {
   display: flex;
-  flex-direction: column;
-  padding: 50px;
+  justify-content: center;
   background-color: rgb(206, 206, 206);
 }

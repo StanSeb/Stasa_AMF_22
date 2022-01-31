@@ -11,7 +11,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@CrossOrigin(origins = "http://localhost:3000")
+
 @Table(name="groups", schema="stasa", catalog="stasa")
 public class Group {
     @Id

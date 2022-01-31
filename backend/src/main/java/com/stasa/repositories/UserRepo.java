@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Repository
-@CrossOrigin(origins = "http://localhost:3000")
 public interface UserRepo extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT member_roles.title FROM member_roles, members WHERE members.role_id = member_roles.id",nativeQuery = true)
@@ -24,4 +23,5 @@ public interface UserRepo extends JpaRepository<User, Long> {
     User findByEmailInDatabase(String email);
 
 
+    User findByEmail(String email);
 }
