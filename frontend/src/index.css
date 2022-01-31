@@ -222,6 +222,14 @@ code {
 	background-color: rgba(50, 75, 150);
 }
 
+#register-form {
+	padding-top: 8em;
+}
+
+.profileContainer {
+	padding-top: 8em;
+}
+
 nav {
 	width: 100vw;
 	background: white;

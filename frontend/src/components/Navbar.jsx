@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 import IntegrityPage from '../pages/IntegrityPage';
 import RulesPage from '../pages/RulesPage';
+import Register from '../pages/Register';
+import Profile from '../pages/Profile';
 
 function Navbar() {
 
@@ -12,6 +14,9 @@ function Navbar() {
                 <ul>
                     <li>
                         <Link to="/"><h3>Hem</h3></Link>
+                    </li>
+                    <li>
+                        <Link to="/register"><h3>Registrera</h3></Link>
                     </li>
                     <li>
                         <Link to="/profile"><h3>Profil</h3></Link>
@@ -25,6 +30,8 @@ function Navbar() {
                 </ul>
             </nav>
             <Routes>
+                <Route path="/register" element={<Register/>} />
+                <Route path="/profile" element={<Profile/>} />
                 <Route path="/rules" element={<RulesPage/>} />
                 <Route path="/integrity" element={<IntegrityPage/>} />
             </Routes> 
