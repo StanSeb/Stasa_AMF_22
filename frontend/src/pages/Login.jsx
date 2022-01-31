@@ -20,8 +20,6 @@ function Login() {
             encodeURIComponent(getEmail) +
             "&password=" +
             encodeURIComponent(getPassword)
-
-        console.log(getEmail + " " + getPassword)
         if(getEmail===''||getPassword===''){
             alert("you have to fill in the entire form")
 
