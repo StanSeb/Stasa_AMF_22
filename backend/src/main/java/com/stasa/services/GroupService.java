@@ -19,7 +19,22 @@ public class GroupService {
     }
 
 
-    public Group addGroup(Group group) {
-        return groupRepo.save(group);
-    }
+    public String addGroup(Group group) {
+        List <Group> filteredGroup = groupRepo.findAll();
+        String response = "successful";
+        for(Group filter : filteredGroup){
+            System.out.println(filter.getTitle());
+            if(filter.getTitle().equalsIgnoreCase(group.getTitle())){
+                response = "failed";
+
+            }
+
+
+        }
+        System.out.println(group.getTitle());
+
+        if (response == "successful")
+            groupRepo.save(group);
+
+        return response;    }
 }

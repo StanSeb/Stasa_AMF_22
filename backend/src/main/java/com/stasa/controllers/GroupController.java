@@ -23,7 +23,7 @@ public class GroupController {
         return groupService.getByUserId(userid); }
 
     @PostMapping("/register/group")
-    public Group register(@RequestBody Group group) {
+    public String register(@RequestBody Group group) {
 
         return groupService.addGroup(group);
     }
