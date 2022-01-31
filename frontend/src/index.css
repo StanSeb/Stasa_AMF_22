@@ -3,6 +3,7 @@ html {
 	padding: 0;
 	height: 100vh;
 	width: 100vw;
+	overflow-x: hidden;
 }
 
 body {
@@ -250,7 +251,43 @@ nav {
 
 .rulesContainer {
 	padding-top: 8em;
+	width: 80%;
+	margin: 0 auto;
 	overflow: auto;
+}
+
+ul>li {
+	padding: 0.5em;
+}
+
+.beforeRegistrationContainer {
+	text-align: left;
+	margin: 4em 0 2em 0;
+	color:rgb(97, 97, 97);
+}
+
+.beforeRegistrationContainer::after {
+	content: "";
+	display: block;
+	width: 100%;
+	height: 1px;
+	margin-top: 2em;
+	background-color: rgb(97, 97, 97);
+}
+
+.moreInfoClick {
+	color:grey;
+	border: solid 1px rgb(105, 105, 105);
+}
+
+.moreInfoClick:hover {
+	cursor: pointer;
+	background-color: white;
+	text-decoration: none;
+}
+
+.moreInfoClick>p {
+	margin: 0.25em;
 }
 
 .paragraphContainer>ul {
@@ -263,13 +300,45 @@ nav {
 	background-color: rgb(240, 240, 240);
 }
 
-.moreInfoClick {
-	cursor: pointer;
-	color: grey;
+.rulesParagraphContainer::before {
+	content: "";
+	display: block;
+	width: 100%;
+	height: 1px;
+	margin: 2em 0 2em 0;
+	background-color: rgb(97, 97, 97);
 }
 
-.rulesParagraphContainer>ul{
+.paragraphMoreContainer {
+	font-style: italic;
+	color: rgb(70, 70, 70);
+}
+
+.miscContainer>ul {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
+}
+
+.miscContainer::before {
+	content: "";
+	display: block;
+	width: 100%;
+	height: 1px;
+	margin: 2em 0 2em 0;
+	background-color: rgb(97, 97, 97);
+}
+
+footer {
+	margin: 2em 0 2em 0;
+	font-weight: bold;
+}
+
+footer::before {
+	content: "";
+	display: block;
+	width: 100%;
+	height: 1px;
+	margin: 2em 0 2em 0;
+	background-color: rgb(182, 182, 182);
 }
