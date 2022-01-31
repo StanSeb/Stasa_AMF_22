@@ -1,6 +1,7 @@
 import axios from "axios";
-import React from "react";
+import React, {useState} from "react";
 import ThreadCard from "../components/ThreadCard";
+import ThreadPage from "../pages/ThreadPage";
 import UserDropdown from "../components/UserDropdown";
 
 class GroupPage extends React.Component {
@@ -25,6 +26,7 @@ class GroupPage extends React.Component {
 				user08: { id: 8, username: "Dr. Leffe Bond" },
 				user09: { id: 9, username: "Agent Lars Schmidt" },
 			},
+			clickedThread: 0,
 		};
 	}
 
@@ -39,11 +41,26 @@ class GroupPage extends React.Component {
 			});
 	}
 
+	handleThreadClick(props) {
+		let clickedThread = props.id;
+		props.parent.setState({ clickedThread });
+	}
+
 	render() {
 		return (
 			<>
 				<div className="group-page">
-					<div className="group-posts">{RenderThreads(this.state.threads)}</div>
+					<>
+						<div className="group-posts">
+							{ShowThread(
+								this.state.threads,
+								this.handleThreadClick,
+								this.state.clickedThread,
+								this // parent som behövs för handleThreadClick
+								// 			Frågar du är du tönt
+							)}
+						</div>
+					</>
 					<div className="group-side-panel">
 						<div className="group-info">
 							<h3>{this.props.group.name}</h3>
@@ -60,12 +77,28 @@ class GroupPage extends React.Component {
 	}
 }
 
-function RenderThreads(props) {
+function ShowThread(threads, handleThreadClick, clickedThread, parent) {
+	if (clickedThread === 0) {
+		return <>{RenderThreads(threads, handleThreadClick, parent)}</>;
+	} else {
+		return <ThreadPage threadId={clickedThread}/>;
+	}
+}
+
+function RenderThreads(props, handleThreadClick, parent) {
 	if (props !== null) {
 		let threads = Object.values(props);
 		let threadList = [];
 		for (let i = 0; i < threads.length; i++) {
-			threadList.push(<ThreadCard thread={threads[i]} key={i} />);
+			threadList.push(
+				<ThreadCard
+					thread={threads[i]}
+					key={i}
+					handleThreadClick={(e) => handleThreadClick(e)
+					}
+					parent={parent}
+				/>
+			);
 		}
 		return threadList;
 	} else return null;

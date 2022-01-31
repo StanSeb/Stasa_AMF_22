@@ -172,6 +172,36 @@ code {
 	overflow-x: hidden;
 }
 
+.group-comments {
+	position: relative;
+	width: 68%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.comment-card{
+	border: 1px solid gray;
+	margin: .5em;
+}
+
+.group-posts-and-comments{
+	display: flex;
+	flex-direction: column;
+	width: 100vw;
+	height: 100%;
+}
+
+.group-posts-and-comments > :first-child{
+	margin-bottom: -10vh;
+}
+
+.comment-social-buttons{
+	display: flex;
+}
+
 .group-side-panel {
 	width: 30vw;
 	right: 0;
