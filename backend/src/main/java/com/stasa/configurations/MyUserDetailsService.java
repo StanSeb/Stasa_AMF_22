@@ -4,12 +4,15 @@ import com.stasa.entities.User;
 import com.stasa.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Configuration
+@CrossOrigin(origins="http://localhost:3000")
 public class MyUserDetailsService implements UserDetailsService {
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -17,8 +20,6 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepo userRepo;
-
-
 
 //  Springs way of calling the constructor
 //  @PostConstruct
@@ -29,16 +30,16 @@ public class MyUserDetailsService implements UserDetailsService {
 //  }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepo.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found by username: " + username);
+    public UserDetails loadUserByUsername(String email){
+        User user = userRepo.findByEmail(email);
+        if(user == null){
+            throw new UsernameNotFoundException("User not found by email:"+ email);
         }
         return toUserDetails(user);
     }
 
     public User addUser(User user){
-        // encrypt password before saving
+        //encrypt password before saving
         System.out.println(user);
         user.setPassword(encoder.encode(user.getPassword()));
         try {
@@ -51,6 +52,8 @@ public class MyUserDetailsService implements UserDetailsService {
 
     public User updateUser(User user){
         user.setPassword(encoder.encode(user.getPassword()));
+        user.setEnabled(false);
+        user.setDeletionTimestamp("2021-09-29");
         try {
             return userRepo.save(user);
         } catch (Exception ex) {
@@ -63,7 +66,7 @@ public class MyUserDetailsService implements UserDetailsService {
         // If you have a User entity you have to
         // use the userdetails User for this to work
         return org.springframework.security.core.userdetails.User
-                .withUsername(user.getUsername())
+                .withUsername(user.getEmail())
                 .password(user.getPassword())
                 .roles("USER").build();
     }
