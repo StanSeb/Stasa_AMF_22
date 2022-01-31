@@ -1,7 +1,9 @@
 package com.stasa.services;
 
 import com.stasa.configurations.MyUserDetailsService;
+import com.stasa.entities.Group;
 import com.stasa.entities.User;
+import com.stasa.repositories.GroupRepo;
 import com.stasa.repositories.UserRepo;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
@@ -25,6 +28,7 @@ import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
@@ -41,13 +45,10 @@ public class UserService {
     @Autowired
     private JavaMailSender mailSender;
 
-
     // bean from your SecurityConfig
     @Resource(name="authenticationManager")
     private AuthenticationManager authManager;
 
-
-    Random rand = new Random();
 
     public void register(User user, String siteURL)
         throws UnsupportedEncodingException, MessagingException{
@@ -58,8 +59,6 @@ public class UserService {
         detailsService.addUser(user);
         sendVerificationEmail(user,siteURL);
     }
-     // i my user detail service högst upp
-
     private void sendVerificationEmail(User user, String siteUrl)
     throws MessagingException, UnsupportedEncodingException{
         String toAdress = user.getEmail();
@@ -78,7 +77,7 @@ public class UserService {
         helper.setTo(toAdress);
         helper.setSubject(subject);
 
-        content=content.replace("[[name]]", user.getUsername()+rand);
+        content=content.replace("[[name]]", user.getUsername());
         String verifyUrl = siteUrl+"/verify/"+user.getVerificationCode();
 
         content = content.replace("[[URL]]", verifyUrl);
@@ -117,8 +116,27 @@ public class UserService {
         return null;
     }
 
+    // hämta id
+    // hämta user på id => myUserDetailService ändra värden.
+    public String terminateUser(long id){
+        //TODO: Kolla om användaren är admin eller ej
+        String role = userRepo.findUserRole();
+
+        if (role.equals("Users")){
+            User user = userRepo.findById(id).get();
+            detailsService.updateUser(user);
+
+            return "user has been terminated!";
+        }
+        else if (role.equals("Admin")){
+            return "You have to delete your groups before deleting your account!";
+        }
+        return "Could not find user!";
+    }
+
     public void deleteById(long id) {
-        userRepo.deleteById(id);
+
+       // userRepo.deleteById(id);
     }
 
     public void updateById(long id, User user) {
@@ -141,40 +159,9 @@ public class UserService {
         }
     }
 
-    /**
-     * @return The logged-in user or null if not logged in.
-     */
-    public User whoAmI() {
-        // the login session is stored between page reloads,
-        // and we can access the current authenticated user with this
-        // SecurityContextHolder.getContext() taps into the current session
-        // getAuthentication() returns the current logged in user
-        // getName() returns the logged in username (email in this case)
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication != null) {
-            String username = authentication.getName();
-            return userRepo.findByUsername(username);
-        }
-
-        return null;
+    public User whoAmI(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepo.findByEmail(email);
     }
 
-    public User login(User user, HttpServletRequest req) {
-        System.out.println("LOGIN ATTEMPT!");
-        try {
-            UsernamePasswordAuthenticationToken authReq
-                    = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-            Authentication auth = authManager.authenticate(authReq);
-
-            SecurityContext sc = SecurityContextHolder.getContext();
-            sc.setAuthentication(auth);
-            HttpSession session = req.getSession(true);
-            session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
-            System.out.println("NO EXCEPTION YET!");
-        } catch(BadCredentialsException err) {
-            throw new BadCredentialsException("Bad Credentials");
-        }
-
-        return whoAmI();
-    }
 }

@@ -43,9 +43,8 @@ justify-content: center;
 
 }
 
-#login {
+#login-form {
   display: flex;
-  flex-direction: column;
-  padding: 50px;
+  justify-content: center;
   background-color: rgb(206, 206, 206);
 }
