@@ -6,6 +6,9 @@ import com.stasa.repositories.MemberRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class MemberService {
     @Autowired
@@ -35,5 +38,9 @@ public class MemberService {
         //    response = "To be a member of a group you have to be logged into your account. Logg in and try again!";
         //}
         return response;
+    }
+
+    public List<Map> getMembersByGroupId(long groupId) {
+        return memberRepo.getMembersByGroupId(groupId);
     }
 }
