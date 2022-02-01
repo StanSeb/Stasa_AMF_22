@@ -56,8 +56,9 @@ class GroupPage extends React.Component {
 							{ShowThread(
 								this.state.threads,
 								this.handleThreadClick,
-								this.state.clickedThread // parent som behövs för handleThreadClick
+								this.state.clickedThread, // parent som behövs för handleThreadClick
 								// 			Frågar du är du tönt
+								this.props.loggedInUser
 							)}
 						</div>
 					</>
@@ -77,15 +78,15 @@ class GroupPage extends React.Component {
 	}
 }
 
-function ShowThread(threads, handleThreadClick, clickedThread) {
+function ShowThread(threads, handleThreadClick, clickedThread, loggedInUser) {
 	if (clickedThread === 0) {
-		return <>{RenderThreads(threads, handleThreadClick)}</>;
+		return <>{RenderThreads(threads, handleThreadClick, loggedInUser)}</>;
 	} else {
-		return <ThreadPage threadId={clickedThread}/>;
+		return <ThreadPage threadId={clickedThread} loggedInUser={loggedInUser}/>;
 	}
 }
 
-function RenderThreads(props, handleThreadClick) {
+function RenderThreads(props, handleThreadClick, loggedInUser) {
 	if (props !== null) {
 		let threads = Object.values(props);
 		let threadList = [];
@@ -96,6 +97,7 @@ function RenderThreads(props, handleThreadClick) {
 					key={i}
 					handleThreadClick={(e) => handleThreadClick(e)
 					}
+					loggedInUser={loggedInUser}
 				/>
 			);
 		}
