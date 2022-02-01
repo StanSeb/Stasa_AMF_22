@@ -1,21 +1,8 @@
 import React, { Component } from "react";
 import "./App.css";
-<<<<<<< HEAD
 import "./index.css"
 import Navbar from './components/Navbar'
-
-class App extends Component {
-
-  render() {
-    return (
-      <Navbar />
-    )
-  }
-=======
-import "./index.css";
 import GroupPage from "./pages/GroupPage";
-// import NewThread from './components/NewThread'
-import ThreadPage from "./pages/ThreadPage";
 
 class App extends Component {
 	constructor() {
@@ -35,17 +22,13 @@ class App extends Component {
 	render() {
 		return (
 			<div className="App">
-				{/* <NewThread user_id={this.state.loggedInUser.id} group_id={this.state.group.id}/> */}
-				<GroupPage
+				<Navbar />
+				{/* <GroupPage
 					group={this.state.group}
-					loggedInUser={this.state.loggedInUser}
-				/>
-				{/* <ThreadPage
 					loggedInUser={this.state.loggedInUser}
 				/> */}
 			</div>
 		);
 	}
->>>>>>> Threads
 }
 export default App;
