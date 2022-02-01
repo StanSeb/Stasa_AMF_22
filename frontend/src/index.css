@@ -226,6 +226,10 @@ code {
 	padding-top: 8em;
 }
 
+#login-form {
+	padding-top: 8em;
+}
+
 .profileContainer {
 	padding-top: 8em;
 }
@@ -262,6 +266,7 @@ nav {
 	width: 80%;
 	margin: 0 auto;
 	overflow: auto;
+	text-align: center;
 }
 
 ul>li {
@@ -356,6 +361,7 @@ footer::before {
 	width: 80%;
 	margin: 0 auto;
 	overflow: auto;
+	text-align: center;
 }
 
 .integritySubContainer {

@@ -3,6 +3,7 @@ package com.stasa.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.stasa.util.ApiConstants;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -10,10 +11,9 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.time.Instant;
 
-@Table(name = "users", indexes = {
-        @Index(name = "user_name", columnList = "user_name", unique = true),
-        @Index(name = "email", columnList = "email", unique = true)
-})
+import static com.stasa.util.ApiConstants.DELETION_REQUIRED_REPORTS;
+
+@Table(name = "users")
 @Entity
 @Getter
 @Setter
@@ -41,6 +41,18 @@ public class User {
 
     @Column(name = "deletion_timestamp")
     private String deletionTimestamp;
+
+    @OneToMany(mappedBy = "targetUser")
+    @JsonIgnoreProperties("targetUser")
+    @JsonIgnore
+    public List<Report> reports;
+
+    /* -------------------- ACCESSORS -------------------- */
+
+    @JsonProperty
+    public boolean canBeDeleted() {
+        return reports.size() >= DELETION_REQUIRED_REPORTS;
+    }
 
     @JsonIgnore
     public String getPassword() {
