@@ -10,6 +10,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 
 import static com.stasa.util.ApiConstants.DELETION_REQUIRED_REPORTS;
 

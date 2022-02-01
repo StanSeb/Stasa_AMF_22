@@ -12,9 +12,6 @@ public class MemberController {
         @Autowired
         private MemberService memberService;
 
-        /* Member{id=null, user=null, role=null, group=null} */
         @PostMapping("/join")
-        public void addMember(@RequestBody Member member){
-            memberService.addMember(member);
-        }
+        public String addMember(@RequestBody Member member) {return memberService.addMember(member); }
 }

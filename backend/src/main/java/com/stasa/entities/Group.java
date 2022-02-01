@@ -31,5 +31,3 @@ public class Group {
     private User user;
 
 }
-
-    @Column(name = "id", nullable = false)

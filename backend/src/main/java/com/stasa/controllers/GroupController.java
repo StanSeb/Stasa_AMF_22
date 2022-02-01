@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 //@RequestMapping("private")
@@ -25,5 +26,8 @@ public class GroupController {
 
         return groupService.addGroup(group);
     }
+
+    @GetMapping("/rest/getGroupById/{groupId}")
+    public List<Map> getGroupById(@PathVariable long groupId) { return groupService.getGroupById(groupId); }
 
 }
