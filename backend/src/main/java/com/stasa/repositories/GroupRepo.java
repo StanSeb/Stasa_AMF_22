@@ -12,11 +12,10 @@ import java.util.List;
 public interface GroupRepo extends JpaRepository <Group, Long> {
 
 
-    @Query(value = "SELECT groups.id, groups.title, groups.description " +
-            "FROM groups INNER JOIN members INNER JOIN member_roles INNER JOIN users "+
-            "ON groups.id = members.group_id "+
-            "AND members.role_id = member_roles.id "+
-            "AND members.user_id = users.id "+
-            "WHERE members.user_id = ?1 ", nativeQuery = true)
+    @Query(value = "SELECT groups.id, groups.title, groups.description "+
+            "FROM groups INNER JOIN members "+
+            "ON members.group_id = groups.id "+
+            "WHERE " +
+            "AND members.user_id = ?1", nativeQuery = true )
              List<Group> findByUserId(int user_id);
 }

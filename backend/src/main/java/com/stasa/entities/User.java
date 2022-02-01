@@ -17,7 +17,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private int id;
 
     @Column(name = "user_name", nullable = false, length = 50)
     private String username;
@@ -36,8 +36,7 @@ public class User {
     @Column(name = "deletion_timestamp")
     private Instant deletionTimestamp;
 
-    @Column(name = "verified", nullable = false)
-    private boolean verified = false;
+
 
 
     @JsonIgnore
