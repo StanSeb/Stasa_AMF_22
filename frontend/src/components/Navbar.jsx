@@ -7,7 +7,9 @@ import Register from '../pages/Register';
 import Profile from '../pages/Profile';
 import Login from '../pages/Login';
 
-function Navbar() {
+function Navbar(props) {
+
+        
 
     return <div className="containerNavbar">
         <Router>

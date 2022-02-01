@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import Axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 
+
 function Login() {
 
     const [getEmail, setEmail] = useState("");
     const [getPassword, setPassword] = useState("");
+   
 
 
     let navigate = useNavigate();
@@ -21,7 +23,7 @@ function Login() {
             "&password=" +
             encodeURIComponent(getPassword)
         if(getEmail===''||getPassword===''){
-            alert("you have to fill in the entire form")
+            alert("Du måste fylla i båda fälten")
 
         }
         else{
@@ -47,11 +49,12 @@ function Login() {
                 }
             })
             .then((response) => {
+                console.log(response.data)
                 if(response.data !=''){
-                    navigate("/");
+                    navigate('/');
                 }
                 else{
-                    alert("wrong credentials! try again")
+                    alert("Fel inloggningsuppgifter! Försök igen")
                 }
             
             })

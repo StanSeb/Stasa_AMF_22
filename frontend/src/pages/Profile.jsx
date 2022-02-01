@@ -1,9 +1,12 @@
 import { render } from '@testing-library/react';
 import React, { Component } from 'react';
+import { unstable_renderSubtreeIntoContainer } from 'react-dom';
 import {useNavigate} from 'react-router-dom'
 
 
+
 export default function Profile() {
+   
     let navigate = useNavigate();
 
     
@@ -16,6 +19,7 @@ export default function Profile() {
             navigate("/getGroups");
         }}>Get groups</button> 
         </div>;
+
   
 }
 
