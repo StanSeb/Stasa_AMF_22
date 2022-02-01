@@ -2,6 +2,13 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 class ThreadCard extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			content: "",
+			title: "",
+		}
+	}
 	handleClick(target) {
 		console.log(target.innerText + " on " + this.props.thread.id);
 	}
@@ -10,6 +17,7 @@ class ThreadCard extends React.Component {
 		return (
 			<div className="thread">
 				<div className="thread-header">
+					{editButton(this)}
 					<div className="thread-title">
 						<ThreadTitle
 							title={this.props.thread.title}
@@ -64,9 +72,28 @@ class ThreadCard extends React.Component {
 	}
 }
 
+function editButton(props) {
+	function handleClick(target) {
+		let thread = target.parentNode.parentNode;
+		let title = thread.childNodes[0].childNodes[1].childNodes[0];
+		let content = thread.childNodes[1].childNodes[0];
+		console.log(props)
+		let id = props.props.thread.id;
+	}
+
+	return (
+		<button
+			className="thread-edit-button"
+			onClick={(e) => handleClick(e.target)}
+		>
+			Edit
+		</button>
+	);
+}
+
 function ThreadTitle(props) {
 	function handleClick() {
-		if (typeof (props.handleThreadClick) === 'function') {
+		if (typeof props.handleThreadClick === "function") {
 			props.handleThreadClick(props);
 		}
 	}
