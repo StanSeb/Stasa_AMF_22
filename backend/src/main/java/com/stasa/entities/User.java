@@ -73,4 +73,12 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
+    
+    @JsonProperty
+    public String getUsername() {
+        if(!enabled){
+            return "DeletedUser";
+        }
+        return username;
+    }
 }

@@ -7,11 +7,12 @@ import Register from '../pages/Register';
 import Profile from '../pages/Profile';
 import Login from '../pages/Login';
 
-function Navbar() {
-
+function Navbar(props) {
     return <div className="containerNavbar">
         <Router>
             <nav>
+                
+                <p className="inloggad-användare">Inloggad användare: {props.userObj.username}</p>
                 <ul>
                     <li>
                         <Link to="/"><h3>Hem</h3></Link>
@@ -35,10 +36,10 @@ function Navbar() {
             </nav>
             <Routes>
                 <Route path="/register" element={<Register/>} />
-                <Route path="/profile" element={<Profile/>} />
+                <Route path="/profile" element={<Profile userObj={props.userObj}/>} />
                 <Route path="/rules" element={<RulesPage/>} />
                 <Route path="/integrity" element={<IntegrityPage/>} />
-                <Route path="/login" element={<Login/>} />
+                <Route path="/login" element={<Login storeId={props.storeId}/>} />
             </Routes> 
         </Router>
     </div>;

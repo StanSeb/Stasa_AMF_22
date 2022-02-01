@@ -19,16 +19,22 @@ class App extends Component {
 		};
 	}
 
-	render() {
-		return (
-			<div className="App">
-				<Navbar />
-				{/* <GroupPage
-					group={this.state.group}
-					loggedInUser={this.state.loggedInUser}
-				/> */}
-			</div>
-		);
-	}
+  constructor(){
+    super();
+    this.state = {userID: 0} 
+    this.handleWhoAmI = this.handleWhoAmI.bind(this)
+  }
+
+  handleWhoAmI(id){
+    this.setState({userID: id}, ()=> {
+      console.log(this.state.userID)
+    })
+  }
+
+  render() {
+    return (
+      <Navbar storeId={this.handleWhoAmI} userObj={this.state.userID}/>
+    )
+  }
 }
 export default App;
