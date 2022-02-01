@@ -8,5 +8,5 @@ import java.util.List;
 public interface MemberRepo extends JpaRepository<Member, Long> {
 
 
-    List<Member> getByUser(int user_id);
+    List<Member> getByUserId(int userId);
 }

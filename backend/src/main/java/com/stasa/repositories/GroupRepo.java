@@ -17,5 +17,5 @@ public interface GroupRepo extends JpaRepository <Group, Long> {
             "ON members.group_id = groups.id "+
             "WHERE " +
             "AND members.user_id = ?1", nativeQuery = true )
-             List<Group> findByUserId(int user_id);
+             List<Group> findByUserId(int userid);
 }

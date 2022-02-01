@@ -17,7 +17,7 @@ public class MemberService {
         return memberRepo.findAll();
     }
 
-    public List<Member> getByUser(int user_id) {
-        return memberRepo.getByUser(user_id);
+    public List<Member> getByUserId(int userId) {
+        return memberRepo.getByUserId(userId);
     }
 }

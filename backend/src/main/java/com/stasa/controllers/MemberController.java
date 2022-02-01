@@ -20,8 +20,8 @@ public class MemberController {
         return memberService.getAll();
     }
 
-    @GetMapping("GetMembersByUserId/{user_id}")
-    public List <Member> getByUser(@PathVariable int user_id){
-        return memberService.getByUser(user_id);
+    @GetMapping("GetMembersByUserId/{userId}")
+    public List <Member> getByUserId(@PathVariable int userId){
+        return memberService.getByUserId(userId);
     }
 }

@@ -30,7 +30,7 @@ public class GroupService {
     }
 
 
-    public List<Group> getByUserId(int user_id) {
-        return groupRepo.findByUserId(user_id);
+    public List<Group> getByUserId(int userid) {
+        return groupRepo.findByUserId(userid);
     }
 }
