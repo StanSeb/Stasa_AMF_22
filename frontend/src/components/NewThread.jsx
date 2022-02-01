@@ -1,45 +1,73 @@
 import React from "react";
-import Axios from "axios";
+import axios from "axios";
 
 class NewThread extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      title: '',
-      content: ''
-    }
+	constructor(props) {
+		super(props);
+		this.state = {
+			thread: {
+				title: "",
+				content: "",
+				groupId: "",
+				creatorId: "",
+			},
+		};
 
-    this.titleChange = this.titleChange.bind(this);
-    this.contentChange = this.contentChange.bind(this);
-  }
+		this.titleChange = this.titleChange.bind(this);
+		this.contentChange = this.contentChange.bind(this);
+	}
 
-  titleChange(event) {
-    this.setState({ title: event.target.value });
-  }
+	titleChange(event) {
+		this.setState({ title: event.target.value });
+	}
 
-  contentChange(event) {
-    this.setState({ content: event.target.value });
-  }
+	contentChange(event) {
+		this.setState({ content: event.target.value });
+	}
 
-  postThread() {
-    let threadObject = { group_id: "1QxY0euu1iD2FM5NKPcA", user_id: "W5jdoeOwwz25Zvf7aMSJ", content: this.state.content, title: this.state.title }
-    
-    console.log(threadObject);
-  }
+	postThread() {
+		let thread = {
+			title: this.state.title,
+			content: this.state.content,
+			groupId: this.props.group_id,
+			creatorId: this.props.user_id,
+		};
 
-  render() {
-    return (
-      <>
-        <div className="new-thread">
-          <label>Title</label>
-          <input type="text" value={this.state.title} onChange={this.titleChange}/>
-          <label>Content</label>
-          <textarea value={this.state.content} onChange={this.contentChange}/>
-          <button onClick={() => this.postThread()}>Post</button>
-        </div>
-      </>
-    )
-  }
+    this.setState({ thread }, () => {
+      console.log(this.state.thread)
+			axios
+				.post("http://localhost:8080/rest/threads/newThread", this.state.thread)
+				.then((response) => {
+					console.log(response);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		});
+	}
+
+	render() {
+		return (
+			<>
+				<div className="new-thread">
+					<label>Title</label>
+					<input
+						type="text"
+						className="new-thread-title"
+						value={this.state.title || ""}
+						onChange={this.titleChange}
+					/>
+					<label>Content</label>
+					<textarea
+						className="new-thread-content"
+						value={this.state.content}
+						onChange={this.contentChange}
+					/>
+					<button onClick={() => this.postThread()}>Post</button>
+				</div>
+			</>
+		);
+	}
 }
 
 export default NewThread;

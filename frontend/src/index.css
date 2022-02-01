@@ -20,6 +20,7 @@ code {
 		monospace;
 }
 
+/*#region Threads*/
 .thread {
 	margin: 1em;
 	width: 65vw;
@@ -87,7 +88,9 @@ code {
 .thread-tags > * {
 	margin-right: 1em;
 }
+/*#endregion */
 
+/*#region new-thread*/
 .new-thread {
 	width: 40%;
 	display: flex;
@@ -95,12 +98,14 @@ code {
 	border: 1px solid gray;
 }
 
-.new-thread > input {
+.new-thread-title {
+	resize: none;
 	width: 98%;
+	height: 1em;
 	margin: 1%;
 }
 
-.new-thread > textarea {
+.new-thread-content {
 	width: 98%;
 	height: 8em;
 	margin: 1%;
@@ -109,7 +114,9 @@ code {
 .new-thread > label {
 	margin-left: 1%;
 }
+/*#endregion */
 
+/*#region user-dropdown*/
 .user-drop {
 	position: relative;
 	display: inline-block;
@@ -146,7 +153,9 @@ code {
 .user-drop:hover .user-drop-button {
 	background-color: lightgray;
 }
+/*#endregion*/
 
+/*#region group-page*/
 .group-page {
 	position: relative;
 	margin: 0;
@@ -161,6 +170,36 @@ code {
 	flex-direction: column;
 	overflow-y: auto;
 	overflow-x: hidden;
+}
+
+.group-comments {
+	position: relative;
+	width: 68%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.comment-card{
+	border: 1px solid gray;
+	margin: .5em;
+}
+
+.group-posts-and-comments{
+	display: flex;
+	flex-direction: column;
+	width: 100vw;
+	height: 100%;
+}
+
+.group-posts-and-comments > :first-child{
+	margin-bottom: -10vh;
+}
+
+.comment-social-buttons{
+	display: flex;
 }
 
 .group-side-panel {
@@ -198,13 +237,13 @@ code {
 }
 
 .group-members > * > button {
-  background-color: lightgray;
+	background-color: lightgray;
 	border: 1px solid gray;
 	outline: none;
 }
 
 .group-members > *:hover > button:hover {
-  background-color: gray;
+	background-color: gray;
 }
 #group-admin {
 	background-color: rgba(255, 75, 50);
@@ -221,6 +260,7 @@ code {
 #group-moderator:hover {
 	background-color: rgba(50, 75, 150);
 }
+/*#endregion*/
 
 #register-form {
 	padding-top: 8em;

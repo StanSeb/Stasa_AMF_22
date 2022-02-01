@@ -1,4 +1,5 @@
 import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 class ThreadCard extends React.Component {
 	handleClick(target) {
@@ -9,8 +10,14 @@ class ThreadCard extends React.Component {
 		return (
 			<div className="thread">
 				<div className="thread-header">
-					<span className="thread-title">{this.props.thread.title}</span>
-					<span>/{this.props.thread.username}</span>
+					<div className="thread-title">
+						<ThreadTitle
+							title={this.props.thread.title}
+							id={this.props.thread.id}
+							handleThreadClick={this.props.handleThreadClick}
+						/>
+					</div>
+					<span>/ {this.props.thread.creatorId}</span>
 				</div>
 				<div className="thread-main">
 					<p>{this.props.thread.content}</p>
@@ -55,6 +62,16 @@ class ThreadCard extends React.Component {
 			</div>
 		);
 	}
+}
+
+function ThreadTitle(props) {
+	function handleClick() {
+		if (typeof (props.handleThreadClick) === 'function') {
+			props.handleThreadClick(props);
+		}
+	}
+
+	return <span onClick={() => handleClick(props.title)}>{props.title}</span>;
 }
 
 export default ThreadCard;
