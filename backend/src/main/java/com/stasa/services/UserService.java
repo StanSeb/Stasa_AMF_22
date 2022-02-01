@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -61,7 +62,7 @@ public class UserService {
     }
     private void sendVerificationEmail(User user, String siteUrl)
     throws MessagingException, UnsupportedEncodingException{
-        String toAdress = user.getEmail();
+        String toAdress = user.getDecodedEmail();
         String fromAddress = "Stasa.Bestmail.com";
         String senderName = "SuperTeamAllstarsStraightAAAAS";
         String subject = "Please verify you registration";
@@ -161,6 +162,7 @@ public class UserService {
 
     public User whoAmI(){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println(email);
         return userRepo.findByEmail(email);
     }
 

@@ -6,6 +6,7 @@ function Login(props) {
     const [getProps, setProps] = useState(0);
     const [getEmail, setEmail] = useState("");
     const [getPassword, setPassword] = useState("");
+   
 
     let navigate = useNavigate();
 
@@ -18,7 +19,7 @@ function Login(props) {
             "&password=" +
             encodeURIComponent(getPassword)
         if(getEmail===''||getPassword===''){
-            alert("you have to fill in the entire form")
+            alert("Du måste fylla i båda fälten")
 
         }
         else{
@@ -44,6 +45,7 @@ function Login(props) {
                 }
             })
             .then((response) => {
+                console.log(response.data)
                 if(response.data !=''){
                     const {id, username} = response.data
                     
@@ -52,7 +54,7 @@ function Login(props) {
                     navigate("/");
                 }
                 else{
-                    alert("wrong credentials! try again")
+                    alert("Fel inloggningsuppgifter! Försök igen")
                 }
             
             })

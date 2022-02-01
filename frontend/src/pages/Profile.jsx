@@ -1,5 +1,6 @@
 import { render } from '@testing-library/react';
 import React, { Component } from 'react';
+import { unstable_renderSubtreeIntoContainer } from 'react-dom';
 import {useNavigate} from 'react-router-dom'
 import Axios from 'axios'
 import axios from 'axios';
@@ -25,6 +26,7 @@ export default function Profile(props) {
 
         <button onClick={terminateUserById}>Stäng av kontot</button>
         </div>;
+
   
 }
 
