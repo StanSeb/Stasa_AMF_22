@@ -18,31 +18,23 @@ public class GroupController {
     @Autowired
     private GroupService groupService;
 
-    @GetMapping("rest/getAllGroups")
+
+
+    @GetMapping("getGroupsByUserId/{user_id}")
+    public List <Group> getByUserId(@PathVariable int user_id){
+        return groupService.getByUserId(user_id);
+    }
+
+
+
+
+    @GetMapping("/getAllGroups")
     public List <Group> getAll(){
         return groupService.findAll();
     }
 
-
-
-
-
-
-    @GetMapping("rest/getByUserId/{userid}")
-    public List <Group> getByUser(@PathVariable int userid) {
-        return groupService.getByUserid(userid);
-    }
-
-
-
-
-
-
-
-
     @PostMapping("/register/group")
     public String register(@RequestBody Group group) {
-
         return groupService.addGroup(group);
     }
 

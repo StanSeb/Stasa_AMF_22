@@ -15,30 +15,22 @@ public class GroupService {
     private GroupRepo groupRepo;
 
 
-
-
     public String addGroup(Group group) {
         List <Group> filteredGroup = groupRepo.findAll();
         String response = "successful";
         for(Group filter : filteredGroup){
             if(filter.getTitle().equalsIgnoreCase(group.getTitle())){
-                response = "failed";
-
-            }
-
-
-        }
-
-        if (response == "successful")
+                response = "failed";}       }
+            if (response == "successful")
             groupRepo.save(group);
-
-        return response;    }
+                return response;    }
 
     public List<Group> findAll() {
         return groupRepo.findAll();
     }
 
-    public List<Group> getByUserid(int userid) {
-        return groupRepo.findByUserid(userid);
+
+    public List<Group> getByUserId(int user_id) {
+        return groupRepo.findByUserId(user_id);
     }
 }

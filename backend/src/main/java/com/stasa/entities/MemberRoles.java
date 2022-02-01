@@ -1,18 +1,18 @@
 package com.stasa.entities;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
-import javax.persistence.*;
 
 @Entity
 @Data
 
-@Table(name="groups", schema="stasa", catalog="stasa")
-public class Group {
+public class MemberRoles {
+
     @Id
     @Column(name = "id")
     @GeneratedValue(generator = "NATIVE")
@@ -21,9 +21,5 @@ public class Group {
 
     @Column(name = "title")
     private String title;
-
-    @Column(name = "description")
-    private String description;
-
 
 }
