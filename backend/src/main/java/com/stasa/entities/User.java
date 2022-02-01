@@ -29,11 +29,14 @@ public class User {
     @Column(name = "user_name",  length = 50)
     private String username;
 
+    @JsonIgnore
     @Column(name = "email",  length = 80)
     private String email;
 
+    @JsonIgnore
     @Column(name = "password",  length = 80)
     private String password;
+
     @Column(name="verification_code",length=50)
     private String verificationCode;
 
@@ -65,6 +68,7 @@ public class User {
         this.password = password;
     }
 
+    @JsonIgnore
    public String getDecodedEmail(){
        byte[] decodedBytes = Base64.getDecoder().decode(this.email);
        return new String(decodedBytes);
