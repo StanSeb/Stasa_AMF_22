@@ -14,9 +14,7 @@ public class GroupService {
     @Autowired
     private GroupRepo groupRepo;
 
-    public List<Group> getByUserId( int userid) {
-        return groupRepo.getByUserId(userid);
-    }
+
 
 
     public String addGroup(Group group) {
@@ -38,5 +36,9 @@ public class GroupService {
 
     public List<Group> findAll() {
         return groupRepo.findAll();
+    }
+
+    public List<Group> getByUserid(int userid) {
+        return groupRepo.findByUserid(userid);
     }
 }

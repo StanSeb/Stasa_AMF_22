@@ -23,9 +23,22 @@ public class GroupController {
         return groupService.findAll();
     }
 
-    @GetMapping("/rest/getByUserId/{userid}")
-    public List<Group> getByUserId(@PathVariable int userid) {
-        return groupService.getByUserId(userid); }
+
+
+
+
+
+    @GetMapping("rest/getByUserId/{userid}")
+    public List <Group> getByUser(@PathVariable int userid) {
+        return groupService.getByUserid(userid);
+    }
+
+
+
+
+
+
+
 
     @PostMapping("/register/group")
     public String register(@RequestBody Group group) {

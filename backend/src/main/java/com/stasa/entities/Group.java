@@ -25,8 +25,7 @@ public class Group {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name ="user_id")
-    private User user;
+    @Column(name ="user_id")
+    private int userid;
 
 }

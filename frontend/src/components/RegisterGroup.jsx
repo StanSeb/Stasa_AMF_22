@@ -45,7 +45,7 @@ export default class RegisterGroup extends Component {
       .then((response) => response.data)
     .then((data) =>{
       this.setState({message: data});
-      console.log(this.state.groups);
+      console.log(this.state.message);
     });
 
   
