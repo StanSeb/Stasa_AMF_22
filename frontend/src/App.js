@@ -5,9 +5,21 @@ import Navbar from './components/Navbar'
 
 class App extends Component {
 
+  constructor(){
+    super();
+    this.state = {userID: 0} 
+    this.handleWhoAmI = this.handleWhoAmI.bind(this)
+  }
+
+  handleWhoAmI(id){
+    this.setState({userID: id}, ()=> {
+      console.log(this.state.userID)
+    })
+  }
+
   render() {
     return (
-      <Navbar />
+      <Navbar storeId={this.handleWhoAmI} getId={this.state.userID}/>
     )
   }
 }

@@ -126,12 +126,12 @@ public class UserService {
             User user = userRepo.findById(id).get();
             detailsService.updateUser(user);
 
-            return "user has been terminated!";
+            return "Användaren är avstängd!";
         }
         else if (role.equals("Admin")){
-            return "You have to delete your groups before deleting your account!";
+            return "Du måste gå ur dina grupper där du är Admin innan du kan stänga av ditt konto!";
         }
-        return "Could not find user!";
+        return "Kunde inte hitta användaren!";
     }
 
     public void deleteById(long id) {

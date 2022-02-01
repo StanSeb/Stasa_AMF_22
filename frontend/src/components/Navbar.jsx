@@ -7,8 +7,7 @@ import Register from '../pages/Register';
 import Profile from '../pages/Profile';
 import Login from '../pages/Login';
 
-function Navbar() {
-
+function Navbar(props) {
     return <div className="containerNavbar">
         <Router>
             <nav>
@@ -35,10 +34,10 @@ function Navbar() {
             </nav>
             <Routes>
                 <Route path="/register" element={<Register/>} />
-                <Route path="/profile" element={<Profile/>} />
+                <Route path="/profile" element={<Profile getId={props.getId}/>} />
                 <Route path="/rules" element={<RulesPage/>} />
                 <Route path="/integrity" element={<IntegrityPage/>} />
-                <Route path="/login" element={<Login/>} />
+                <Route path="/login" element={<Login storeId={props.storeId}/>} />
             </Routes> 
         </Router>
     </div>;
