@@ -116,6 +116,10 @@ public class UserService {
         return null;
     }
 
+    public String getUsernamyById(long id) {
+        return userRepo.findUsernameById(id);
+    }
+
     // hämta id
     // hämta user på id => myUserDetailService ändra värden.
     public String terminateUser(long id){

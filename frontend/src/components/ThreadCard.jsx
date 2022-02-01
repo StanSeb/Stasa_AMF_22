@@ -1,9 +1,22 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import axios from "axios";
 
 class ThreadCard extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			username: ""
+		}
+	}
+
 	handleClick(target) {
 		console.log(target.innerText + " on " + this.props.thread.id);
+	}
+
+	componentDidMount() {
+		axios
+			.get("/rest/users/getUsername/38")
+			.then((response) => {this.setState({username: response.data })})
 	}
 
 	render() {
@@ -17,7 +30,7 @@ class ThreadCard extends React.Component {
 							handleThreadClick={this.props.handleThreadClick}
 						/>
 					</div>
-					<span>/ {this.props.thread.creatorId}</span>
+					<span>/ {this.state.username}</span>
 				</div>
 				<div className="thread-main">
 					<p>{this.props.thread.content}</p>

@@ -31,7 +31,6 @@ class ThreadPage extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log(this.props.threadId)
 		let thread;
 		axios
 			.get("http://localhost:8080/rest/threads/byId/" + this.props.threadId)

@@ -92,6 +92,8 @@ code {
 
 /*#region new-thread*/
 .new-thread {
+	position: fixed;
+	top: 50%;
 	width: 40%;
 	display: flex;
 	flex-wrap: wrap;
@@ -164,6 +166,7 @@ code {
 }
 
 .group-posts {
+	margin-top: 14.5vh;
 	width: 68%;
 	height: 100%;
 	display: flex;
@@ -278,6 +281,7 @@ nav {
 	width: 100vw;
 	background: white;
 	position: fixed;
+	z-index: 5;
 }
 
 .containerNavbar>nav>ul {

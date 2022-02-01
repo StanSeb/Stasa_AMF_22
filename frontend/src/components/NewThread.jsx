@@ -29,8 +29,8 @@ class NewThread extends React.Component {
 		let thread = {
 			title: this.state.title,
 			content: this.state.content,
-			groupId: this.props.group_id,
-			creatorId: this.props.user_id,
+			groupId: 2,
+			creatorId: 38,
 		};
 
     this.setState({ thread }, () => {

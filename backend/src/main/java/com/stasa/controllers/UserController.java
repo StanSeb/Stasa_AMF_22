@@ -56,6 +56,9 @@ public class UserController {
         return userService.findById(id);
     }
 
+    @GetMapping("/rest/users/getUsername/{id}")
+    public String getUsernameById(@PathVariable long id){ return userService.getUsernamyById(id); };
+
     @DeleteMapping("/rest/users/{id}")
     public void deleteById(@PathVariable long id) { userService.deleteById(id); }
 
