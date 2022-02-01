@@ -11,6 +11,8 @@ function Navbar(props) {
     return <div className="containerNavbar">
         <Router>
             <nav>
+                
+                <p className="inloggad-användare">Inloggad användare: {props.userObj.username}</p>
                 <ul>
                     <li>
                         <Link to="/"><h3>Hem</h3></Link>
@@ -34,7 +36,7 @@ function Navbar(props) {
             </nav>
             <Routes>
                 <Route path="/register" element={<Register/>} />
-                <Route path="/profile" element={<Profile getId={props.getId}/>} />
+                <Route path="/profile" element={<Profile userObj={props.userObj}/>} />
                 <Route path="/rules" element={<RulesPage/>} />
                 <Route path="/integrity" element={<IntegrityPage/>} />
                 <Route path="/login" element={<Login storeId={props.storeId}/>} />

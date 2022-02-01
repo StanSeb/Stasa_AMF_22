@@ -6,8 +6,7 @@ import axios from 'axios';
 
 export default function Profile(props) {
    async function terminateUserById() {
-            //console.log("test.. " + props.getId)
-        await axios.put("/auth/terminateUser/"+ props.getId)
+        await axios.put("/auth/terminateUser/"+ props.userObj.id)
         .then(response => {
             alert(response.data)
         })

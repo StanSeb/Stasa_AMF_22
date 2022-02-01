@@ -19,7 +19,7 @@ class App extends Component {
 
   render() {
     return (
-      <Navbar storeId={this.handleWhoAmI} getId={this.state.userID}/>
+      <Navbar storeId={this.handleWhoAmI} userObj={this.state.userID}/>
     )
   }
 }

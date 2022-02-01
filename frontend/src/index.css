@@ -109,6 +109,11 @@ code {
 .new-thread > label {
 	margin-left: 1%;
 }
+.inloggad-användare{
+	position: fixed;
+	right: 1em;
+	user-select: none;
+}
 
 .user-drop {
 	position: relative;
