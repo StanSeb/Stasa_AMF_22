@@ -15,7 +15,6 @@ class ThreadCard extends React.Component {
 							title={this.props.thread.title}
 							id={this.props.thread.id}
 							handleThreadClick={this.props.handleThreadClick}
-							parent={this.props.parent}
 						/>
 					</div>
 					<span>/ {this.props.thread.creatorId}</span>
@@ -67,11 +66,12 @@ class ThreadCard extends React.Component {
 
 function ThreadTitle(props) {
 	function handleClick() {
-		props.handleThreadClick(props)
+		if (typeof (props.handleThreadClick) === 'function') {
+			props.handleThreadClick(props);
+		}
 	}
 
-	return (
-		<span onClick={() => handleClick(props.title)}>{props.title}</span>);
+	return <span onClick={() => handleClick(props.title)}>{props.title}</span>;
 }
 
 export default ThreadCard;

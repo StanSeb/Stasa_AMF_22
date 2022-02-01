@@ -40,6 +40,16 @@ class ThreadPage extends React.Component {
 				thread = data;
 				this.setState({ thread });
 			});
+		
+//Avkommentera när det börjar bli dags att hämta kommentarer
+			// let comments;
+			// axios
+			// 	.get("http://localhost:8080/rest/comments/byThread/1")
+			// 	.then((response) => response.data)
+			// 	.then((data) => {
+			// 		comments = data;
+			// 		this.setState({ comments });
+			// 	});
 	}
 
 	render() {
@@ -73,17 +83,6 @@ function RenderComments(props, loggedInUser) {
 		);
 	}
 	return commentList;
-}
-
-function RenderUsers(props, loggedInUser) {
-	let users = Object.values(props);
-	let usersList = [];
-	for (let i = 0; i < users.length; i++) {
-		usersList.push(
-			<UserDropdown user={users[i]} key={i} loggedInUser={loggedInUser} />
-		);
-	}
-	return usersList;
 }
 
 export default ThreadPage;

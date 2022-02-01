@@ -28,12 +28,13 @@ class GroupPage extends React.Component {
 			},
 			clickedThread: 0,
 		};
+		this.handleThreadClick = this.handleThreadClick.bind(this);
 	}
 
 	componentDidMount() {
 		let threads;
 		axios
-			.get("http://localhost:8080/rest/threads/byGroup/1")
+			.get("http://localhost:8080/rest/threads/byGroup/2")
 			.then((response) => response.data)
 			.then((data) => {
 				threads = data;
@@ -43,7 +44,7 @@ class GroupPage extends React.Component {
 
 	handleThreadClick(props) {
 		let clickedThread = props.id;
-		props.parent.setState({ clickedThread });
+		this.setState({ clickedThread });
 	}
 
 	render() {
@@ -55,8 +56,7 @@ class GroupPage extends React.Component {
 							{ShowThread(
 								this.state.threads,
 								this.handleThreadClick,
-								this.state.clickedThread,
-								this // parent som behövs för handleThreadClick
+								this.state.clickedThread // parent som behövs för handleThreadClick
 								// 			Frågar du är du tönt
 							)}
 						</div>
@@ -77,15 +77,15 @@ class GroupPage extends React.Component {
 	}
 }
 
-function ShowThread(threads, handleThreadClick, clickedThread, parent) {
+function ShowThread(threads, handleThreadClick, clickedThread) {
 	if (clickedThread === 0) {
-		return <>{RenderThreads(threads, handleThreadClick, parent)}</>;
+		return <>{RenderThreads(threads, handleThreadClick)}</>;
 	} else {
 		return <ThreadPage threadId={clickedThread}/>;
 	}
 }
 
-function RenderThreads(props, handleThreadClick, parent) {
+function RenderThreads(props, handleThreadClick) {
 	if (props !== null) {
 		let threads = Object.values(props);
 		let threadList = [];
@@ -96,7 +96,6 @@ function RenderThreads(props, handleThreadClick, parent) {
 					key={i}
 					handleThreadClick={(e) => handleThreadClick(e)
 					}
-					parent={parent}
 				/>
 			);
 		}
