@@ -2,7 +2,6 @@ import { render } from '@testing-library/react';
 import React, { Component } from 'react';
 import { unstable_renderSubtreeIntoContainer } from 'react-dom';
 import {useNavigate} from 'react-router-dom'
-import Axios from 'axios'
 import axios from 'axios';
 
 export default function Profile(props) {
@@ -11,6 +10,16 @@ export default function Profile(props) {
         .then(response => {
             alert(response.data)
         })
+    }
+    async function logOut() {
+        await fetch("/logout", {
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            mode: 'no-cors',
+        })
+        navigate("/")
+        window.location.reload(true)
     }
 
     let navigate = useNavigate();
@@ -25,6 +34,7 @@ export default function Profile(props) {
         }}>Get groups</button> 
 
         <button onClick={terminateUserById}>Stäng av kontot</button>
+        <button onClick={logOut}>Logga ut</button>
         </div>;
 
   
