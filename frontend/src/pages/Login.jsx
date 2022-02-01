@@ -2,18 +2,15 @@ import React, { useState } from 'react'
 import Axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 
-function Login() {
-
+function Login(props) {
+    const [getProps, setProps] = useState(0);
     const [getEmail, setEmail] = useState("");
     const [getPassword, setPassword] = useState("");
 
-
     let navigate = useNavigate();
 
-
-
     // POST request using fetch with async/await
-    async function loginUser() {
+    async function loginUser(props) {
         // const newUserObject = { username: getEmail, password: getPassword };
         const credentials =
             "username=" +
@@ -35,11 +32,11 @@ function Login() {
                 body: credentials,
                 
             })
-            whoAmI()
+            whoAmI(props)
         }
     }
-    async function whoAmI() {
-
+    async function whoAmI(props) {
+        console.log(props.storeId)
         await Axios
             .get("/rest/whoami", {
                 headers: {
@@ -48,6 +45,10 @@ function Login() {
             })
             .then((response) => {
                 if(response.data !=''){
+                    const {id, username} = response.data
+                    
+                    const userObject = {id: id, username: username}
+                    props.storeId(userObject)
                     navigate("/");
                 }
                 else{
@@ -67,16 +68,14 @@ function Login() {
         navigate("/");
     }
 
-
-
-    const handleSubmit = (event) => {
+    const handleSubmit = (event, props) => {
         event.preventDefault()
-        loginUser();
+        loginUser(props);
     }
 
     return (
         <div id="login-form">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={(e) => handleSubmit(e, props)}>
                 <div>
                     <label>Login</label>
                 </div>

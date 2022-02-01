@@ -25,14 +25,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
-
     private String getSiteURL(HttpServletRequest request){
 
         String siteURL = request.getRequestURL().toString();
         return siteURL.replace(request.getServletPath(),"");
     }
-
 
     @GetMapping("/verify/{code}")
     public String verifyUser(@PathVariable String code){
@@ -62,10 +59,6 @@ public class UserController {
     @PutMapping("/rest/users/{id}")
     public void updateById(@RequestBody User user, @PathVariable long id) { userService.updateById(id, user); }
 
-
-
-
-
     @PostMapping("/rest/process_register")
     public String processRegister(@RequestBody User user, HttpServletRequest request)
     throws UnsupportedEncodingException, MessagingException {
@@ -73,15 +66,9 @@ public class UserController {
         return "register_success";
     }
 
-//   @PostMapping("/rest/login")
-//  public User login(@RequestBody User user) {
-//        System.out.println("LOGIN!");
-//       return userService.login(user);
-//   }
-
     @GetMapping("/rest/whoami")
     public User whoAmI() {
-        System.out.println("whoami controller works");
+        System.out.println(userService.whoAmI());
         return userService.whoAmI(); }
     
     @PutMapping("/auth/terminateUser/{id}")
