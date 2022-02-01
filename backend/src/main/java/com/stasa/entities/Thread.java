@@ -28,10 +28,10 @@ public class Thread {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "group_id", nullable = false, length = 80)
+    @Column(name = "group_id", length = 80)
     private long groupId;
 
-    @Column(name = "creator_id", nullable = false, length = 80)
+    @Column(name = "creator_id", length = 80)
     private long creatorId;
 
     @Column(name = "deletion_timestamp", length = 80)
