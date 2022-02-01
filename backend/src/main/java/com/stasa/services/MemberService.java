@@ -30,12 +30,12 @@ public class MemberService {
             int membership = memberRepo.isMember( memberUserId, memberGroupId );
             if (membership == 0){
                 memberRepo.save(member);
-                response = "You have been successfully added to the requested group!";
+                response = "Du har lagts till i den begärda gruppen!!";
             } else {
-                response = "You are already part of this group. We can't add you again!";
+                response = "Du är redan medlem av den här gruppen. Vi kan inte lägga till dig igen!";
             }
         //}else{
-        //    response = "To be a member of a group you have to be logged into your account. Logg in and try again!";
+        //    response = "För att vara medlem i en grupp måste du vara inloggad på ditt konto. Logga in och försök igen!";
         //}
         return response;
     }
