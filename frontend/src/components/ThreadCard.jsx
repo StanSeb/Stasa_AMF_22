@@ -78,12 +78,12 @@ class ThreadCard extends React.Component {
 
 function editButton(props, id) {
 	if (props.state.isEditable) {
-		function abortEdit(target) {
-			props.setState({ isEditable: !props.state.isEditable });
+		function abortEdit() {
+			window.location.reload();
+			// props.setState({ isEditable: !props.state.isEditable });
 		}
 
 		function saveThread() {
-			// console.log(props.state.title, props.state.content, id);
 			let thread = {
 				id: id,
 				title: props.state.title,
