@@ -13,7 +13,7 @@ constructor(props){
 
 componentDidMount() {
   axios
-    .get("http://localhost:8080/rest/getAllGroups/" )
+    .get("http://localhost:8080/getAllGroups/" )
     .then((response) => response.data)
     .then((data) =>{
       this.setState({groups: data});
@@ -25,13 +25,12 @@ componentDidMount() {
 
   render() {
 
-    return <div>Welcome to Homepage
+    return <div>Homepage
 
 <div>{this.state.groups.map((group) =>(
             <ul key={group.id}> 
              <li> Title: <span>{group.title}</span> <br />
                   Description: <span>{group.description}</span> <br />
-                  UserID: <span>{group.user.id}</span>
                </li>
             </ul>  
             ))}</div>

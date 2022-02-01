@@ -48,7 +48,7 @@ export default class RegisterGroup extends Component {
       console.log(this.state.message);
     });
 
-  
+
   }
 
   render() { 
