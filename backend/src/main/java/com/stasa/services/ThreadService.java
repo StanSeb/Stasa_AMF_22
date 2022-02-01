@@ -35,7 +35,10 @@ public class ThreadService {
 
     public String editThread(Thread thread) {
         if(threadRepo.findThreadById(thread.getId()) != null){
-            threadRepo.save(thread);
+            Thread newThread = threadRepo.findThreadById(thread.getId());
+            newThread.setContent(thread.getContent());
+            newThread.setTitle(thread.getTitle());
+            threadRepo.save(newThread);
             return "Saved OK";
         }
 
