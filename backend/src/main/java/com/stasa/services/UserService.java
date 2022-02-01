@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -61,7 +62,7 @@ public class UserService {
     }
     private void sendVerificationEmail(User user, String siteUrl)
     throws MessagingException, UnsupportedEncodingException{
-        String toAdress = user.getEmail();
+        String toAdress = user.getDecodedEmail();
         String fromAddress = "Stasa.Bestmail.com";
         String senderName = "SuperTeamAllstarsStraightAAAAS";
         String subject = "Please verify you registration";
@@ -126,12 +127,12 @@ public class UserService {
             User user = userRepo.findById(id).get();
             detailsService.updateUser(user);
 
-            return "user has been terminated!";
+            return "Användaren är avstängd!";
         }
         else if (role.equals("Admin")){
-            return "You have to delete your groups before deleting your account!";
+            return "Du måste gå ur dina grupper där du är Admin innan du kan stänga av ditt konto!";
         }
-        return "Could not find user!";
+        return "Kunde inte hitta användaren!";
     }
 
     public void deleteById(long id) {
@@ -161,6 +162,7 @@ public class UserService {
 
     public User whoAmI(){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println(email);
         return userRepo.findByEmail(email);
     }
 

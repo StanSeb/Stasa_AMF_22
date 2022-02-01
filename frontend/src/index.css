@@ -20,6 +20,7 @@ code {
 		monospace;
 }
 
+/*#region Threads*/
 .thread {
 	margin: 1em;
 	width: 65vw;
@@ -31,6 +32,12 @@ code {
 	margin-left: 0.5vw;
 	display: flex;
 	justify-content: flex-start;
+	position: relative;
+}
+
+.thread-edit-button {
+	position: absolute;
+	right: .5em;
 }
 
 .thread-header > * {
@@ -87,7 +94,9 @@ code {
 .thread-tags > * {
 	margin-right: 1em;
 }
+/*#endregion */
 
+/*#region new-thread*/
 .new-thread {
 	width: 40%;
 	display: flex;
@@ -95,12 +104,14 @@ code {
 	border: 1px solid gray;
 }
 
-.new-thread > input {
+.new-thread-title {
+	resize: none;
 	width: 98%;
+	height: 1em;
 	margin: 1%;
 }
 
-.new-thread > textarea {
+.new-thread-content {
 	width: 98%;
 	height: 8em;
 	margin: 1%;
@@ -109,7 +120,9 @@ code {
 .new-thread > label {
 	margin-left: 1%;
 }
+/*#endregion */
 
+/*#region user-dropdown*/
 .user-drop {
 	position: relative;
 	display: inline-block;
@@ -146,7 +159,9 @@ code {
 .user-drop:hover .user-drop-button {
 	background-color: lightgray;
 }
+/*#endregion*/
 
+/*#region group-page*/
 .group-page {
 	position: relative;
 	margin: 0;
@@ -161,12 +176,44 @@ code {
 	flex-direction: column;
 	overflow-y: auto;
 	overflow-x: hidden;
+	position: relative;
+	top: 20%;
+}
+
+.group-comments {
+	position: relative;
+	width: 68%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.comment-card {
+	border: 1px solid gray;
+	margin: 0.5em;
+}
+
+.group-posts-and-comments {
+	display: flex;
+	flex-direction: column;
+	width: 100vw;
+	height: 100%;
+}
+
+.group-posts-and-comments > :first-child {
+	margin-bottom: -10vh;
+}
+
+.comment-social-buttons {
+	display: flex;
 }
 
 .group-side-panel {
 	width: 30vw;
 	right: 0;
-	top: 5.7em;
+	top: 20%;
 	margin: 1em;
 	position: fixed;
 }
@@ -198,13 +245,13 @@ code {
 }
 
 .group-members > * > button {
-  background-color: lightgray;
+	background-color: lightgray;
 	border: 1px solid gray;
 	outline: none;
 }
 
 .group-members > *:hover > button:hover {
-  background-color: gray;
+	background-color: gray;
 }
 #group-admin {
 	background-color: rgba(255, 75, 50);
@@ -221,7 +268,9 @@ code {
 #group-moderator:hover {
 	background-color: rgba(50, 75, 150);
 }
+/*#endregion*/
 
+/*#region register- and register-form*/
 #register-form {
 	padding-top: 8em;
 }
@@ -229,37 +278,41 @@ code {
 #login-form {
 	padding-top: 8em;
 }
+/*#endregion*/
 
 .profileContainer {
 	padding-top: 8em;
 }
 
+/*#region Navbar*/
 nav {
 	width: 100vw;
 	background: white;
 	position: fixed;
+	z-index: 5;
 }
 
-.containerNavbar>nav>ul {
+.containerNavbar > nav > ul {
 	display: flex;
 	justify-content: space-evenly;
 	list-style-type: none;
 }
 
-.containerNavbar>nav>ul>li>a {
+.containerNavbar > nav > ul > li > a {
 	color: black;
 	text-decoration: none;
 }
 
-.containerNavbar>nav>ul>li>a:hover {
+.containerNavbar > nav > ul > li > a:hover {
 	cursor: pointer;
-	text-decoration: underline;	
+	text-decoration: underline;
 }
 
-.containerNavbar>nav>ul>li>a:active {
+.containerNavbar > nav > ul > li > a:active {
 	color: rgb(255, 0, 221);
 	text-decoration: underline;
 }
+/*#endregion*/
 
 .rulesContainer {
 	padding-top: 8em;
@@ -269,14 +322,14 @@ nav {
 	text-align: center;
 }
 
-ul>li {
+ul > li {
 	padding: 0.5em;
 }
 
 .beforeRegistrationContainer {
 	text-align: left;
 	margin: 4em 0 2em 0;
-	color:rgb(97, 97, 97);
+	color: rgb(97, 97, 97);
 }
 
 .beforeRegistrationContainer::after {
@@ -289,7 +342,7 @@ ul>li {
 }
 
 .moreInfoClick {
-	color:grey;
+	color: grey;
 	border: solid 1px rgb(105, 105, 105);
 }
 
@@ -299,17 +352,17 @@ ul>li {
 	text-decoration: none;
 }
 
-.moreInfoClick>p {
+.moreInfoClick > p {
 	margin: 0.25em;
 }
 
-.paragraphContainer>ul {
+.paragraphContainer > ul {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
 }
 
-.paragraphContainer>ul>li:nth-child(odd) {
+.paragraphContainer > ul > li:nth-child(odd) {
 	background-color: rgb(240, 240, 240);
 }
 
@@ -327,7 +380,7 @@ ul>li {
 	color: rgb(70, 70, 70);
 }
 
-.miscContainer>ul {
+.miscContainer > ul {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
@@ -366,4 +419,8 @@ footer::before {
 
 .integritySubContainer {
 	margin: 5em 0 5em 0;
+}
+.profileContainer{
+padding-top: 8em;
+
 }

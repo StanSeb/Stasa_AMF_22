@@ -10,6 +10,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.Base64;
 import java.util.List;
 
 import static com.stasa.util.ApiConstants.DELETION_REQUIRED_REPORTS;
@@ -28,7 +29,7 @@ public class User {
     @Column(name = "user_name",  length = 50)
     private String username;
 
-    @Column(name = "email",  length = 50)
+    @Column(name = "email",  length = 80)
     private String email;
 
     @Column(name = "password",  length = 80)
@@ -64,6 +65,13 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+   public String getDecodedEmail(){
+       byte[] decodedBytes = Base64.getDecoder().decode(this.email);
+       return new String(decodedBytes);
+   }
+
+
 //
 //    @JsonProperty
 //    public String getUsername() {
@@ -73,6 +81,14 @@ public class User {
     @JsonProperty
     public void setUsername(String username) {
         this.username = username;
+    }
+    
+    @JsonProperty
+    public String getUsername() {
+        if(!enabled){
+            return "DeletedUser";
+        }
+        return username;
     }
     @JsonProperty
     public boolean isEnabled() {

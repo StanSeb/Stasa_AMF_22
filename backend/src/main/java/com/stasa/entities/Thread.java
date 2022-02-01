@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.sql.Time;
@@ -14,11 +15,12 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@ToString
 public class Thread {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private long id;
 
     @Column(name = "title", nullable = false, length = 50)
     private String title;
@@ -26,12 +28,12 @@ public class Thread {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "group_id", nullable = false, length = 80)
-    private String groupId;
+    @Column(name = "group_id", length = 80)
+    private long groupId;
 
-    @Column(name = "creator_id", nullable = false, length = 80)
-    private String creatorId;
+    @Column(name = "creator_id", length = 80)
+    private long creatorId;
 
-    @Column(name = "deletion_timestamp", nullable = false, length = 80)
+    @Column(name = "deletion_timestamp", length = 80)
     private Time deletionTimestamp;
 }
