@@ -37,4 +37,9 @@ public class ThreadController {
 
         return threadService.postNewThread(thread);
     }
+
+    @PutMapping("/editThread/{id}")
+    public String editThread(@RequestBody Thread thread){
+        return threadService.editThread(thread);
+    }
 }

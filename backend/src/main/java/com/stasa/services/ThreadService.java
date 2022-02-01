@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ThreadService {
@@ -30,5 +31,14 @@ public class ThreadService {
         System.out.println(thread + " from service");
         threadRepo.save(thread);
         return "Post OK";
+    }
+
+    public String editThread(Thread thread) {
+        if(threadRepo.findThreadById(thread.getId()) != null){
+            threadRepo.save(thread);
+            return "Saved OK";
+        }
+
+        return "Could not find the thread";
     }
 }
