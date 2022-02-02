@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-
 export default class RegisterGroup extends Component {
   constructor(props) {
     super(props);
@@ -10,6 +9,7 @@ export default class RegisterGroup extends Component {
 				title: "",
 				description: "",				        	
 			}, 
+      message: []
       /* 
       member:{
         user:{
@@ -22,9 +22,7 @@ export default class RegisterGroup extends Component {
           id: this.state.group.id
         }
       },
-      */
-      message: []
-    
+      */     
 		};
 
     this.titleChange = this.titleChange.bind(this);
@@ -38,14 +36,12 @@ export default class RegisterGroup extends Component {
   descriptionChange(event) {
     this.setState({ description: event.target.value });
   }
-  /* 
-registerMember(){
+  /* registerMember(){
   let member= {
     user:{id: 3},
     memberRole: {id: 3},
     group: {id: this.state.group.id}
   };
-
   fetch ("http://localhost:8080/register/member", {
        method: 'POST',
        headers: { "Content-Type": "application/json" },
@@ -53,24 +49,28 @@ registerMember(){
       .then((response) => response.data)
     .then((data) =>{
       console.log(this.state.member);
-    });
-}
-*/
+    });}*/
   registerGroup(){
     let group = {
 			title: this.state.title,
 			description: this.state.description,      
 		};
-       
-     fetch ("http://localhost:8080/register/group", {
-       method: 'POST',
-       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(group)})
-      .then((response) => response.data)
-    .then((data) =>{
-      this.setState({message: data});
-      console.log(this.state.message);
-    });
+
+    axios.post("http://localhost:8080/register/group", this.state.group)
+    .then((response) =>{
+      console.log(response);
+      console.log("this is state.group",this.state.group);
+      console.log("this is  group",this.group);
+      /*
+      console.log(this.state.group);
+      if(response.data ==="successful"){
+        alert("Group created!")
+      } if(response.data ==="failed"){
+        alert("Group name not available")
+      }
+      else{alert("Error occured, try again")
+    }*/
+  })
   }
 
   render() { 

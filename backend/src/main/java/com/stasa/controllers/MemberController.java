@@ -20,7 +20,7 @@ public class MemberController {
         return memberService.getAll();
     }
 
-    //Get method to retrieve data from Members, Member roles, group and user table
+    //Get method to retrieve data from Members, Member roles, group and user
     @GetMapping("GetMembersByUserId/{userId}")
     public List <Member> getByUserId(@PathVariable int userId){
         return memberService.getByUserId(userId);
