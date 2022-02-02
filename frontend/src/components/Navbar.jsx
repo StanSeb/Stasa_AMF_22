@@ -20,7 +20,7 @@ function Navbar(props) {
                     <li>
                         <Link to="/"><h3>Hem</h3></Link>
                     </li>
-                    <li>
+                    <li style={{ display: props.userObj.username ? 'none' : 'block' }}>
                         <Link to="/register"><h3>Registrera</h3></Link>
                     </li>
                     <li>
