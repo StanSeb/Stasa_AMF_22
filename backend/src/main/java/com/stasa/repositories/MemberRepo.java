@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface MemberRepo extends JpaRepository<Member, Long> {
 
-
     List<Member> getByUserId(int userId);
+
+
+
 }

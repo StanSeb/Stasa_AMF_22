@@ -20,4 +20,10 @@ public class MemberService {
     public List<Member> getByUserId(int userId) {
         return memberRepo.getByUserId(userId);
     }
+
+    public Member register(Member member) {
+        return memberRepo.save(member);
+    }
+
+
 }

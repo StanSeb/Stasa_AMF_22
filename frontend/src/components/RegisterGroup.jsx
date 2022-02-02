@@ -6,13 +6,23 @@ export default class RegisterGroup extends Component {
     super(props);
     this.state = {
 			group: {
+        id:"",
 				title: "",
-				description: "",
-				user:{
-          id: ''}
-        
-				
-			},
+				description: "",				        	
+			}, 
+      /* 
+      member:{
+        user:{
+          id: 3
+        },
+        memberRole: {
+          id: 3
+        },
+        group: {
+          id: this.state.group.id
+        }
+      },
+      */
       message: []
     
 		};
@@ -28,16 +38,30 @@ export default class RegisterGroup extends Component {
   descriptionChange(event) {
     this.setState({ description: event.target.value });
   }
+  /* 
+registerMember(){
+  let member= {
+    user:{id: 3},
+    memberRole: {id: 3},
+    group: {id: this.state.group.id}
+  };
 
+  fetch ("http://localhost:8080/register/member", {
+       method: 'POST',
+       headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(member)})
+      .then((response) => response.data)
+    .then((data) =>{
+      console.log(this.state.member);
+    });
+}
+*/
   registerGroup(){
     let group = {
 			title: this.state.title,
-			description: this.state.description,
-      user:{
-        id: 7}
+			description: this.state.description,      
 		};
-    
-    
+       
      fetch ("http://localhost:8080/register/group", {
        method: 'POST',
        headers: { "Content-Type": "application/json" },
@@ -47,8 +71,6 @@ export default class RegisterGroup extends Component {
       this.setState({message: data});
       console.log(this.state.message);
     });
-
-
   }
 
   render() { 
