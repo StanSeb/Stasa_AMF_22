@@ -56,21 +56,18 @@ export default class RegisterGroup extends Component {
 			description: this.state.description,      
 		};
 
-    axios.post("http://localhost:8080/register/group", this.state.group)
-    .then((response) =>{
-      console.log(response);
-      console.log("this is state.group",this.state.group);
-      console.log("this is  group",this.group);
-      /*
-      console.log(this.state.group);
-      if(response.data ==="successful"){
-        alert("Group created!")
-      } if(response.data ==="failed"){
-        alert("Group name not available")
-      }
-      else{alert("Error occured, try again")
-    }*/
-  })
+    this.setState({ group }, () => {
+      console.log(this.state.group)
+			axios
+				.post("http://localhost:8080/register/group", this.state.group)
+				.then((response) =>{
+          if(response.data ==="successful")
+          {alert("Group created successfully")}
+          
+          else{alert("Group title is unavailable")}
+        })
+		});
+    
   }
 
   render() { 
