@@ -3,13 +3,11 @@ package com.stasa.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.stasa.util.ApiConstants;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.Base64;
 import java.util.List;
 
@@ -73,13 +71,6 @@ public class User {
        byte[] decodedBytes = Base64.getDecoder().decode(this.email);
        return new String(decodedBytes);
    }
-
-
-//
-//    @JsonProperty
-//    public String getUsername() {
-//        return "DeletedUser";
-//    }
 
     @JsonProperty
     public void setUsername(String username) {
