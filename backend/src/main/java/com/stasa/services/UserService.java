@@ -154,7 +154,6 @@ public class UserService {
 
     public User whoAmI(){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println(email);
         return userRepo.findByEmail(email);
     }
 

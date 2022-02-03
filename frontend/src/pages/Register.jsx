@@ -24,7 +24,6 @@ function Register() {
         else {
             Axios.post('http://localhost:8080/rest/process_register', newUserObject)
 
-                .then(response => console.log(response.data))
         }
     }
     const handleSubmit = (event) => {

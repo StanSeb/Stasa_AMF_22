@@ -24,7 +24,6 @@ class App extends Component {
 
   handleWhoAmI(id) {
     this.setState({ userID: id }, () => {
-      console.log(this.state.userID);
     });
   }
 
@@ -36,7 +35,6 @@ class App extends Component {
         }
       })
       .then((response) => {
-        console.log(response.data)
         if (response.data != '') {
           const { id, username } = response.data
 
