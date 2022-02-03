@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/rest/groups")
 public class GroupController {
@@ -35,5 +36,4 @@ public class GroupController {
     public String leaveGroup(@PathVariable long id, @PathVariable long groupID){
         return groupService.leaveGroup(id, groupID);
     }
-
 }
