@@ -34,7 +34,7 @@ class GroupPage extends React.Component {
 	componentDidMount() {
 		let threads;
 		axios
-			.get("http://localhost:8080/rest/threads/byGroup/2")
+			.get("http://localhost:8080/rest/threads/byGroup/7")
 			.then((response) => response.data)
 			.then((data) => {
 				threads = data;
@@ -90,7 +90,7 @@ function RenderThreads(props, handleThreadClick, loggedInUser) {
 	if (props !== null) {
 		let threads = Object.values(props);
 		let threadList = [];
-		for (let i = 0; i < threads.length; i++) {
+		for (let i = threads.length - 1; i >= 0; i--) {
 			threadList.push(
 				<ThreadCard
 					thread={threads[i]}
