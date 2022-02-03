@@ -6,22 +6,20 @@ import Navbar from "./components/Navbar";
 import GroupPage from "./pages/GroupPage";
 import RegisterGroup from './components/RegisterGroup'
 
-
 class App extends Component {
-  constructor() {
-   
-    super();
-    this.state = {
-      userID: "",
-      group: {
-        id: 1,
-        name: "Bonds ''Speciella'' Klubb",
-        info: "Här pratar vi bara om hemliga agenter",
-        admin: "Leif Bond",
-      },
-    };
-    this.handleWhoAmI = this.handleWhoAmI.bind(this);
-  }
+	constructor() {
+		super();
+		this.state = {
+			userID: "",
+			// group: {
+			// 	id: 7,
+			// 	name: "Bonds ''Speciella'' Klubb",
+			// 	info: "Här pratar vi bara om hemliga agenter",
+			// 	admin: "Leif Bond",
+			// },
+		};
+		this.handleWhoAmI = this.handleWhoAmI.bind(this);
+	}
 
   handleWhoAmI(id) {
     this.setState({ userID: id }, () => {
@@ -39,18 +37,19 @@ class App extends Component {
         if (response.data != '') {
           const { id, username } = response.data
 
-          const userObject = { id: id, username: username }
-          this.setState({ userID: userObject })
-        }
-      })
-  }
+				const userObject = { id: id, username: username };
+				this.setState({ userID: userObject });
+			}
+		});
+	}
 
-  render() {
-    return (
-      <>
-        <Navbar storeId={this.handleWhoAmI} userObj={this.state.userID} />
-      </>
-    );
-  }
+	render() {
+		return (
+			<>
+				<Navbar storeId={this.handleWhoAmI} userObj={this.state.userID} />
+				{/* <GroupPage group={this.state.group} loggedInUser={this.state.userID} /> */}
+			</>
+		);
+	}
 }
 export default App;

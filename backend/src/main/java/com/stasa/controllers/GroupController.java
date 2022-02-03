@@ -28,4 +28,8 @@ public class GroupController {
         return groupService.addGroup(group);
     }
 
+    @GetMapping("/rest/getUserRole/{group_id}/{id}")
+    public String getGroupRole(@PathVariable long group_id, @PathVariable long id){
+        return groupService.getRole(group_id, id);
+    }
 }

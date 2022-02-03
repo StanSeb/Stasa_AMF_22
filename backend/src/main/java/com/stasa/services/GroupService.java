@@ -31,4 +31,8 @@ public class GroupService {
         return groupRepo.findByUserId(userid);
         
     }
+
+    public String getRole(long group_id, long id) {
+        return groupRepo.getMemberStatus(group_id, id);
+    }
 }
