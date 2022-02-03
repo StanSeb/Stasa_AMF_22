@@ -327,7 +327,60 @@ code {
 }
 /*#endregion*/
 
-/*#region rules-page*/
+/*#region register- and register-form*/
+#register-form {
+	padding-top: 8em;
+}
+
+#login-form {
+	padding-top: 8em;
+}
+/*#endregion*/
+
+.profileContainer {
+	padding-top: 8em;
+}
+
+.profile-groups-list{
+	display: flex;
+	height: 2em;
+	align-items: center;
+}
+
+.profile-groups-list > * {
+	margin: .5em;
+}
+
+/*#region Navbar*/
+nav {
+	width: 100vw;
+	background: white;
+	position: fixed;
+	z-index: 5;
+}
+
+.containerNavbar > nav > ul {
+	display: flex;
+	justify-content: space-evenly;
+	list-style-type: none;
+}
+
+.containerNavbar > nav > ul > li > a {
+	color: black;
+	text-decoration: none;
+}
+
+.containerNavbar > nav > ul > li > a:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.containerNavbar > nav > ul > li > a:active {
+	color: rgb(255, 0, 221);
+	text-decoration: underline;
+}
+/*#endregion*/
+
 .rulesContainer {
 	width: 80%;
 	margin: 0 auto;

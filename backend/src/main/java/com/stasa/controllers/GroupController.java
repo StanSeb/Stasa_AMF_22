@@ -8,14 +8,15 @@ import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@RequestMapping("/rest/groups")
 public class GroupController {
 
     @Autowired
     private GroupService groupService;
 
-    @GetMapping("getGroupsByUserId/{user_id}")
-    public List <Group> getByUserId(@PathVariable int user_id){
-        return groupService.getByUserId(user_id);
+    @GetMapping("/getGroupsByUserId/{id}")
+    public List <Group> getByUserId(@PathVariable long id){
+        return groupService.getByUserId(id);
     }
 
     @GetMapping("/getAllGroups")
@@ -31,5 +32,9 @@ public class GroupController {
     @GetMapping("/rest/getUserRole/{group_id}/{id}")
     public String getGroupRole(@PathVariable long group_id, @PathVariable long id){
         return groupService.getRole(group_id, id);
+    }
+    @GetMapping("/leaveGroup/{id}/{groupID}")
+    public String leaveGroup(@PathVariable long id, @PathVariable long groupID){
+        return groupService.leaveGroup(id, groupID);
     }
 }

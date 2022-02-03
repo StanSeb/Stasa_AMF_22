@@ -14,6 +14,9 @@ import java.util.List;
 public interface GroupRepo extends JpaRepository <Group, Long> {
     List<Group> getByUserId(int userid);
 
+    @Query(value = "DELETE FROM members WHERE members.group_id = ?1 AND members.user_id = ?2",
+            nativeQuery = true)
+    Group leaveGroup(long id, long groupID);
 
     @Query(value = "SELECT groups.id, groups.title, groups.description "+
             "FROM groups INNER JOIN members "+
@@ -27,4 +30,9 @@ public interface GroupRepo extends JpaRepository <Group, Long> {
             " = ?2",
             nativeQuery = true)
     String getMemberStatus(long group_id, long id);
+    @Query(value = "SELECT groups.id, groups.title, groups.description, members.user_id "+
+            "FROM groups INNER JOIN members "+
+            "ON members.group_id = groups.id "+
+            "WHERE members.user_id = ?1", nativeQuery = true )
+    List<Group> findByUserId(long id);
 }
