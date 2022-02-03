@@ -6,7 +6,6 @@ import RulesPage from '../pages/RulesPage';
 import Register from '../pages/Register';
 import Profile from '../pages/Profile';
 import Login from '../pages/Login';
-import {useNavigate} from 'react-router-dom';
 
 function Navbar(props) {
         

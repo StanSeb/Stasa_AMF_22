@@ -8,20 +8,25 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-//@RequestMapping("private")
-
+@RequestMapping("/rest/groups")
 public class GroupController {
 
 
     @Autowired
     private GroupService groupService;
 
-    @GetMapping("/rest/getByUserId/{userid}")
-    public List<Group> getByUserId(@PathVariable int userid) {
-        return groupService.getByUserId(userid); }
+    @GetMapping("/getGroupsByUserId/{id}")
+    public List <Group> getByUserId(@PathVariable long id){
+        return groupService.getByUserId(id);
+    }
+
+    @GetMapping("/getAllGroups")
+    public List <Group> getAll(){
+        return groupService.findAll();
+    }
 
     @PostMapping("/register/group")
-    public Group register(@RequestBody Group group) {
+    public String register(@RequestBody Group group) {
 
         return groupService.addGroup(group);
     }

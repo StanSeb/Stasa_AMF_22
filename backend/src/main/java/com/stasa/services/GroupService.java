@@ -16,17 +16,24 @@ public class GroupService {
     @Autowired
     private GroupRepo groupRepo;
 
-    public List<Group> getByUserId( int userid) {
-        return groupRepo.getByUserId(userid);
-    }
-
-
-    public Group addGroup(Group group) {
-        return groupRepo.save(group);
-    }
-
     public String leaveGroup(long id, long groupID) {
         groupRepo.leaveGroup(id, groupID);
         return "Användare lämnade gruppen!";
+    }
+
+    public String addGroup(Group group) {
+        List <Group> filteredGroup = groupRepo.findAll();
+        String response = "successful";
+        for(Group filter : filteredGroup){
+            if(filter.getTitle().equalsIgnoreCase(group.getTitle())){
+                response = "failed";}       }
+            if (response == "successful")
+            groupRepo.save(group);
+                return response;    }
+
+    public List<Group> findAll() { return groupRepo.findAll();  }
+
+    public List<Group> getByUserId(long id) {
+        return groupRepo.findByUserId(id);
     }
 }

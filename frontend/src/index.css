@@ -284,6 +284,16 @@ code {
 	padding-top: 8em;
 }
 
+.profile-groups-list{
+	display: flex;
+	height: 2em;
+	align-items: center;
+}
+
+.profile-groups-list > * {
+	margin: .5em;
+}
+
 /*#region Navbar*/
 nav {
 	width: 100vw;
