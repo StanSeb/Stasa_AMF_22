@@ -6,7 +6,7 @@ constructor(props){
     super(props);
     this.state = {
         groups: [],
-        user_id: 2
+        user_id: 1
     }
 }
 

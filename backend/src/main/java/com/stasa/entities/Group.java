@@ -26,5 +26,6 @@ public class Group {
     @Column(name = "description")
     private String description;
 
-
+    @Column(name ="user_id")
+    private long user_id;
 }

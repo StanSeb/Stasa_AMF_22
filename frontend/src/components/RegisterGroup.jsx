@@ -5,24 +5,10 @@ export default class RegisterGroup extends Component {
     super(props);
     this.state = {
 			group: {
-        id:"",
+        user_id: "",
 				title: "",
 				description: "",				        	
-			}, 
-      message: []
-      /* 
-      member:{
-        user:{
-          id: 3
-        },
-        memberRole: {
-          id: 3
-        },
-        group: {
-          id: this.state.group.id
-        }
-      },
-      */     
+			}       
 		};
 
     this.titleChange = this.titleChange.bind(this);
@@ -36,22 +22,10 @@ export default class RegisterGroup extends Component {
   descriptionChange(event) {
     this.setState({ description: event.target.value });
   }
-  /* registerMember(){
-  let member= {
-    user:{id: 3},
-    memberRole: {id: 3},
-    group: {id: this.state.group.id}
-  };
-  fetch ("http://localhost:8080/register/member", {
-       method: 'POST',
-       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(member)})
-      .then((response) => response.data)
-    .then((data) =>{
-      console.log(this.state.member);
-    });}*/
+  
   registerGroup(){
     let group = {
+      user_id : 1,
 			title: this.state.title,
 			description: this.state.description,      
 		};
@@ -63,7 +37,6 @@ export default class RegisterGroup extends Component {
 				.then((response) =>{
           if(response.data ==="successful")
           {alert("Group created successfully")}
-          
           else{alert("Group title is unavailable")}
         })
 		});
