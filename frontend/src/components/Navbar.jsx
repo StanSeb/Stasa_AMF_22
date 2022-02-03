@@ -6,16 +6,13 @@ import RulesPage from '../pages/RulesPage';
 import Register from '../pages/Register';
 import Profile from '../pages/Profile';
 import Login from '../pages/Login';
-import {useNavigate} from 'react-router-dom';
+import MailSentPage from '../pages/MailSentPage';
 
 function Navbar(props) {
-        
-       
     
-    
-    return <div className="containerNavbar">
+    return <div className="app">
         <Router>
-            <nav>
+            <nav className='containerNavbar'>
                 <ul>
                     <li>
                         <Link to="/"><h3>Hem</h3></Link>
@@ -43,6 +40,7 @@ function Navbar(props) {
                 <Route path="/integrity" element={<IntegrityPage />} />
                 <Route path="/login" element={<Login storeId={props.storeId} />} />
                 <Route path="/profile" element={<Profile userObj={props.userObj} />} />
+                <Route path="/mailSent" element={<MailSentPage />}/>
             </Routes>
         </Router>
     </div>;

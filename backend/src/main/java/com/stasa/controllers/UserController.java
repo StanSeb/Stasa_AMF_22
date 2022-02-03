@@ -31,8 +31,6 @@ public class UserController {
 
     @GetMapping("/verify/{code}")
     public String verifyUser(@PathVariable String code){
-
-        System.out.println(code);
         if (userService.verify(code)){
             return "verify_success";
 
