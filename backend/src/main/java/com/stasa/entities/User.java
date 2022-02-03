@@ -3,13 +3,11 @@ package com.stasa.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.stasa.util.ApiConstants;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.Base64;
 import java.util.List;
 
@@ -29,7 +27,6 @@ public class User {
     @Column(name = "user_name",  length = 50)
     private String username;
 
-    @JsonIgnore
     @Column(name = "email",  length = 80)
     private String email;
 
@@ -74,23 +71,16 @@ public class User {
        return new String(decodedBytes);
    }
 
-
-//
-//    @JsonProperty
-//    public String getUsername() {
-//        return "DeletedUser";
-//    }
-
     @JsonProperty
     public void setUsername(String username) {
         this.username = username;
     }
     
-    @JsonProperty
+   @JsonProperty
     public String getUsername() {
         if(!enabled){
             return "DeletedUser";
-        }
-        return username;
-    }
+       }
+       return username;
+   }
 }
