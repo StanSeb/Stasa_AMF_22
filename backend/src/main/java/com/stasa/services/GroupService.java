@@ -27,5 +27,6 @@ public class GroupService {
 
     public List<Group> getByUserId(int userid) {
         return groupRepo.findByUserId(userid);
+        
     }
 }
