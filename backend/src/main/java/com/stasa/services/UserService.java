@@ -121,9 +121,9 @@ public class UserService {
     // hämta user på id => myUserDetailService ändra värden.
     public String terminateUser(long id){
         //TODO: Kolla om användaren är admin eller ej
-        String role = userRepo.findUserRole();
+        String role = userRepo.findUserRole(id);
 
-        if (role.equals("Users")){
+        if (role.equals("User")){
             User user = userRepo.findById(id).get();
             detailsService.updateUser(user);
 

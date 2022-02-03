@@ -14,7 +14,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Calendar;
+import java.util.Date;
 
 
 @Configuration
@@ -67,8 +71,12 @@ public class MyUserDetailsService implements UserDetailsService {
         //--------
 
         user.setEnabled(false);
-        user.setDeletionTimestamp("2021-09-29");
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        String strDate = dateFormat.format(date);
+        user.setDeletionTimestamp(strDate);
         try {
+            System.out.println(user);
             return userRepo.save(user);
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -35,7 +35,7 @@ code {
 	position: relative;
 }
 
-.thread-edit-button {
+.thread-thread-header-buttons {
 	position: absolute;
 	right: .5em;
 }
@@ -102,6 +102,7 @@ code {
 	display: flex;
 	flex-wrap: wrap;
 	border: 1px solid gray;
+	z-index: 6;
 }
 
 .new-thread-title {

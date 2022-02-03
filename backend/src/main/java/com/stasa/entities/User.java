@@ -29,7 +29,6 @@ public class User {
     @Column(name = "username",  length = 50)
     private String username;
 
-    @JsonIgnore
     @Column(name = "email",  length = 80)
     private String email;
 

@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @Repository
 public interface UserRepo extends JpaRepository<User, Long> {
 
-    @Query(value = "SELECT member_roles.title FROM member_roles, members WHERE members.role_id = member_roles.id",nativeQuery = true)
-    String findUserRole();
+    @Query(value = "SELECT member_roles.title FROM member_roles, members WHERE members.role_id = " +
+            "member_roles.id AND members.user_id = ?",nativeQuery = true)
+    String findUserRole(long id);
 
     User findByUsername(String username);
 

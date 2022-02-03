@@ -38,8 +38,13 @@ public class ThreadController {
         return threadService.postNewThread(thread);
     }
 
-    @PutMapping("/editThread")
+    @PutMapping("editThread")
     public String editThread(@RequestBody Thread thread){
         return threadService.editThread(thread);
+    }
+
+    @PutMapping("deleteThread/{id}")
+    public String deleteThread(@PathVariable long id){
+        return threadService.deleteThread(id);
     }
 }
