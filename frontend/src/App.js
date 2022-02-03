@@ -10,12 +10,12 @@ class App extends Component {
 		super();
 		this.state = {
 			userID: "",
-			group: {
-				id: 1,
-				name: "Bonds ''Speciella'' Klubb",
-				info: "Här pratar vi bara om hemliga agenter",
-				admin: "Leif Bond",
-			},
+			// group: {
+			// 	id: 7,
+			// 	name: "Bonds ''Speciella'' Klubb",
+			// 	info: "Här pratar vi bara om hemliga agenter",
+			// 	admin: "Leif Bond",
+			// },
 		};
 		this.handleWhoAmI = this.handleWhoAmI.bind(this);
 	}
@@ -47,7 +47,7 @@ class App extends Component {
 		return (
 			<>
 				<Navbar storeId={this.handleWhoAmI} userObj={this.state.userID} />
-				<GroupPage group={this.state.group} loggedInUser={this.state.userID} />
+				{/* <GroupPage group={this.state.group} loggedInUser={this.state.userID} /> */}
 			</>
 		);
 	}

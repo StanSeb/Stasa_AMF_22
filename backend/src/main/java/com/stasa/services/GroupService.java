@@ -24,4 +24,8 @@ public class GroupService {
     public Group addGroup(Group group) {
         return groupRepo.save(group);
     }
+
+    public String getRole(long group_id, long id) {
+        return groupRepo.getMemberStatus(group_id, id);
+    }
 }

@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import ThreadCard from "../components/ThreadCard";
 import ThreadPage from "../pages/ThreadPage";
 import UserDropdown from "../components/UserDropdown";
@@ -40,6 +40,28 @@ class GroupPage extends React.Component {
 				threads = data;
 				this.setState({ threads });
 			});
+
+		let privilege;
+		let loggedInUser;
+		axios
+			.get(
+				"http://localhost:8080/rest/getUserRole/" +
+					this.state.group.id +
+					"/" +
+					this.state.loggedInUser.id
+			)
+			.then((response) => {
+				privilege = response.data;
+			})
+			.then(
+				this.setState({
+					loggedInUser: {
+						username: this.state.loggedInUser.username,
+						id: this.state.loggedInUser.id,
+						privilege: privilege,
+					},
+				}, () => {console.log(this.state.loggedInUser)})
+			);
 	}
 
 	handleThreadClick(props) {
@@ -82,7 +104,7 @@ function ShowThread(threads, handleThreadClick, clickedThread, loggedInUser) {
 	if (clickedThread === 0) {
 		return <>{RenderThreads(threads, handleThreadClick, loggedInUser)}</>;
 	} else {
-		return <ThreadPage threadId={clickedThread} loggedInUser={loggedInUser}/>;
+		return <ThreadPage threadId={clickedThread} loggedInUser={loggedInUser} />;
 	}
 }
 
@@ -95,8 +117,7 @@ function RenderThreads(props, handleThreadClick, loggedInUser) {
 				<ThreadCard
 					thread={threads[i]}
 					key={i}
-					handleThreadClick={(e) => handleThreadClick(e)
-					}
+					handleThreadClick={(e) => handleThreadClick(e)}
 					loggedInUser={loggedInUser}
 				/>
 			);

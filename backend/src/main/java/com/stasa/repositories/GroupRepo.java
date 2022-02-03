@@ -13,7 +13,12 @@ import java.util.List;
 @Repository
 @CrossOrigin(origins = "http://localhost:3000")
 public interface GroupRepo extends JpaRepository <Group, Long> {
-
-
     List<Group> getByUserId(int userid);
+
+    @Query(value = "SELECT member_roles.title\n" +
+            "\tFROM member_roles INNER JOIN members\n" +
+            "\tON members.role_id = member_roles.id AND members.group_id = ?1 AND members.user_id" +
+            " = ?2",
+            nativeQuery = true)
+    String getMemberStatus(long group_id, long id);
 }

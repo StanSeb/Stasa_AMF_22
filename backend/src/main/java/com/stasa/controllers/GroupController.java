@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-//@RequestMapping("private")
 
+@CrossOrigin(origins = "http://localhost:3000")
+@RestController
 public class GroupController {
 
 
@@ -22,8 +22,11 @@ public class GroupController {
 
     @PostMapping("/register/group")
     public Group register(@RequestBody Group group) {
-
         return groupService.addGroup(group);
     }
 
+    @GetMapping("/rest/getUserRole/{group_id}/{id}")
+    public String getGroupRole(@PathVariable long group_id, @PathVariable long id){
+        return groupService.getRole(group_id, id);
+    }
 }
