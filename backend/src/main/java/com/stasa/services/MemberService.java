@@ -43,4 +43,13 @@ public class MemberService {
     public List<Map> getMembersByGroupId(long groupId) {
         return memberRepo.getMembersByGroupId(groupId);
     }
+    public List<Member> getAll() {
+        return memberRepo.findAll();
+    }
+    public List<Member> getByUserId(int userId) {
+        return memberRepo.getByUserId(userId);
+    }
+    public Member register(Member member) {
+        return memberRepo.save(member);
+    }
 }

@@ -19,7 +19,7 @@ class ThreadCard extends React.Component {
 		return (
 			<div className="thread">
 				<div className="thread-header">
-					{editButton(this, this.props.thread.id)}
+					{editButton(this, this.props.thread, this.props.loggedInUser)}
 					<div className="thread-title">
 						<ThreadTitle
 							title={this.state.title}
@@ -76,49 +76,54 @@ class ThreadCard extends React.Component {
 	}
 }
 
-function editButton(props, id) {
-	if (props.state.isEditable) {
-		function abortEdit() {
-			window.location.reload();
-			// props.setState({ isEditable: !props.state.isEditable });
+function editButton(props, threadProp, loggedInUser) {
+	if (threadProp.creatorId === loggedInUser.id) {
+		if (props.state.isEditable) {
+			function abortEdit() {
+				window.location.reload();
+				// props.setState({ isEditable: !props.state.isEditable });
+			}
+	
+			function saveThread() {
+				let thread = {
+					id: threadProp.id,
+					title: props.state.title,
+					content: props.state.content,
+				};
+	
+				axios
+					.put("http://localhost:8080/rest/threads/editThread/", thread)
+					.then((response) => {
+						console.log(response);
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			}
+	
+			return (
+				<div className="thread-edit-button">
+					<button onClick={(e) => abortEdit(e)}>Avbryt</button>
+					<button onClick={saveThread}>Spara</button>
+				</div>
+			);
+		} else {
+			function handleClick(target) {
+				props.setState({ isEditable: !props.state.isEditable });
+			}
+	
+			return (
+				<button
+					className="thread-edit-button"
+					onClick={(e) => handleClick(e.target)}
+				>
+					Redigera
+				</button>
+			);
 		}
-
-		function saveThread() {
-			let thread = {
-				id: id,
-				title: props.state.title,
-				content: props.state.content,
-			};
-
-			axios
-				.put("http://localhost:8080/rest/threads/editThread/", thread)
-				.then((response) => {
-					console.log(response);
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		}
-
-		return (
-			<div className="thread-edit-button">
-				<button onClick={(e) => abortEdit(e)}>Avbryt</button>
-				<button onClick={saveThread}>Spara</button>
-			</div>
-		);
-	} else {
-		function handleClick(target) {
-			props.setState({ isEditable: !props.state.isEditable });
-		}
-
-		return (
-			<button
-				className="thread-edit-button"
-				onClick={(e) => handleClick(e.target)}
-			>
-				Redigera
-			</button>
-		);
+	}
+	else {
+		return(<></>)
 	}
 }
 

@@ -51,6 +51,9 @@ public class UserController {
         return userService.findById(id);
     }
 
+    @GetMapping("/rest/user/{username}")
+    public String getByUserName(@PathVariable String username) { return userService.findByUserName(username); }
+
     @DeleteMapping("/rest/users/{id}")
     public void deleteById(@PathVariable long id) { userService.deleteById(id); }
 

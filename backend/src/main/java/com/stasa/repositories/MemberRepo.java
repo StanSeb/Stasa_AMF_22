@@ -20,4 +20,6 @@ public interface MemberRepo extends JpaRepository<Member, Integer> {
             "WHERE m.group_id = ?1\n" +
             "GROUP BY m.user_id", nativeQuery = true )
     List<Map> getMembersByGroupId(long groupId);
+
+    List<Member> getByUserId(int userId);
 }

@@ -1,6 +1,5 @@
 package com.stasa.services;
 
-
 import com.stasa.entities.Group;
 import com.stasa.repositories.GroupRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +16,21 @@ public class GroupService {
     @Autowired
     private GroupRepo groupRepo;
 
-    public List<Group> getByUserId( int userid) {
-        return groupRepo.getByUserId(userid);
-    }
+    public String addGroup(Group group) {
+        List <Group> filteredGroup = groupRepo.findAll();
+        String response = "successful";
+        for(Group filter : filteredGroup){
+            if(filter.getTitle().equalsIgnoreCase(group.getTitle())){
+                response = "failed";}       }
+            if (response == "successful")
+            groupRepo.save(group);
+                return response;    }
 
+    public List<Group> findAll() { return groupRepo.findAll();  }
 
-    public Group addGroup(Group group) {
-        return groupRepo.save(group);
+    public List<Group> getByUserId(int userid) {
+        return groupRepo.findByUserId(userid);
+        
     }
 
     public List<Map> getGroupById(long groupId) {

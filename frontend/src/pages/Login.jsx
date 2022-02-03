@@ -37,7 +37,6 @@ function Login(props) {
         }
     }
     async function whoAmI(props) {
-        console.log(props.storeId)
         await Axios
             .get("/rest/whoami", {
                 headers: {
@@ -45,7 +44,6 @@ function Login(props) {
                 }
             })
             .then((response) => {
-                console.log(response.data)
                 if(response.data !=''){
                     const {id, username} = response.data
                     
@@ -69,6 +67,7 @@ function Login(props) {
         })
         navigate("/");
     }
+
 
     const handleSubmit = (event, props) => {
         event.preventDefault()

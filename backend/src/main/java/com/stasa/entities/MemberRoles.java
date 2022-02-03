@@ -2,14 +2,17 @@ package com.stasa.entities;
 
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 
 @Entity
 @Data
 
-@Table(name="groups", schema="stasa", catalog="stasa")
-public class Group {
+public class MemberRoles {
+
     @Id
     @Column(name = "id")
     @GeneratedValue(generator = "NATIVE")
@@ -19,9 +22,4 @@ public class Group {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "description")
-    private String description;
-
-    @Column(name ="user_id")
-    private long user_id;
 }

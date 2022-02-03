@@ -424,3 +424,16 @@ footer::before {
 padding-top: 8em;
 
 }
+
+.checkUserName-container {
+	display: flex;
+}
+
+.checkUserName-container>p {
+	margin: 0;
+}
+
+.rule-link {
+	display: flex;
+	align-items: center;
+}
