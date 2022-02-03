@@ -47,7 +47,6 @@ class Profile extends React.Component {
 				<Link to="/createGroup">
 					<button>Skapa grupp</button>
 				</Link>
-				<button>Hämta grupper</button>
 				<button onClick={this.terminateUserById}>Stäng av kontot</button>
 				<button onClick={this.logOut}>Logga ut</button>
 
