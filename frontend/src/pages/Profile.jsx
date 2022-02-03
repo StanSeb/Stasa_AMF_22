@@ -27,7 +27,7 @@ export default function Profile(props) {
     <div className='profileContainer'>
         <div> Welcome to profile </div>
         <button onClick={() => {
-            navigate("/createGroup");
+            navigate("/registerGroup");
         }}>Create a group</button>
         <button onClick={() => {
             navigate("/getGroups");
