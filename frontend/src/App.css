@@ -37,17 +37,12 @@
   }
 }
 #register-form{
-display: flex;
-justify-content: center;
-
-
+  display: flex;
+  justify-content: center;
 }
 
 #login-form {
   display: flex;
   justify-content: center;
   background-color: rgb(206, 206, 206);
-}
-.group-page{
-  padding-top: 8em;
 }

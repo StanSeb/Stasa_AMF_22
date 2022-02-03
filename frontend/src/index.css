@@ -8,6 +8,7 @@ html {
 
 body {
 	margin: 0;
+	padding-top: 8em;
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
 		"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
 		sans-serif;
@@ -19,6 +20,61 @@ code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
 		monospace;
 }
+
+/*#region Navbar*/
+.containerNavbar {
+	width: 100vw;
+	background: white;
+	position: fixed;
+	top: 0;
+	z-index: 5;
+}
+
+.containerNavbar > ul {
+	display: flex;
+	justify-content: space-evenly;
+	list-style-type: none;
+}
+
+.containerNavbar > ul > li > a {
+	color: black;
+	text-decoration: none;
+}
+
+.containerNavbar > ul > li > a:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.containerNavbar > ul > li > a:active {
+	color: rgb(255, 0, 221);
+	text-decoration: underline;
+}
+/*#endregion*/
+
+/*#region registerPage*/
+.checkUserName-container {
+	display: flex;
+}
+
+.checkUserName-container>p {
+	margin: 0;
+}
+
+.rule-link {
+	display: flex;
+	align-items: center;
+}
+/*#endregion*/
+
+/*"region mailSentPage*/
+.emailSent-container {
+	text-align: center;
+}
+.emailSent-container>h2{
+	margin-bottom: 2em;
+}
+/*#endregion*/
 
 /*#region Threads*/
 .thread {
@@ -270,60 +326,12 @@ code {
 }
 /*#endregion*/
 
-/*#region register- and register-form*/
-#register-form {
-	padding-top: 8em;
-}
-
-#login-form {
-	padding-top: 8em;
-}
-/*#endregion*/
-
-.profileContainer {
-	padding-top: 8em;
-}
-
-/*#region Navbar*/
-nav {
-	width: 100vw;
-	background: white;
-	position: fixed;
-	z-index: 5;
-}
-
-.containerNavbar > nav > ul {
-	display: flex;
-	justify-content: space-evenly;
-	list-style-type: none;
-}
-
-.containerNavbar > nav > ul > li > a {
-	color: black;
-	text-decoration: none;
-}
-
-.containerNavbar > nav > ul > li > a:hover {
-	cursor: pointer;
-	text-decoration: underline;
-}
-
-.containerNavbar > nav > ul > li > a:active {
-	color: rgb(255, 0, 221);
-	text-decoration: underline;
-}
-/*#endregion*/
-
+/*#region rules-page*/
 .rulesContainer {
-	padding-top: 8em;
 	width: 80%;
 	margin: 0 auto;
 	overflow: auto;
 	text-align: center;
-}
-
-ul > li {
-	padding: 0.5em;
 }
 
 .beforeRegistrationContainer {
@@ -408,9 +416,10 @@ footer::before {
 	margin: 2em 0 2em 0;
 	background-color: rgb(182, 182, 182);
 }
+/*#endregion*/
 
+/*#region integrity-page*/
 .integrityContainer {
-	padding-top: 8em;
 	width: 80%;
 	margin: 0 auto;
 	overflow: auto;
@@ -420,20 +429,5 @@ footer::before {
 .integritySubContainer {
 	margin: 5em 0 5em 0;
 }
-.profileContainer{
-padding-top: 8em;
+/*#endregion*/
 
-}
-
-.checkUserName-container {
-	display: flex;
-}
-
-.checkUserName-container>p {
-	margin: 0;
-}
-
-.rule-link {
-	display: flex;
-	align-items: center;
-}
