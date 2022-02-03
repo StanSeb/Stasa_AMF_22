@@ -29,7 +29,6 @@ public class User {
     @Column(name = "user_name",  length = 50)
     private String username;
 
-    @JsonIgnore
     @Column(name = "email",  length = 80)
     private String email;
 
@@ -74,23 +73,16 @@ public class User {
        return new String(decodedBytes);
    }
 
-
-//
-//    @JsonProperty
-//    public String getUsername() {
-//        return "DeletedUser";
-//    }
-
     @JsonProperty
     public void setUsername(String username) {
         this.username = username;
     }
     
-    @JsonProperty
+   @JsonProperty
     public String getUsername() {
         if(!enabled){
             return "DeletedUser";
-        }
-        return username;
-    }
+       }
+       return username;
+   }
 }
