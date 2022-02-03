@@ -16,4 +16,7 @@ public interface GroupRepo extends JpaRepository <Group, Long> {
 
 
     List<Group> getByUserId(int userid);
+
+    @Query(value = "DELETE FROM groups WHERE groups.id =?1 AND groups.user_id =?2", nativeQuery = true)
+    Group leaveGroup(long id, long groupID);
 }

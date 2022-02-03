@@ -26,9 +26,9 @@ public class GroupController {
         return groupService.addGroup(group);
     }
 
-    @GetMapping("/leaveGroup/{id}")
-    public String leaveGroup(@PathVariable long id){
-        return groupService.leaveGroup(id);
+    @GetMapping("/leaveGroup/{id}/{groupID}")
+    public String leaveGroup(@PathVariable long id, @PathVariable long groupID){
+        return groupService.leaveGroup(id, groupID);
     }
 
 }

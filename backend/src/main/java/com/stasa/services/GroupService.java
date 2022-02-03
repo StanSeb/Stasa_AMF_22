@@ -25,8 +25,8 @@ public class GroupService {
         return groupRepo.save(group);
     }
 
-    public String leaveGroup(long id) {
-        groupRepo.deleteById(id);
+    public String leaveGroup(long id, long groupID) {
+        groupRepo.leaveGroup(id, groupID);
         return "Användare lämnade gruppen!";
     }
 }
