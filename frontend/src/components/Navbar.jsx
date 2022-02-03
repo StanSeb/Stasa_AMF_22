@@ -6,12 +6,8 @@ import RulesPage from '../pages/RulesPage';
 import Register from '../pages/Register';
 import Profile from '../pages/Profile';
 import Login from '../pages/Login';
-import {useNavigate} from 'react-router-dom';
 
 function Navbar(props) {
-        
-       
-    
     
     return <div className="containerNavbar">
         <Router>
@@ -33,7 +29,7 @@ function Navbar(props) {
                         <Link to="/login"><h3>Login</h3></Link>
                     </li>
                     <li style={{ display: props.userObj ? 'block' : 'none' }}>
-                        <Link to="/profile"><h3>{props.userObj.username}</h3></Link>
+                        <Link to={"/profile/"+props.userObj.id}><h3>{props.userObj.username}</h3></Link>
                     </li>
                 </ul>
             </nav>
@@ -42,7 +38,7 @@ function Navbar(props) {
                 <Route path="/rules" element={<RulesPage />} />
                 <Route path="/integrity" element={<IntegrityPage />} />
                 <Route path="/login" element={<Login storeId={props.storeId} />} />
-                <Route path="/profile" element={<Profile userObj={props.userObj} />} />
+                <Route path="/profile/:id" element={<Profile userObj={props.userObj} />} />
             </Routes>
         </Router>
     </div>;

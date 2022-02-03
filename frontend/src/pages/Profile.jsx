@@ -1,16 +1,13 @@
 import { render } from '@testing-library/react';
 import React, { Component } from 'react';
 import { unstable_renderSubtreeIntoContainer } from 'react-dom';
-import {useNavigate} from 'react-router-dom'
+import {Router, useNavigate, useParams} from 'react-router-dom'
 import axios from 'axios';
 
 export default function Profile(props) {
-   async function terminateUserById() {
-        await axios.put("/auth/terminateUser/"+ props.userObj.id)
-        .then(response => {
-            alert(response.data)
-        })
-    }
+
+  
+
     async function logOut() {
         await fetch("/logout", {
             headers: {
@@ -33,10 +30,36 @@ export default function Profile(props) {
             navigate("/getGroups");
         }}>Get groups</button> 
 
-        <button onClick={terminateUserById}>Stäng av kontot</button>
+        
+        {checkIfSignedId(props.userObj.id)}
         <button onClick={logOut}>Logga ut</button>
         </div>;
-
-  
 }
 
+function checkIfAdmin(id){
+   if (typeof(id) != "undefined") {
+        axios.get("/rest/isAdmin/"+id)
+        .then(response => {
+            return response.data;
+        })
+   }
+ 
+    return false;
+}
+
+function checkIfSignedId(id) {
+    const profileID = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
+
+    if (id == profileID || checkIfAdmin(id)){
+        function terminateUserById(id) {
+            axios.put("/auth/terminateUser/"+ id)
+            .then(response => {
+                alert(response.data)
+            }).catch((error) =>{
+                console.log(error)
+            })
+        }
+        return <button onClick={terminateUserById}>Stäng av kontot</button>;
+    }
+     return <></>;
+}

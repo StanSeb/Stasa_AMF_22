@@ -135,6 +135,11 @@ public class UserService {
         return "Kunde inte hitta användaren!";
     }
 
+    public boolean isAdmin(long id){
+        return userRepo.findAdminById(id);
+
+    }
+
     public void deleteById(long id) {
 
        // userRepo.deleteById(id);

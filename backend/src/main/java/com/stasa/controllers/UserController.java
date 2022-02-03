@@ -70,6 +70,11 @@ public class UserController {
     public User whoAmI() {
         System.out.println(userService.whoAmI());
         return userService.whoAmI(); }
+
+    @GetMapping("/rest/isAdmin/{id}")
+    public boolean isAdmin(@PathVariable long id){
+        return userService.isAdmin(id);
+    }
     
     @PutMapping("/auth/terminateUser/{id}")
     public String terminateUser(@PathVariable long id){
