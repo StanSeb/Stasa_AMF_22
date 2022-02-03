@@ -14,9 +14,9 @@ public class GroupController {
     @Autowired
     private GroupService groupService;
 
-    @GetMapping("getGroupsByUserId/{user_id}")
-    public List <Group> getByUserId(@PathVariable int user_id){
-        return groupService.getByUserId(user_id);
+    @GetMapping("getGroupsByUserId/{userId}")
+    public List <Group> getByUserId(@PathVariable long userId){
+        return groupService.getByUserId(userId);
     }
 
     @GetMapping("/getAllGroups")

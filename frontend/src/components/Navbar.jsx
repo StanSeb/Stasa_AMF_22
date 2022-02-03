@@ -7,18 +7,21 @@ import Register from '../pages/Register';
 import Profile from '../pages/Profile';
 import Login from '../pages/Login';
 import {useNavigate} from 'react-router-dom';
+import GroupComponent from './GroupComponent';
+import RegisterGroup from './RegisterGroup';
+import HomePage from '../pages/Homepage';
+import NewGroup from './NewGroup';
 
 function Navbar(props) {
         
        
-    
     
     return <div className="containerNavbar">
         <Router>
             <nav>
                 <ul>
                     <li>
-                        <Link to="/"><h3>Hem</h3></Link>
+                        <Link to="/home"><h3>Hem</h3></Link>
                     </li>
                     <li style={{ display: props.userObj.username ? 'none' : 'block' }}>
                         <Link to="/register"><h3>Registrera</h3></Link>
@@ -39,6 +42,9 @@ function Navbar(props) {
             </nav>
             <Routes>
                 <Route path="/register" element={<Register />} />
+                <Route path="/getGroups" element={<GroupComponent />} />
+                <Route path="/home" element={<HomePage/>} />
+                <Route path="/newGroup" element={<NewGroup />} />
                 <Route path="/rules" element={<RulesPage />} />
                 <Route path="/integrity" element={<IntegrityPage />} />
                 <Route path="/login" element={<Login storeId={props.storeId} />} />

@@ -1,6 +1,5 @@
 import axios from 'axios';
-import React, { Component } from 'react';
-import { render } from 'react-dom';
+import React from 'react';
 import { useNavigate } from 'react-router-dom'
 
 export default function Profile(props) {
@@ -26,9 +25,7 @@ export default function Profile(props) {
     return (
     <div className='profileContainer'>
         <div> Welcome to profile </div>
-        <button onClick={() => {
-            navigate("/createGroup");
-        }}>Create a group</button>
+        
         <button onClick={() => {
             navigate("/getGroups");
         }}>Get groups</button>

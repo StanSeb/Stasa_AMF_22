@@ -13,7 +13,7 @@ constructor(props){
 
 componentDidMount() {
   axios
-    .get("http://localhost:8080/getAllGroups/" )
+    .get("/getAllGroups/" )
     .then((response) => response.data)
     .then((data) =>{
       this.setState({groups: data});

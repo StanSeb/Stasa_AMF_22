@@ -21,15 +21,16 @@ public class GroupService {
         String response = "successful";
         for(Group filter : filteredGroup){
             if(filter.getTitle().equalsIgnoreCase(group.getTitle())){
-                response = "failed";}       }
-            if (response == "successful")
-            groupRepo.save(group);
-                return response;    }
+                response = "failed";}
+        }
+        if (response == "successful"){
+            groupRepo.save(group);}
+        return response;    }
 
-    public List<Group> findAll() { return groupRepo.findAll();  }
+    public List<Group> findAll() { return groupRepo.findAll(); }
 
-    public List<Group> getByUserId(int userid) {
-        return groupRepo.findByUserId(userid);
+    public List<Group> getByUserId(long userId) {
+        return groupRepo.getByUserId(userId);
         
     }
 
