@@ -4,6 +4,7 @@ import "./index.css";
 import Axios from "axios";
 import Navbar from "./components/Navbar";
 import GroupPage from "./pages/GroupPage";
+import RegisterGroup from './components/RegisterGroup'
 
 
 class App extends Component {

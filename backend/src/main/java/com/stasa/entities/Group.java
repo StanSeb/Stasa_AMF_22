@@ -8,6 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -26,8 +27,6 @@ public class Group {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name ="user_id")
-    private User user;
-
+    @Column(name ="user_id")
+    private long user_id;
 }

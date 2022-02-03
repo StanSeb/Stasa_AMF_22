@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import axios from 'axios';
 import React, { Component } from 'react';
 import { unstable_renderSubtreeIntoContainer } from 'react-dom';
 import {useNavigate} from 'react-router-dom'
@@ -40,3 +40,25 @@ export default function Profile(props) {
   
 }
 
+
+
+  render() {
+
+    return <div>PROFILE PAGE
+
+<div>{this.state.groups.map((group) =>( 
+            <ul key={group.id}> 
+             <li> Title: <span>{group.group.title}</span> <br />
+                  Description: <span>{group.group.description}</span> <br />
+                  Group role: <span>{group.memberRoles.title}</span>
+
+               </li>
+            </ul>  
+            ))}</div>
+
+    </div>;
+
+
+
+}
+}
