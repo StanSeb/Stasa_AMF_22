@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
-
 import IntegrityPage from '../pages/IntegrityPage';
 import RulesPage from '../pages/RulesPage';
 import Register from '../pages/Register';
@@ -9,7 +8,10 @@ import Login from '../pages/Login';
 import MailSentPage from '../pages/MailSentPage';
 import RegisterGroup from './RegisterGroup';
 import GroupPage from '../pages/GroupPage';
+import GroupComponent from './GroupComponent';
 import Homepage from '../pages/Homepage';
+import NewGroup from './NewGroup';
+
 
 function Navbar(props) {
     
@@ -40,7 +42,6 @@ function Navbar(props) {
             <Routes>
                 <Route path="/register" element={<Register />} />
                 <Route path="/getGroups" element={<GroupComponent />} />
-                <Route path="/home" element={<HomePage/>} />
                 <Route path="/newGroup" element={<NewGroup />} />
                 <Route path="/rules" element={<RulesPage />} />
                 <Route path="/integrity" element={<IntegrityPage />} />

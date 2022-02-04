@@ -31,7 +31,7 @@ render() {
             <div>{this.state.groups.map((group) =>(
                 <ul key={group.userId}> 
                     <li> 
-                         <span>{group.user_name} - </span> <span><i>{group.role}</i></span><br /><br />
+                         <span>{group.username} - </span> <span><i>{group.role}</i></span><br /><br />
                     </li>
                 </ul>  
             ))}</div>

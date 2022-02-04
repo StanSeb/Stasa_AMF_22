@@ -13,19 +13,6 @@ class GroupPage extends React.Component {
 			loggedInUser: this.props.loggedInUser,
 			threads: {},
 			users: {
-				user01: { id: 1, username: "Leif Bond", privilege: "admin" },
-				user02: {
-					id: 2,
-					username: "Leificus Bondicus",
-					privilege: "moderator",
-				},
-				user03: { id: 3, username: "Dr. Leffe Bond", privilege: "moderator" },
-				user04: { id: 4, username: "Agent Lars Schmidt" },
-				user05: { id: 5, username: "Laif Bendelius" },
-				user06: { id: 6, username: "Leif Bond" },
-				user07: { id: 7, username: "Leificus Bondicus" },
-				user08: { id: 8, username: "Dr. Leffe Bond" },
-				user09: { id: 9, username: "Agent Lars Schmidt" },
 			},
 			clickedThread: 0,
 		};
@@ -40,6 +27,14 @@ class GroupPage extends React.Component {
 			console.log(response.data)
 			this.setState({group:response.data})
 		})	
+
+		let users;
+		axios.get("http://localhost:8080/rest/member/memberByGroupId/" + groupId) 
+		.then((response) => response.data)
+		.then((data) =>{
+		 this.setState({users: data});
+		 console.log(this.state.users);
+	 });	
 
 		let threads;
 		axios
@@ -100,6 +95,7 @@ class GroupPage extends React.Component {
 						</div>
 						<div className="group-members">
 							{RenderUsers(this.state.users, this.state.loggedInUser)}
+							
 						</div>
 					</div>
 				</div>

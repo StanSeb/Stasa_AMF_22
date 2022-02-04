@@ -84,27 +84,8 @@ function RenderGroups(props, user_id) {
 					</button>
 				</div>
 			);
-		}
-
-    return (
-    <div className='profileContainer'>
-        <div> Welcome to profile </div>
-        
-        <button onClick={() => {
-            navigate("/getGroups");
-        }}>Get groups</button>
-        
-        {/* TODO: Fixa så funktion för denna */}
-        {/* <div>
-            <div>{this.state.groups.map((group) => (
-                <ul key={group.id}>
-                    <li> Title: <span>{group.group.title}</span> <br />
-                        Description: <span>{group.group.description}</span> <br />
-                        Group role: <span>{group.memberRoles.title}</span>
-		return groupList;
-	} else {
-		return <></>;
-	}
+		}   
+    }    
 }
 
 export default Profile;

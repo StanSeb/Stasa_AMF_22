@@ -33,15 +33,8 @@ public class GroupService {
         return "Användare lämnade gruppen!";
     }
 
-
-    public List<Group> findAll() { return groupRepo.findAll();  }
-
     public List<Group> getByUserId(long userId) {
-        return groupRepo.getByUserId(userId);
-        
-    public List<Group> getByUserId(long userId) {
-        return groupRepo.getByUserId(userId);
-    }
+        return groupRepo.getByUserId(userId);}
 
     public List<Map> getGroupById(long groupId) {
         return groupRepo.getGroupById(groupId);
