@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -68,7 +69,7 @@ public class User {
     
    @JsonProperty
     public String getUsername() {
-        if(!enabled){
+        if(getDeletionTimestamp() != null) {
            return "DeletedUser";
       }
       return username;

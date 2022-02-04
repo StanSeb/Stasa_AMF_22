@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.html.Option;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -45,8 +47,8 @@ public class UserController {
     }
 
     @GetMapping("/rest/users/{id}")
-    public User getById(@PathVariable long id) {
-        return userService.findById(id);
+    public User getById(@PathVariable long id) throws Exception {
+        return userService.findById(id).orElseThrow(() -> new Exception("User not found!"));
     }
 
     @GetMapping("/rest/username/{username}")
@@ -69,9 +71,14 @@ public class UserController {
     }
 
     @GetMapping("/rest/whoami")
-    public User whoAmI() {
-        System.out.println(userService.whoAmI());
-        return userService.whoAmI(); }
+    public User whoAmI() throws Exception {
+        var user = Optional.ofNullable(userService.whoAmI());
+        if(user.isPresent()) {
+            return user.get();
+        } else {
+            throw new Exception("You are not logged in.");
+        }
+    }
     
     @PutMapping("/auth/terminateUser/{id}")
     public String terminateUser(@PathVariable long id){
