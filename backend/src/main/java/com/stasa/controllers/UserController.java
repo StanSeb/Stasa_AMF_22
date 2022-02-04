@@ -73,8 +73,8 @@ public class UserController {
         System.out.println(userService.whoAmI());
         return userService.whoAmI(); }
     
-    @PutMapping("/auth/terminateUser/{id}")
-    public String terminateUser(@PathVariable long id){
-        return userService.terminateUser(id);
+    @PutMapping("/auth/terminateUser/{userId}")
+    public String terminateUser(@PathVariable long userId){
+        return userService.terminateUser(userId);
     }
 }
