@@ -7,7 +7,8 @@ class Profile extends React.Component {
 		super(props);
 		this.state = {
 			userObj: this.props.userObj,
-			groupsList: "",
+			userId:this.props.userObj.id,
+			groups:[]
 		};
 	}
 
@@ -29,15 +30,15 @@ class Profile extends React.Component {
 	}
 
 	async componentDidMount() {
-		let groups;
+		 axios
+			.get("/getMembersByUserId/"+ this.state.userId)
+			.then((response) => response.data)
+			.then((data) =>{
+		this.setState({groups: data});
+		console.log(this.state.groups);
+		});
 
-		await axios
-			.get("http://localhost:8080/rest/groups/getGroupsByUserId/40")
-			.then((response) => {
-				groups = response.data;
-			});
-
-		this.setState({ groupsList: groups });
+		
 	}
 
 	render() {
@@ -51,6 +52,17 @@ class Profile extends React.Component {
 				<button onClick={this.logOut}>Logga ut</button>
 
 				{RenderGroups(this.state.groupsList, this.state.userObj.id)}
+
+				<div>{this.state.groups.map((group) =>( 
+            	<ul key={group.id}> 
+            	 <li> Title: <span>{group.group.title}</span> <br />
+                  Description: <span>{group.group.description}</span> <br />
+				  Role: <span>{group.memberRoles.title}</span> <br />
+
+
+               </li>
+            </ul>  
+            ))}</div>
 			</div>
 		);
 	}
