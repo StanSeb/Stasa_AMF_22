@@ -8,7 +8,11 @@ class GroupPage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			
+			member: {
+				user: {id:""},
+				memberRole:{id:""},
+				group:{id:""},
+				},       
 			group: {name:"",info:""},
 			loggedInUser: this.props.loggedInUser,
 			threads: {},
@@ -17,6 +21,22 @@ class GroupPage extends React.Component {
 			clickedThread: 0,
 		};
 		this.handleThreadClick = this.handleThreadClick.bind(this);
+	}
+
+	createMember(){
+		let member= {
+			user: {id: this.state.loggedInUser.id},
+			memberRole:{id: 1}, // id av "user" i Tabellen mamber_roles i Databasen.
+			group:{id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1)},
+		};
+	
+		this.setState({ member }, () => {
+			axios
+				.post("http://localhost:8080/rest/member/join", this.state.member)
+				.then((response) =>{
+				alert(response.data);
+			})
+		});
 	}
 
 	componentDidMount() {
@@ -92,6 +112,7 @@ class GroupPage extends React.Component {
 						<div className="group-info">
 							<h3>{this.state.group.title}</h3>
 							<p>{this.state.group.description}</p>
+							<button onClick={() => this.createMember()}>Bli medlem</button>
 						</div>
 						<div className="group-members">
 							{RenderUsers(this.state.users, this.state.loggedInUser)}

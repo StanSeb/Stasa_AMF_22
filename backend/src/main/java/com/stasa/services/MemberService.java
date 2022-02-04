@@ -19,20 +19,15 @@ public class MemberService {
 
     public String addMember(Member member) {
         String response;
-        User loggedUser = userService.whoAmI();
         long memberUserId = member.getUser().getId();
         long memberGroupId = member.getGroup().getId();
-        //if(loggedUser != null){
-            int membership = memberRepo.isMember( memberUserId, memberGroupId );  //Kollar om user är redan member i en group
+        int membership = memberRepo.isMember( memberUserId, memberGroupId );  //Kollar om user är redan member i en group eller inte
             if (membership == 0){
-                memberRepo.save(member);
+                memberRepo.save(member); // Sparas i Databasen som en ny member i en group
                 response = "Du har lagts till i den begärda gruppen!!";
             } else {
                 response = "Du är redan medlem av den här gruppen. Vi kan inte lägga till dig igen!";
             }
-        //}else{
-        //    response = "För att vara medlem i en grupp måste du vara inloggad på ditt konto. Logga in och försök igen!";
-        //}
         return response;
     }
 
