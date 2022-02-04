@@ -5,6 +5,7 @@ import com.stasa.entities.User;
 import com.stasa.repositories.UserRepo;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -47,7 +49,7 @@ public class UserService {
         sendVerificationEmail(user,siteURL);
     }
     private void sendVerificationEmail(User user, String siteUrl)
-    throws MessagingException, UnsupportedEncodingException {
+            throws MessagingException, UnsupportedEncodingException {
         String toAdress = user.getDecodedEmail();
         String fromAddress = "Stasa.Bestmail.com";
         String senderName = "SuperTeamAllstarsStraightAAAAS";
@@ -71,7 +73,8 @@ public class UserService {
         helper.setText(content,true);
 
         mailSender.send(message);
-
+        System.out.println("Email sent to " + toAdress);
+        System.out.println("Verification code: " + user.getVerificationCode());
     }
 
 
@@ -96,11 +99,11 @@ public class UserService {
 //    return userRepo.save(user);
 //  }
 
-    public User findById(long id) {
+    public Optional<User> findById(long id) {
         if(userRepo.findById(id).isPresent()) {
-            return userRepo.findById(id).get();
+            return Optional.of(userRepo.findById(id).get());
         }
-        return null;
+        return Optional.empty();
     }
 
     public String findByUserName(String username) {
@@ -143,8 +146,8 @@ public class UserService {
     }
 
     public void updateById(long id, User user) {
-        User fromDb = findById(id);
-        if(fromDb != null) {
+        Optional<User> fromDb = findById(id);
+        if(fromDb.isPresent()) {
 
             Field[] fields = user.getClass().getDeclaredFields(); // get all fields, even private one
             try {
@@ -158,11 +161,11 @@ public class UserService {
                 e.printStackTrace();
             }
 
-            detailsService.updateUser(fromDb);
+            detailsService.updateUser(fromDb.get());
         }
     }
 
-    public User whoAmI(){
+    public @Nullable User whoAmI() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepo.findByEmail(email);
     }

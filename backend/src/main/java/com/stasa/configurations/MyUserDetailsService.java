@@ -59,6 +59,7 @@ public class MyUserDetailsService implements UserDetailsService {
         return null;
     }
 
+    // >>>>>>>>>>>>>>>>>>>> Varför heter den här metoden updateUser ifall den markerar en användare som deleted?
     public User updateUser(User user){
         //todo: byta lösenord nedan,,
         //user.setPassword(encoder.encode(user.getPassword()));
