@@ -6,20 +6,16 @@ import RulesPage from '../pages/RulesPage';
 import Register from '../pages/Register';
 import Profile from '../pages/Profile';
 import Login from '../pages/Login';
-import {useNavigate} from 'react-router-dom';
-import GroupComponent from './GroupComponent';
+import MailSentPage from '../pages/MailSentPage';
 import RegisterGroup from './RegisterGroup';
-import HomePage from '../pages/Homepage';
-import OneGroupPage from '../pages/OneGroupPage';
-import NewGroup from './NewGroup';
+import GroupPage from '../pages/GroupPage';
+import Homepage from '../pages/Homepage';
 
 function Navbar(props) {
-        
-       
     
-    return <div className="containerNavbar">
+    return <div className="app">
         <Router>
-            <nav>
+            <nav className='containerNavbar'>
                 <ul>
                     <li>
                         <Link to="/home"><h3>Hem</h3></Link>
@@ -49,8 +45,11 @@ function Navbar(props) {
                 <Route path="/rules" element={<RulesPage />} />
                 <Route path="/integrity" element={<IntegrityPage />} />
                 <Route path="/login" element={<Login storeId={props.storeId} />} />
-                <Route path="/profile" element={<Profile userObj={props.userObj} />} />
-                <Route path="/getGroup" element={<OneGroupPage groupId={props.groupId} />} />
+                <Route path="/profile/" element={<Profile userObj={props.userObj} />} />
+                <Route path="/mailSent" element={<MailSentPage />}/>
+                <Route path="/registerGroup" element={<RegisterGroup/>} />
+                <Route path="/group/:id" element={<GroupPage loggedInUser={props.userObj}/>} />
+                <Route path="/home" element={<Homepage/>} />
             </Routes>
         </Router>
     </div>;

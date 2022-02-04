@@ -35,5 +35,5 @@ public class Thread {
     private long creatorId;
 
     @Column(name = "deletion_timestamp", length = 80)
-    private Time deletionTimestamp;
+    private String deletionTimestamp;
 }

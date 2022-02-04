@@ -81,21 +81,15 @@ function Login(props) {
                     <label>Login</label>
                 </div>
                 <div className='stuff-container'>
-
                     <input type="text" value={getEmail} onChange={(e) => setEmail(e.target.value)}
                         id="email-input" placeholder='E-mail'></input>
                 </div>
-
                 <div className='stuff-container'>
                     <input type="password" value={getPassword} onChange={(e) => setPassword(e.target.value)}
                         id="password-input" placeholder='Password'></input>
                 </div>
-
                 <button type="submit">Login</button>
             </form>
-            <div>
-            <button onClick={() => logOut()}>logout</button>
-            </div>
         </div>
     )
 }

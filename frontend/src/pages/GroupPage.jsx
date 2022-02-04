@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import ThreadCard from "../components/ThreadCard";
 import ThreadPage from "../pages/ThreadPage";
 import UserDropdown from "../components/UserDropdown";
@@ -8,7 +8,8 @@ class GroupPage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			group: this.props.group,
+			
+			group: {name:"",info:""},
 			loggedInUser: this.props.loggedInUser,
 			threads: {},
 			users: {
@@ -32,14 +33,44 @@ class GroupPage extends React.Component {
 	}
 
 	componentDidMount() {
+		let groupId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
+
+		axios.get("/rest/groups/getGroupBy/"+groupId)
+		.then((response)=> {
+			console.log(response.data)
+			this.setState({group:response.data})
+		})	
+
 		let threads;
 		axios
-			.get("http://localhost:8080/rest/threads/byGroup/2")
+			.get("http://localhost:8080/rest/threads/byGroup/"+groupId)
 			.then((response) => response.data)
 			.then((data) => {
 				threads = data;
 				this.setState({ threads });
 			});
+
+		let privilege;
+		let loggedInUser;
+		// axios
+		// 	.get(
+		// 		"http://localhost:8080/rest/getUserRole/" +
+		// 			this.state.group.id +
+		// 			"/" +
+		// 			this.state.loggedInUser.id
+		// 	)
+		// 	.then((response) => {
+		// 		privilege = response.data;
+		// 	})
+		// 	.then(
+		// 		this.setState({
+		// 			loggedInUser: {
+		// 				username: this.state.loggedInUser.username,
+		// 				id: this.state.loggedInUser.id,
+		// 				privilege: privilege,
+		// 			},
+		// 		}, () => {console.log(this.state.loggedInUser)})
+		// 	);
 	}
 
 	handleThreadClick(props) {
@@ -64,9 +95,8 @@ class GroupPage extends React.Component {
 					</>
 					<div className="group-side-panel">
 						<div className="group-info">
-							<h3>{this.props.group.name}</h3>
-							<p>{this.props.group.info}</p>
-							<p>Admin: {this.props.group.admin}</p>
+							<h3>{this.state.group.title}</h3>
+							<p>{this.state.group.description}</p>
 						</div>
 						<div className="group-members">
 							{RenderUsers(this.state.users, this.state.loggedInUser)}
@@ -82,7 +112,7 @@ function ShowThread(threads, handleThreadClick, clickedThread, loggedInUser) {
 	if (clickedThread === 0) {
 		return <>{RenderThreads(threads, handleThreadClick, loggedInUser)}</>;
 	} else {
-		return <ThreadPage threadId={clickedThread} loggedInUser={loggedInUser}/>;
+		return <ThreadPage threadId={clickedThread} loggedInUser={loggedInUser} />;
 	}
 }
 
@@ -90,13 +120,12 @@ function RenderThreads(props, handleThreadClick, loggedInUser) {
 	if (props !== null) {
 		let threads = Object.values(props);
 		let threadList = [];
-		for (let i = 0; i < threads.length; i++) {
+		for (let i = threads.length - 1; i >= 0; i--) {
 			threadList.push(
 				<ThreadCard
 					thread={threads[i]}
 					key={i}
-					handleThreadClick={(e) => handleThreadClick(e)
-					}
+					handleThreadClick={(e) => handleThreadClick(e)}
 					loggedInUser={loggedInUser}
 				/>
 			);

@@ -2,9 +2,16 @@ package com.stasa.services;
 
 import com.stasa.repositories.ThreadRepo;
 import com.stasa.entities.Thread;
+import org.apache.tomcat.jni.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.stream.events.Comment;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,5 +50,24 @@ public class ThreadService {
         }
 
         return "Could not find the thread";
+    }
+
+    public String deleteThread(long id) {
+        if(threadRepo.findThreadById(id) != null){
+            Thread newThread = threadRepo.findThreadById(id);
+            Date date = Calendar.getInstance().getTime();
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+            String strDate = dateFormat.format(date);
+            newThread.setDeletionTimestamp(strDate);
+            threadRepo.save(newThread);
+            return "Delete OK";
+        }else{
+            return "Could not find thread in database";
+        }
+    }
+
+    public List<Comment> findCommentById(long id) {
+        System.out.println(threadRepo.findCommentsById(id));
+       return threadRepo.findCommentsById(id);
     }
 }

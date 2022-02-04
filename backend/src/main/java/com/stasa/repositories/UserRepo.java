@@ -8,10 +8,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepo extends JpaRepository<User, Long> {
 
-    @Query(value = "SELECT member_roles.title FROM member_roles, members WHERE members.role_id = member_roles.id",nativeQuery = true)
-    String findUserRole();
+    @Query(value = "SELECT member_roles.title FROM member_roles, members WHERE members.role_id = " +
+            "member_roles.id AND members.user_id = ?",nativeQuery = true)
+    String findUserRole(long id);
 
-    @Query(value = "SELECT user_name FROM users WHERE user_name = ?", nativeQuery = true)
+    @Query(value = "SELECT username FROM users WHERE username = ?", nativeQuery = true)
     String findByUsername(String username);
 
     //MUY IMPORTANTE
@@ -20,7 +21,6 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * FROM users WHERE users.email=?1", nativeQuery = true)
     User findByEmailInDatabase(String email);
-
 
     User findByEmail(String email);
 }

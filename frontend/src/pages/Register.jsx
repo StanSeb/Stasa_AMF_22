@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import Axios from 'axios';
-import  {Link} from 'react-router-dom';
-
+import  { Link, useNavigate } from 'react-router-dom';
 
 function Register() {
     const [getName, setName] = useState("");
@@ -10,9 +9,9 @@ function Register() {
     const [getPassword, setPassword] = useState("");
     const [getToggledRules, setToggledRules] = useState(false);
     const [getToggledIntegrity, setToggledIntegrity] = useState(false);
-    
 
-    // POST request using fetch with async/await
+    let navigate = useNavigate();    
+
     function registerUser() {
         const newUserObject = { username: getName, email: getEmail, password: getPassword };
         if (newUserObject.username === '' || newUserObject.email === '' || newUserObject.password === '') {
@@ -23,9 +22,10 @@ function Register() {
         }
         else {
             Axios.post('http://localhost:8080/rest/process_register', newUserObject)
-
+            navigate("/mailSent", {state: {email: getEmail}});
         }
     }
+
     const handleSubmit = (event) => {
         event.preventDefault();
         if(isNameOk === 1) {
@@ -35,7 +35,7 @@ function Register() {
 
     function checkAvailability() {
         Axios.get('/rest/user/' + getName).then(response => {
-            if(response.data != getName) {
+            if(response.data !== getName) {
                 setIsNameOk(1);
             } else {
                 setIsNameOk(2);
