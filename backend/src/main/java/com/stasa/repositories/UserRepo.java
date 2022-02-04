@@ -8,8 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepo extends JpaRepository<User, Long> {
 
-    @Query(value = "SELECT member_roles.title FROM member_roles, members WHERE members.role_id = " +
-            "member_roles.id AND members.user_id = ?",nativeQuery = true)
+    @Query(value = "SELECT member_roles.title FROM member_roles, members WHERE members.role_id = 2 AND members.user_id = ?1",nativeQuery = true)
     String findUserRole(long id);
 
     @Query(value = "SELECT username FROM users WHERE username = ?", nativeQuery = true)

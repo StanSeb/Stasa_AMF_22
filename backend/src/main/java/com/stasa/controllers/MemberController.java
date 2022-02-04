@@ -31,6 +31,9 @@ public class MemberController {
         return memberService.register(member);
     }
 
-
+    @DeleteMapping("/deleteUser/{userId}/{groupID}")
+    public String deleteUserFromGroup(@PathVariable long userId, @PathVariable long groupId){
+        return memberService.deleteUserFromGroup(userId, groupId);
+    }
 
 }

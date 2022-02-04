@@ -25,5 +25,12 @@ public class MemberService {
         return memberRepo.save(member);
     }
 
-
+    // kör denna metod som admin i front-end
+    public String deleteUserFromGroup(long userId, long groupId) {
+        if (memberRepo.userInGroup(userId, groupId)){
+            memberRepo.deleteUserInGroup(userId, groupId);
+            return "Användaren är borttagen!";
+        }
+        return "Användaren finns inte med i denna gruppen";
+    }
 }
