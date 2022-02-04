@@ -35,6 +35,7 @@ class GroupPage extends React.Component {
 				.post("http://localhost:8080/rest/member/join", this.state.member)
 				.then((response) =>{
 				alert(response.data);
+				window.location.reload();
 			})
 		});
 	}
