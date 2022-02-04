@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { Component } from 'react';
+import {Link} from 'react-router-dom'
 
 export default class Homepage extends Component {
 constructor(props){
@@ -27,7 +28,7 @@ componentDidMount() {
 
     return <div><div>{this.state.groups.map((group) =>(
             <ul key={group.id}> 
-             <li> Title: <span>{group.title}</span> <br />
+             <li> <Link to={`/group/${group.id}`}><span>{group.title}</span></Link>: <br />
                   Description: <span>{group.description}</span> <br />
                </li>
             </ul>  

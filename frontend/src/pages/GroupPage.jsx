@@ -11,21 +11,8 @@ class GroupPage extends React.Component {
 			group: this.props.group,
 			loggedInUser: this.props.loggedInUser,
 			threads: {},
-			users: {
-				user01: { id: 1, username: "Leif Bond", privilege: "admin" },
-				user02: {
-					id: 2,
-					username: "Leificus Bondicus",
-					privilege: "moderator",
-				},
-				user03: { id: 3, username: "Dr. Leffe Bond", privilege: "moderator" },
-				user04: { id: 4, username: "Agent Lars Schmidt" },
-				user05: { id: 5, username: "Laif Bendelius" },
-				user06: { id: 6, username: "Leif Bond" },
-				user07: { id: 7, username: "Leificus Bondicus" },
-				user08: { id: 8, username: "Dr. Leffe Bond" },
-				user09: { id: 9, username: "Agent Lars Schmidt" },
-			},
+			members: {},
+			group:{},
 			clickedThread: 0,
 		};
 		this.handleThreadClick = this.handleThreadClick.bind(this);
@@ -40,6 +27,10 @@ class GroupPage extends React.Component {
 				threads = data;
 				this.setState({ threads });
 			});
+
+let group;
+axios .get("http://localhost:8080/rest/group")
+
 
 		let privilege;
 		let loggedInUser;
@@ -86,9 +77,9 @@ class GroupPage extends React.Component {
 					</>
 					<div className="group-side-panel">
 						<div className="group-info">
-							<h3>{this.props.group.name}</h3>
-							<p>{this.props.group.info}</p>
-							<p>Admin: {this.props.group.admin}</p>
+							<h3>{this.props.group.title}</h3>
+							<p>{this.props.group.description}</p>
+							<p>Admin: {this.props.group.userId}</p>
 						</div>
 						<div className="group-members">
 							{RenderUsers(this.state.users, this.state.loggedInUser)}
