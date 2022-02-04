@@ -5,6 +5,7 @@ import  { Link, useNavigate } from 'react-router-dom';
 function Register() {
     const [getName, setName] = useState("");
     const [isNameOk, setIsNameOk] = useState(0);
+    const [isEmailOk, setIsEmailOk] = useState(0);
     const [getEmail, setEmail] = useState("");
     const [getPassword, setPassword] = useState("");
     const [getToggledRules, setToggledRules] = useState(false);
@@ -33,8 +34,19 @@ function Register() {
         }
     }
 
-    function checkAvailability() {
-        Axios.get('/rest/user/' + getName).then(response => {
+    function checkEmailAvailability() {
+        Axios.get('/rest/validateEmail/' + getEmail).then(response => {
+            if(response.data === false) {
+                setIsEmailOk(1);
+            } else {
+                setIsEmailOk(2);
+                alert("Användarnamnet är upptaget.")
+            }            
+        })   
+    }
+
+    function checkNameAvailability() {
+        Axios.get('/rest/username/' + getName).then(response => {
             if(response.data !== getName) {
                 setIsNameOk(1);
             } else {
@@ -50,21 +62,23 @@ function Register() {
                 <div>
                     <label>Register account</label>
                 </div>
-                <div className='stuff-container'>
-                    <input type="text" value={getEmail} onChange={(e) => setEmail(e.target.value)}
-                        id="email-input" placeholder='E-mail'></input>
+                <div className='stuff-container check-container'>
+                    <input type="text" value={getEmail} onChange={(e) => setEmail(e.target.value)} onBlur={() => checkEmailAvailability()}
+                        id="email-input" placeholder='E-postadress'></input>
+                    <p style={{ display: isEmailOk === 1 ? 'block' : 'none' }}>✅</p>
+                    <p style={{ display: isEmailOk === 2 ? 'block' : 'none' }}>❌</p>
                 </div>
 
-                <div className='stuff-container checkUserName-container'>
-                    <input type="text" value={getName} onChange={(e) => setName(e.target.value)} onBlur={() => checkAvailability()}
-                        id="userName-input" placeholder='User name'></input>
+                <div className='stuff-container check-container'>
+                    <input type="text" value={getName} onChange={(e) => setName(e.target.value)} onBlur={() => checkNameAvailability()}
+                        id="userName-input" placeholder='Användarnamn'></input>
                     <p style={{ display: isNameOk === 1 ? 'block' : 'none' }}>✅</p>
                     <p style={{ display: isNameOk === 2 ? 'block' : 'none' }}>❌</p>
                 </div>
 
                 <div className='stuff-container'>
                     <input type="password" value={getPassword} onChange={(e) => setPassword(e.target.value)}
-                        id="password-input" placeholder='Password' minLength="8" maxLength="25"></input>
+                        id="password-input" placeholder='Lösenord' minLength="8" maxLength="25"></input>
                 </div>
                 <div>
                     <label htmlFor="">Lösenordet måste vara 8 karaktärer långt minimum</label>

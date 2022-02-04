@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class StasaProjectApplicationTests {
@@ -25,5 +26,13 @@ class StasaProjectApplicationTests {
 		String byUserName = userService.findByUserName(username);
 
 		assertEquals("Sebbe", byUserName);
+	}
+
+	@Test
+	public void testGetEmail() {
+		String email = "stanczak.sebastian@gmail.com";
+		boolean foundEmail = userService.findByEmail(email);
+
+		assertTrue(foundEmail);
 	}
 }
