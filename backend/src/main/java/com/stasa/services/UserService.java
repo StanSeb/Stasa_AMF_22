@@ -119,19 +119,21 @@ public class UserService {
 
     // hämta id
     // hämta user på id => myUserDetailService ändra värden.
-    public String terminateUser(long id) {
+    public String terminateUser(long userId) {
         //TODO: Kolla om användaren är admin eller ej
-        String role = userRepo.findUserRole(id);
 
-        if (role.equals("User")){
-            User user = userRepo.findById(id).get();
-            detailsService.updateUser(user);
+        for(String roles : userRepo.findUserRole(userId)){
+            if (roles.equals("Admin")){
+                return "Du måste gå ur dina grupper där du är Admin innan du kan stänga av ditt konto!";
+            }
+            else{
+                User user = userRepo.findById(userId).get();
+                detailsService.updateUser(user);
 
-            return "Användaren är avstängd!";
+                return "Användaren är avstängd!";
+            }
         }
-        else if (role.equals("Admin")){
-            return "Du måste gå ur dina grupper där du är Admin innan du kan stänga av ditt konto!";
-        }
+
         return "Kunde inte hitta användaren!";
     }
 
