@@ -2,18 +2,14 @@ package com.stasa.configurations;
 
 import com.stasa.entities.User;
 import com.stasa.repositories.UserRepo;
-import com.sun.mail.util.BASE64DecoderStream;
-import com.sun.mail.util.BASE64EncoderStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
@@ -40,10 +36,8 @@ public class MyUserDetailsService implements UserDetailsService {
 //  }
 
     @Override
-    public UserDetails loadUserByUsername(String email){
-
-        String email1=Base64.getEncoder().encodeToString(email.getBytes());
-
+    public UserDetails loadUserByUsername(String email) {
+        String email1 = Base64.getEncoder().encodeToString(email.getBytes());
         User user = userRepo.findByEmail(email1);
         if(user == null){
             throw new UsernameNotFoundException("User not found by email:"+ email1);

@@ -80,8 +80,8 @@ public class UserController {
         }
     }
     
-    @PutMapping("/auth/terminateUser/{id}")
-    public String terminateUser(@PathVariable long id){
-        return userService.terminateUser(id);
+    @PutMapping("/auth/terminateUser/{userId}")
+    public String terminateUser(@PathVariable long userId){
+        return userService.terminateUser(userId);
     }
 }
