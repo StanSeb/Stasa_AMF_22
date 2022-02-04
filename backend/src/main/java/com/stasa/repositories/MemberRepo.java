@@ -9,10 +9,12 @@ import java.util.Map;
 
 public interface MemberRepo extends JpaRepository<Member, Integer> {
 
+    //Kollar om en user är redan member i en group
     @Query(value= "Select COUNT(id) FROM members WHERE user_id = ?1 AND group_id = ?2", nativeQuery = true )
     int isMember(long memberUserId, long memberGroupId);
 
-    @Query(value= "SELECT m.user_id AS userId, u.user_name, m.group_id AS groupId, g.title, r.title AS role \n" +
+    //Hämtar alla member från en group
+    @Query(value= "SELECT m.user_id AS userId, u.user_name, m.group_id AS groupId, g.title, g.description, r.title AS role \n" +
             "FROM members m\n" +
             "INNER JOIN users u on u.id = m.user_id\n" +
             "INNER JOIN `groups` g on g.id = m.group_id\n" +

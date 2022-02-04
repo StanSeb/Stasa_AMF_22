@@ -15,21 +15,24 @@ public class MemberController {
         @Autowired
         private MemberService memberService;
 
+        //Bli medlem i en group
         @PostMapping("/join")
         public String addMember(@RequestBody Member member) {return memberService.addMember(member); }
 
+        //Get alla members från en group by groupId
         @GetMapping("/memberByGroupId/{groupId}")
         public List<Map> getMembersByGroupId(@PathVariable long groupId) {return memberService.getMembersByGroupId(groupId); }
-    @GetMapping("getAllMembers")
-    public List<Member> getallMembers() {
-        return memberService.getAll();
-    }
 
-    //Get method to retrieve data from Members, Member roles, group and user
-    @GetMapping("GetMembersByUserId/{userId}")
-    public List <Member> getByUserId(@PathVariable int userId){
+        @GetMapping("getAllMembers")
+        public List<Member> getallMembers() {
+        return memberService.getAll();
+        }
+
+        //Get method to retrieve data from Members, Member roles, group and user
+        @GetMapping("GetMembersByUserId/{userId}")
+        public List <Member> getByUserId(@PathVariable int userId){
         return memberService.getByUserId(userId);
-    }
+        }
 
     @PostMapping("register/member")
     public Member registerMember(@RequestBody Member member) {

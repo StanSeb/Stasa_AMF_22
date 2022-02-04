@@ -2,11 +2,12 @@ import axios from 'axios';
 import React, { Component } from 'react';
 
 export default class Homepage extends Component {
+
 constructor(props){
+  
     super(props);
     this.state = {
-        groups: [],
-        
+        groups: [], 
     }
 }
 
@@ -21,15 +22,15 @@ componentDidMount() {
     });
 }
 
+ 
+render() {
 
+  return <div>Homepage
 
-  render() {
-
-    return <div>Homepage
-
-<div>{this.state.groups.map((group) =>(
+ <div>{this.state.groups.map((group) =>(
             <ul key={group.id}> 
-             <li> Title: <span>{group.title}</span> <br />
+             <li> id: <span>{group.id}</span> <br />
+                  Title: <span>{group.title}</span> <br />
                   Description: <span>{group.description}</span> <br />
                </li>
             </ul>  

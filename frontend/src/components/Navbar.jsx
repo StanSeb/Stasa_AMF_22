@@ -10,6 +10,7 @@ import {useNavigate} from 'react-router-dom';
 import GroupComponent from './GroupComponent';
 import RegisterGroup from './RegisterGroup';
 import HomePage from '../pages/Homepage';
+import OneGroupPage from '../pages/OneGroupPage';
 import NewGroup from './NewGroup';
 
 function Navbar(props) {
@@ -49,11 +50,10 @@ function Navbar(props) {
                 <Route path="/integrity" element={<IntegrityPage />} />
                 <Route path="/login" element={<Login storeId={props.storeId} />} />
                 <Route path="/profile" element={<Profile userObj={props.userObj} />} />
+                <Route path="/getGroup" element={<OneGroupPage groupId={props.groupId} />} />
             </Routes>
         </Router>
     </div>;
 }
-
-  
 
 export default Navbar;

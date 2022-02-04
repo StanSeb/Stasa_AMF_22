@@ -6,7 +6,7 @@ export default class GroupComponent extends Component {
   
   render() { 
     
-    return <div> Alianne
+    return <div> 
     </div>;   
   
   } 

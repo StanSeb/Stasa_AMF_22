@@ -40,7 +40,6 @@
 display: flex;
 justify-content: center;
 
-
 }
 
 #login-form {
@@ -51,3 +50,4 @@ justify-content: center;
 .group-page{
   padding-top: 8em;
 }
+
