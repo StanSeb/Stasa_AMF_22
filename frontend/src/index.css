@@ -53,11 +53,11 @@ code {
 /*#endregion*/
 
 /*#region registerPage*/
-.checkUserName-container {
+.check-container {
 	display: flex;
 }
 
-.checkUserName-container>p {
+.check-container>p {
 	margin: 0;
 }
 

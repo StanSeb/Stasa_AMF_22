@@ -17,6 +17,7 @@ import javax.mail.internet.MimeMessage;
 import javax.persistence.Id;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -109,6 +110,13 @@ public class UserService {
         return null;
     }
 
+    public boolean findByEmail(String email) {
+        if(userRepo.findByEmailInDatabase(Base64.getEncoder().encodeToString(email.getBytes())) != null){
+            return true;
+        }
+        return false;
+    }
+
     // hämta id
     // hämta user på id => myUserDetailService ändra värden.
     public String terminateUser(long id) {
@@ -156,6 +164,5 @@ public class UserService {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepo.findByEmail(email);
     }
-
 
 }
