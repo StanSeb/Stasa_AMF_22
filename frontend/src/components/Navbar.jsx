@@ -7,6 +7,9 @@ import Register from '../pages/Register';
 import Profile from '../pages/Profile';
 import Login from '../pages/Login';
 import MailSentPage from '../pages/MailSentPage';
+import RegisterGroup from './RegisterGroup';
+import GroupPage from '../pages/GroupPage';
+import Homepage from '../pages/Homepage';
 
 function Navbar(props) {
     
@@ -15,7 +18,7 @@ function Navbar(props) {
             <nav className='containerNavbar'>
                 <ul>
                     <li>
-                        <Link to="/"><h3>Hem</h3></Link>
+                        <Link to="/home"><h3>Hem</h3></Link>
                     </li>
                     <li style={{ display: props.userObj.username ? 'none' : 'block' }}>
                         <Link to="/register"><h3>Registrera</h3></Link>
@@ -41,6 +44,9 @@ function Navbar(props) {
                 <Route path="/login" element={<Login storeId={props.storeId} />} />
                 <Route path="/profile" element={<Profile userObj={props.userObj} />} />
                 <Route path="/mailSent" element={<MailSentPage />}/>
+                <Route path="/registerGroup" element={<RegisterGroup/>} />
+                <Route path="/getGroups" element={<GroupPage/>} />
+                <Route path="/home" element={<Homepage/>} />
             </Routes>
         </Router>
     </div>;
