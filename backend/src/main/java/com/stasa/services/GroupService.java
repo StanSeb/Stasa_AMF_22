@@ -39,4 +39,9 @@ public class GroupService {
     public String getRole(long group_id, long id) {
         return groupRepo.getMemberStatus(group_id, id);
     }
+
+    public Group findById(long id) {
+        System.out.println(id);
+        return groupRepo.findById(id);
+    }
 }

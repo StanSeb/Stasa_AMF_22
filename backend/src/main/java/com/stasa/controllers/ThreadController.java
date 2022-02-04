@@ -5,6 +5,7 @@ import com.stasa.entities.Thread;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.stream.events.Comment;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -46,5 +47,11 @@ public class ThreadController {
     @PutMapping("deleteThread/{id}")
     public String deleteThread(@PathVariable long id){
         return threadService.deleteThread(id);
+    }
+
+    @GetMapping("commentsForThread/{id}")
+    public List<Comment> comments(@PathVariable long id){
+
+        return threadService.findCommentById(id);
     }
 }

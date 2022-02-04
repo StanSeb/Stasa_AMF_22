@@ -33,7 +33,7 @@ export default class RegisterGroup extends Component {
     this.setState({ group }, () => {
       console.log(this.state.group)
 			axios
-				.post("http://localhost:8080/register/group", this.state.group)
+				.post("http://localhost:8080/rest/groups/register/group", this.state.group)
 				.then((response) =>{
           if(response.data ==="successful")
           {alert("Group created successfully")}

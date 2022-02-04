@@ -42,10 +42,10 @@ function Navbar(props) {
                 <Route path="/rules" element={<RulesPage />} />
                 <Route path="/integrity" element={<IntegrityPage />} />
                 <Route path="/login" element={<Login storeId={props.storeId} />} />
-                <Route path="/profile" element={<Profile userObj={props.userObj} />} />
+                <Route path="/profile/" element={<Profile userObj={props.userObj} />} />
                 <Route path="/mailSent" element={<MailSentPage />}/>
                 <Route path="/registerGroup" element={<RegisterGroup/>} />
-                <Route path="/getGroups" element={<GroupPage/>} />
+                <Route path="/group/:id" element={<GroupPage loggedInUser={props.userObj}/>} />
                 <Route path="/home" element={<Homepage/>} />
             </Routes>
         </Router>

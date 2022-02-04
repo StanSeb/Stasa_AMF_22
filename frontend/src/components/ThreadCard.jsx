@@ -80,6 +80,7 @@ class ThreadCard extends React.Component {
 }
 
 function EditButton(props, threadProp, loggedInUser) {
+	console.log(loggedInUser)
 	if (threadProp.creatorId === loggedInUser.id) {
 		if (props.state.isEditable) {
 			function abortEdit() {

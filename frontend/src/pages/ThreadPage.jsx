@@ -32,6 +32,7 @@ class ThreadPage extends React.Component {
 
 	componentDidMount() {
 		console.log(this.props.threadId)
+		console.log(this.props)
 		let thread;
 		axios
 			.get("http://localhost:8080/rest/threads/byId/" + this.props.threadId)
@@ -42,14 +43,16 @@ class ThreadPage extends React.Component {
 			});
 		
 //Avkommentera när det börjar bli dags att hämta kommentarer
-			// let comments;
-			// axios
-			// 	.get("http://localhost:8080/rest/comments/byThread/1")
-			// 	.then((response) => response.data)
-			// 	.then((data) => {
-			// 		comments = data;
-			// 		this.setState({ comments });
-			// 	});
+			 let comments;
+			
+			 axios
+			 	.get("http://localhost:8080/rest/threads/commentsForThread/"+this.props.threadId)
+			 	.then((response) => response.data)
+				.then((data) => {
+			 		comments = data;
+					 console.log(comments)
+			 		this.setState({ comments });
+			 	});
 	}
 
 	render() {
@@ -70,7 +73,7 @@ class ThreadPage extends React.Component {
 
 function RenderThreads(props) {
 	if (Object.keys(props).length > 0) {
-		return <ThreadCard thread={props} />;
+		return <ThreadCard thread={props} loggedInUser={props} />;
 	} else return null;
 }
 

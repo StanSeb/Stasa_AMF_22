@@ -6,6 +6,7 @@ import org.apache.tomcat.jni.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.stream.events.Comment;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -63,5 +64,10 @@ public class ThreadService {
         }else{
             return "Could not find thread in database";
         }
+    }
+
+    public List<Comment> findCommentById(long id) {
+        System.out.println(threadRepo.findCommentsById(id));
+       return threadRepo.findCommentsById(id);
     }
 }

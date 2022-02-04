@@ -2,6 +2,7 @@ package com.stasa;
 
 import com.stasa.configurations.MyUserDetailsService;
 import com.stasa.entities.User;
+import com.stasa.services.GroupService;
 import com.stasa.services.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ public class ServerTest {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    GroupService groupService;
 
     @Test
     public void testJunit() {

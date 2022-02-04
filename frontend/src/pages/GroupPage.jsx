@@ -8,7 +8,8 @@ class GroupPage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			group: this.props.group,
+			
+			group: {name:"",info:""},
 			loggedInUser: this.props.loggedInUser,
 			threads: {},
 			users: {
@@ -32,9 +33,17 @@ class GroupPage extends React.Component {
 	}
 
 	componentDidMount() {
+		let groupId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
+
+		axios.get("/rest/groups/getGroupBy/"+groupId)
+		.then((response)=> {
+			console.log(response.data)
+			this.setState({group:response.data})
+		})	
+
 		let threads;
 		axios
-			.get("http://localhost:8080/rest/threads/byGroup/7")
+			.get("http://localhost:8080/rest/threads/byGroup/"+groupId)
 			.then((response) => response.data)
 			.then((data) => {
 				threads = data;
@@ -43,25 +52,25 @@ class GroupPage extends React.Component {
 
 		let privilege;
 		let loggedInUser;
-		axios
-			.get(
-				"http://localhost:8080/rest/getUserRole/" +
-					this.state.group.id +
-					"/" +
-					this.state.loggedInUser.id
-			)
-			.then((response) => {
-				privilege = response.data;
-			})
-			.then(
-				this.setState({
-					loggedInUser: {
-						username: this.state.loggedInUser.username,
-						id: this.state.loggedInUser.id,
-						privilege: privilege,
-					},
-				}, () => {console.log(this.state.loggedInUser)})
-			);
+		// axios
+		// 	.get(
+		// 		"http://localhost:8080/rest/getUserRole/" +
+		// 			this.state.group.id +
+		// 			"/" +
+		// 			this.state.loggedInUser.id
+		// 	)
+		// 	.then((response) => {
+		// 		privilege = response.data;
+		// 	})
+		// 	.then(
+		// 		this.setState({
+		// 			loggedInUser: {
+		// 				username: this.state.loggedInUser.username,
+		// 				id: this.state.loggedInUser.id,
+		// 				privilege: privilege,
+		// 			},
+		// 		}, () => {console.log(this.state.loggedInUser)})
+		// 	);
 	}
 
 	handleThreadClick(props) {
@@ -86,9 +95,8 @@ class GroupPage extends React.Component {
 					</>
 					<div className="group-side-panel">
 						<div className="group-info">
-							<h3>{this.props.group.name}</h3>
-							<p>{this.props.group.info}</p>
-							<p>Admin: {this.props.group.admin}</p>
+							<h3>{this.state.group.title}</h3>
+							<p>{this.state.group.description}</p>
 						</div>
 						<div className="group-members">
 							{RenderUsers(this.state.users, this.state.loggedInUser)}
