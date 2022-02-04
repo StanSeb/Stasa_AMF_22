@@ -1,37 +1,23 @@
 package com.stasa.services;
 
 import com.stasa.configurations.MyUserDetailsService;
-import com.stasa.entities.Group;
 import com.stasa.entities.User;
-import com.stasa.repositories.GroupRepo;
 import com.stasa.repositories.UserRepo;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.persistence.Id;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-
-import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 @Service
 public class UserService {
@@ -51,7 +37,7 @@ public class UserService {
 
 
     public void register(User user, String siteURL)
-        throws UnsupportedEncodingException, MessagingException{
+        throws UnsupportedEncodingException, MessagingException {
         System.out.println(user);
             String verification = RandomString.make(50);
             user.setVerificationCode(verification);
@@ -60,8 +46,8 @@ public class UserService {
         sendVerificationEmail(user,siteURL);
     }
     private void sendVerificationEmail(User user, String siteUrl)
-    throws MessagingException, UnsupportedEncodingException{
-        String toAdress = user.getEmail();
+    throws MessagingException, UnsupportedEncodingException {
+        String toAdress = user.getDecodedEmail();
         String fromAddress = "Stasa.Bestmail.com";
         String senderName = "SuperTeamAllstarsStraightAAAAS";
         String subject = "Please verify you registration";
@@ -88,7 +74,7 @@ public class UserService {
     }
 
 
-    public boolean verify(String verificationCode){
+    public boolean verify(String verificationCode) {
         User user = userRepo.findByVerificationCode(verificationCode);
 
         if(user==null || user.isEnabled()){
@@ -116,13 +102,20 @@ public class UserService {
         return null;
     }
 
+    public String findByUserName(String username) {
+        if (userRepo.findByUsername(username) != null) {
+            return userRepo.findByUsername(username);
+        }
+        return null;
+    }
+
     // hämta id
     // hämta user på id => myUserDetailService ändra värden.
-    public String terminateUser(long id){
+    public String terminateUser(long id) {
         //TODO: Kolla om användaren är admin eller ej
-        String role = userRepo.findUserRole();
+        String role = userRepo.findUserRole(id);
 
-        if (role.equals("Users")){
+        if (role.equals("User")){
             User user = userRepo.findById(id).get();
             detailsService.updateUser(user);
 
@@ -163,5 +156,6 @@ public class UserService {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepo.findByEmail(email);
     }
+
 
 }

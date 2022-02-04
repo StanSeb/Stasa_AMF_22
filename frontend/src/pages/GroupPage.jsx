@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import ThreadCard from "../components/ThreadCard";
 import ThreadPage from "../pages/ThreadPage";
 import UserDropdown from "../components/UserDropdown";
@@ -34,12 +34,34 @@ class GroupPage extends React.Component {
 	componentDidMount() {
 		let threads;
 		axios
-			.get("http://localhost:8080/rest/threads/byGroup/2")
+			.get("http://localhost:8080/rest/threads/byGroup/7")
 			.then((response) => response.data)
 			.then((data) => {
 				threads = data;
 				this.setState({ threads });
 			});
+
+		let privilege;
+		let loggedInUser;
+		axios
+			.get(
+				"http://localhost:8080/rest/getUserRole/" +
+					this.state.group.id +
+					"/" +
+					this.state.loggedInUser.id
+			)
+			.then((response) => {
+				privilege = response.data;
+			})
+			.then(
+				this.setState({
+					loggedInUser: {
+						username: this.state.loggedInUser.username,
+						id: this.state.loggedInUser.id,
+						privilege: privilege,
+					},
+				}, () => {console.log(this.state.loggedInUser)})
+			);
 	}
 
 	handleThreadClick(props) {
@@ -56,8 +78,9 @@ class GroupPage extends React.Component {
 							{ShowThread(
 								this.state.threads,
 								this.handleThreadClick,
-								this.state.clickedThread // parent som behövs för handleThreadClick
+								this.state.clickedThread, // parent som behövs för handleThreadClick
 								// 			Frågar du är du tönt
+								this.props.loggedInUser
 							)}
 						</div>
 					</>
@@ -77,25 +100,25 @@ class GroupPage extends React.Component {
 	}
 }
 
-function ShowThread(threads, handleThreadClick, clickedThread) {
+function ShowThread(threads, handleThreadClick, clickedThread, loggedInUser) {
 	if (clickedThread === 0) {
-		return <>{RenderThreads(threads, handleThreadClick)}</>;
+		return <>{RenderThreads(threads, handleThreadClick, loggedInUser)}</>;
 	} else {
-		return <ThreadPage threadId={clickedThread}/>;
+		return <ThreadPage threadId={clickedThread} loggedInUser={loggedInUser} />;
 	}
 }
 
-function RenderThreads(props, handleThreadClick) {
+function RenderThreads(props, handleThreadClick, loggedInUser) {
 	if (props !== null) {
 		let threads = Object.values(props);
 		let threadList = [];
-		for (let i = 0; i < threads.length; i++) {
+		for (let i = threads.length - 1; i >= 0; i--) {
 			threadList.push(
 				<ThreadCard
 					thread={threads[i]}
 					key={i}
-					handleThreadClick={(e) => handleThreadClick(e)
-					}
+					handleThreadClick={(e) => handleThreadClick(e)}
+					loggedInUser={loggedInUser}
 				/>
 			);
 		}

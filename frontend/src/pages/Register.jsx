@@ -1,34 +1,47 @@
 import React, { useState } from 'react'
 import Axios from 'axios';
+import  { Link, useNavigate } from 'react-router-dom';
 
 function Register() {
     const [getName, setName] = useState("");
+    const [isNameOk, setIsNameOk] = useState(0);
     const [getEmail, setEmail] = useState("");
     const [getPassword, setPassword] = useState("");
+    const [getToggledRules, setToggledRules] = useState(false);
+    const [getToggledIntegrity, setToggledIntegrity] = useState(false);
 
+    let navigate = useNavigate();    
 
-    // POST request using fetch with async/await
     function registerUser() {
-
-            
         const newUserObject = { username: getName, email: getEmail, password: getPassword };
-        console.log(newUserObject);
-        if(newUserObject.username===''||newUserObject.email===''||newUserObject.password===''){
-            alert('you need to fill in the entire form!')
+        if (newUserObject.username === '' || newUserObject.email === '' || newUserObject.password === '') {
+            alert('Du måste fylla i alla fälten!')
         }
-        else{
-
-            
+        else if(getToggledRules===false || getToggledIntegrity===false){
+            alert("Du måste läsa våra regler och integritetspolicys")
+        }
+        else {
             Axios.post('http://localhost:8080/rest/process_register', newUserObject)
-            
-            .then(response => console.log(response.data))
+            navigate("/mailSent", {state: {email: getEmail}});
         }
-
     }
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        registerUser();
+        if(isNameOk === 1) {
+            registerUser();
+        }
+    }
+
+    function checkAvailability() {
+        Axios.get('/rest/user/' + getName).then(response => {
+            if(response.data !== getName) {
+                setIsNameOk(1);
+            } else {
+                setIsNameOk(2);
+                alert("Användarnamnet är upptaget.")
+            }            
+        })      
     }
 
     return (
@@ -38,20 +51,33 @@ function Register() {
                     <label>Register account</label>
                 </div>
                 <div className='stuff-container'>
-
-                <input type="text" value={getEmail} onChange={(e) => setEmail(e.target.value)}
-                    id="email-input" placeholder='E-mail'></input>
-                    </div>
-
-                <div className='stuff-container'>
-                    <input type="text" value={getName} onChange={(e) => setName(e.target.value)}
-                        id="userName-input" placeholder='User name'></input>
+                    <input type="text" value={getEmail} onChange={(e) => setEmail(e.target.value)}
+                        id="email-input" placeholder='E-mail'></input>
                 </div>
+
+                <div className='stuff-container checkUserName-container'>
+                    <input type="text" value={getName} onChange={(e) => setName(e.target.value)} onBlur={() => checkAvailability()}
+                        id="userName-input" placeholder='User name'></input>
+                    <p style={{ display: isNameOk === 1 ? 'block' : 'none' }}>✅</p>
+                    <p style={{ display: isNameOk === 2 ? 'block' : 'none' }}>❌</p>
+                </div>
+
                 <div className='stuff-container'>
                     <input type="password" value={getPassword} onChange={(e) => setPassword(e.target.value)}
-                        id="password-input" placeholder='Password'></input>
+                        id="password-input" placeholder='Password' minLength="8" maxLength="25"></input>
+                </div>
+                <div>
+                    <label htmlFor="">Lösenordet måste vara 8 karaktärer långt minimum</label>
+                </div>
+                <div className='rule-link'>
+                    <input type="checkbox" checked={getToggledRules} onChange={(e) => setToggledRules(e.target.checked)} />
+                    <Link to="/rules"><p>Läs regler för att använda hemsida</p></Link>
                 </div>
 
+                <div className='rule-link'>
+                    <input type="checkbox" checked={getToggledIntegrity} onChange={(e) => setToggledIntegrity(e.target.checked)} />
+                    <Link to="/integrity"><p>Hur vi hanterar personlig integritet</p></Link>
+                </div>
                 <button type="submit">Register new account</button>
             </form>
         </div>

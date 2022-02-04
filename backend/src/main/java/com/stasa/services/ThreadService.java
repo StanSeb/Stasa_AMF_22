@@ -2,10 +2,17 @@ package com.stasa.services;
 
 import com.stasa.repositories.ThreadRepo;
 import com.stasa.entities.Thread;
+import org.apache.tomcat.jni.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ThreadService {
@@ -30,5 +37,31 @@ public class ThreadService {
         System.out.println(thread + " from service");
         threadRepo.save(thread);
         return "Post OK";
+    }
+
+    public String editThread(Thread thread) {
+        if(threadRepo.findThreadById(thread.getId()) != null){
+            Thread newThread = threadRepo.findThreadById(thread.getId());
+            newThread.setContent(thread.getContent());
+            newThread.setTitle(thread.getTitle());
+            threadRepo.save(newThread);
+            return "Saved OK";
+        }
+
+        return "Could not find the thread";
+    }
+
+    public String deleteThread(long id) {
+        if(threadRepo.findThreadById(id) != null){
+            Thread newThread = threadRepo.findThreadById(id);
+            Date date = Calendar.getInstance().getTime();
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+            String strDate = dateFormat.format(date);
+            newThread.setDeletionTimestamp(strDate);
+            threadRepo.save(newThread);
+            return "Delete OK";
+        }else{
+            return "Could not find thread in database";
+        }
     }
 }

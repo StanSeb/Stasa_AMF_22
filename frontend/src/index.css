@@ -8,6 +8,7 @@ html {
 
 body {
 	margin: 0;
+	padding-top: 8em;
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
 		"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
 		sans-serif;
@@ -19,6 +20,61 @@ code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
 		monospace;
 }
+
+/*#region Navbar*/
+.containerNavbar {
+	width: 100vw;
+	background: white;
+	position: fixed;
+	top: 0;
+	z-index: 5;
+}
+
+.containerNavbar > ul {
+	display: flex;
+	justify-content: space-evenly;
+	list-style-type: none;
+}
+
+.containerNavbar > ul > li > a {
+	color: black;
+	text-decoration: none;
+}
+
+.containerNavbar > ul > li > a:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.containerNavbar > ul > li > a:active {
+	color: rgb(255, 0, 221);
+	text-decoration: underline;
+}
+/*#endregion*/
+
+/*#region registerPage*/
+.checkUserName-container {
+	display: flex;
+}
+
+.checkUserName-container>p {
+	margin: 0;
+}
+
+.rule-link {
+	display: flex;
+	align-items: center;
+}
+/*#endregion*/
+
+/*"region mailSentPage*/
+.emailSent-container {
+	text-align: center;
+}
+.emailSent-container>h2{
+	margin-bottom: 2em;
+}
+/*#endregion*/
 
 /*#region Threads*/
 .thread {
@@ -32,6 +88,12 @@ code {
 	margin-left: 0.5vw;
 	display: flex;
 	justify-content: flex-start;
+	position: relative;
+}
+
+.thread-thread-header-buttons {
+	position: absolute;
+	right: .5em;
 }
 
 .thread-header > * {
@@ -96,6 +158,7 @@ code {
 	display: flex;
 	flex-wrap: wrap;
 	border: 1px solid gray;
+	z-index: 6;
 }
 
 .new-thread-title {
@@ -113,11 +176,6 @@ code {
 
 .new-thread > label {
 	margin-left: 1%;
-}
-.inloggad-användare{
-	position: fixed;
-	right: 1em;
-	user-select: none;
 }
 /*#endregion */
 
@@ -175,6 +233,8 @@ code {
 	flex-direction: column;
 	overflow-y: auto;
 	overflow-x: hidden;
+	position: relative;
+	top: 20%;
 }
 
 .group-comments {
@@ -187,30 +247,30 @@ code {
 	overflow-x: hidden;
 }
 
-.comment-card{
+.comment-card {
 	border: 1px solid gray;
-	margin: .5em;
+	margin: 0.5em;
 }
 
-.group-posts-and-comments{
+.group-posts-and-comments {
 	display: flex;
 	flex-direction: column;
 	width: 100vw;
 	height: 100%;
 }
 
-.group-posts-and-comments > :first-child{
+.group-posts-and-comments > :first-child {
 	margin-bottom: -10vh;
 }
 
-.comment-social-buttons{
+.comment-social-buttons {
 	display: flex;
 }
 
 .group-side-panel {
 	width: 30vw;
 	right: 0;
-	top: 5.7em;
+	top: 20%;
 	margin: 1em;
 	position: fixed;
 }
@@ -267,6 +327,7 @@ code {
 }
 /*#endregion*/
 
+/*#region register- and register-form*/
 #register-form {
 	padding-top: 8em;
 }
@@ -274,54 +335,63 @@ code {
 #login-form {
 	padding-top: 8em;
 }
+/*#endregion*/
 
 .profileContainer {
 	padding-top: 8em;
 }
 
+.profile-groups-list{
+	display: flex;
+	height: 2em;
+	align-items: center;
+}
+
+.profile-groups-list > * {
+	margin: .5em;
+}
+
+/*#region Navbar*/
 nav {
 	width: 100vw;
 	background: white;
 	position: fixed;
+	z-index: 5;
 }
 
-.containerNavbar>nav>ul {
+.containerNavbar > nav > ul {
 	display: flex;
 	justify-content: space-evenly;
 	list-style-type: none;
 }
 
-.containerNavbar>nav>ul>li>a {
+.containerNavbar > nav > ul > li > a {
 	color: black;
 	text-decoration: none;
 }
 
-.containerNavbar>nav>ul>li>a:hover {
+.containerNavbar > nav > ul > li > a:hover {
 	cursor: pointer;
-	text-decoration: underline;	
-}
-
-.containerNavbar>nav>ul>li>a:active {
-	color: rgb(255, 0, 221);
 	text-decoration: underline;
 }
 
+.containerNavbar > nav > ul > li > a:active {
+	color: rgb(255, 0, 221);
+	text-decoration: underline;
+}
+/*#endregion*/
+
 .rulesContainer {
-	padding-top: 8em;
 	width: 80%;
 	margin: 0 auto;
 	overflow: auto;
 	text-align: center;
 }
 
-ul>li {
-	padding: 0.5em;
-}
-
 .beforeRegistrationContainer {
 	text-align: left;
 	margin: 4em 0 2em 0;
-	color:rgb(97, 97, 97);
+	color: rgb(97, 97, 97);
 }
 
 .beforeRegistrationContainer::after {
@@ -334,7 +404,7 @@ ul>li {
 }
 
 .moreInfoClick {
-	color:grey;
+	color: grey;
 	border: solid 1px rgb(105, 105, 105);
 }
 
@@ -344,17 +414,17 @@ ul>li {
 	text-decoration: none;
 }
 
-.moreInfoClick>p {
+.moreInfoClick > p {
 	margin: 0.25em;
 }
 
-.paragraphContainer>ul {
+.paragraphContainer > ul {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
 }
 
-.paragraphContainer>ul>li:nth-child(odd) {
+.paragraphContainer > ul > li:nth-child(odd) {
 	background-color: rgb(240, 240, 240);
 }
 
@@ -372,7 +442,7 @@ ul>li {
 	color: rgb(70, 70, 70);
 }
 
-.miscContainer>ul {
+.miscContainer > ul {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
@@ -400,9 +470,10 @@ footer::before {
 	margin: 2em 0 2em 0;
 	background-color: rgb(182, 182, 182);
 }
+/*#endregion*/
 
+/*#region integrity-page*/
 .integrityContainer {
-	padding-top: 8em;
 	width: 80%;
 	margin: 0 auto;
 	overflow: auto;
@@ -412,3 +483,5 @@ footer::before {
 .integritySubContainer {
 	margin: 5em 0 5em 0;
 }
+/*#endregion*/
+

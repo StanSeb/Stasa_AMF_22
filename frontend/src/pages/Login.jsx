@@ -6,6 +6,7 @@ function Login(props) {
     const [getProps, setProps] = useState(0);
     const [getEmail, setEmail] = useState("");
     const [getPassword, setPassword] = useState("");
+   
 
     let navigate = useNavigate();
 
@@ -18,7 +19,7 @@ function Login(props) {
             "&password=" +
             encodeURIComponent(getPassword)
         if(getEmail===''||getPassword===''){
-            alert("you have to fill in the entire form")
+            alert("Du måste fylla i båda fälten")
 
         }
         else{
@@ -36,7 +37,6 @@ function Login(props) {
         }
     }
     async function whoAmI(props) {
-        console.log(props.storeId)
         await Axios
             .get("/rest/whoami", {
                 headers: {
@@ -52,7 +52,7 @@ function Login(props) {
                     navigate("/");
                 }
                 else{
-                    alert("wrong credentials! try again")
+                    alert("Fel inloggningsuppgifter! Försök igen")
                 }
             
             })
@@ -68,6 +68,7 @@ function Login(props) {
         navigate("/");
     }
 
+
     const handleSubmit = (event, props) => {
         event.preventDefault()
         loginUser(props);
@@ -80,21 +81,15 @@ function Login(props) {
                     <label>Login</label>
                 </div>
                 <div className='stuff-container'>
-
                     <input type="text" value={getEmail} onChange={(e) => setEmail(e.target.value)}
                         id="email-input" placeholder='E-mail'></input>
                 </div>
-
                 <div className='stuff-container'>
                     <input type="password" value={getPassword} onChange={(e) => setPassword(e.target.value)}
                         id="password-input" placeholder='Password'></input>
                 </div>
-
                 <button type="submit">Login</button>
             </form>
-            <div>
-            <button onClick={() => logOut()}>logout</button>
-            </div>
         </div>
     )
 }

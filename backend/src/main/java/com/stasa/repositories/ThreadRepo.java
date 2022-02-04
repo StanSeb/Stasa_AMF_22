@@ -11,7 +11,10 @@ import java.util.List;
 public interface ThreadRepo extends JpaRepository<Thread, Long> {
     Thread findById(Integer id);
 
+    @Query(value = "SELECT * FROM threads WHERE threads.deletion_timestamp IS NULL AND threads" +
+            ".group_id = ?", nativeQuery = true)
     List<Thread> findByGroupId(Long id);
 
-
+    @Query(value = "SELECT * from threads where id =?", nativeQuery = true)
+    Thread findThreadById(Long id);
 }

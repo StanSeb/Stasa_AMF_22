@@ -3,13 +3,12 @@ package com.stasa.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.stasa.util.ApiConstants;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.util.Base64;
 import java.util.List;
 
 import static com.stasa.util.ApiConstants.DELETION_REQUIRED_REPORTS;
@@ -25,14 +24,16 @@ public class User {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "user_name",  length = 50)
+    @Column(name = "username",  length = 50)
     private String username;
 
-    @Column(name = "email",  length = 50)
+    @Column(name = "email",  length = 80)
     private String email;
 
+    @JsonIgnore
     @Column(name = "password",  length = 80)
     private String password;
+
     @Column(name="verification_code",length=50)
     private String verificationCode;
 
@@ -54,16 +55,22 @@ public class User {
         this.password = password;
     }
 
+    @JsonIgnore
+   public String getDecodedEmail(){
+       byte[] decodedBytes = Base64.getDecoder().decode(this.email);
+       return new String(decodedBytes);
+   }
+
     @JsonProperty
     public void setUsername(String username) {
         this.username = username;
     }
     
-    @JsonProperty
+   @JsonProperty
     public String getUsername() {
         if(!enabled){
-            return "DeletedUser";
-        }
-        return username;
-    }
+           return "DeletedUser";
+      }
+      return username;
+   }
 }

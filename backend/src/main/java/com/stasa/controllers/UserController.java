@@ -3,8 +3,6 @@ package com.stasa.controllers;
 import com.stasa.entities.User;
 import com.stasa.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -33,8 +31,6 @@ public class UserController {
 
     @GetMapping("/verify/{code}")
     public String verifyUser(@PathVariable String code){
-
-        System.out.println(code);
         if (userService.verify(code)){
             return "verify_success";
 
@@ -52,6 +48,9 @@ public class UserController {
     public User getById(@PathVariable long id) {
         return userService.findById(id);
     }
+
+    @GetMapping("/rest/user/{username}")
+    public String getByUserName(@PathVariable String username) { return userService.findByUserName(username); }
 
     @DeleteMapping("/rest/users/{id}")
     public void deleteById(@PathVariable long id) { userService.deleteById(id); }
