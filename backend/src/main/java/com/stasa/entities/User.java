@@ -79,8 +79,8 @@ public class User {
    @JsonProperty
     public String getUsername() {
         if(!enabled){
-            return "DeletedUser";
-       }
-       return username;
+           return "DeletedUser";
+      }
+      return username;
    }
 }

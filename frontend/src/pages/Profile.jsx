@@ -44,7 +44,7 @@ class Profile extends React.Component {
 		return (
 			<div className="profileContainer">
 				<div> Welcome to profile </div>
-				<Link to="/createGroup">
+				<Link to="/registerGroup">
 					<button>Skapa grupp</button>
 				</Link>
 				<button onClick={this.terminateUserById}>Stäng av kontot</button>
