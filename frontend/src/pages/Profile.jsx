@@ -58,8 +58,6 @@ class Profile extends React.Component {
             	 <li> Title: <span>{group.group.title}</span> <br />
                   Description: <span>{group.group.description}</span> <br />
 				  Role: <span>{group.memberRoles.title}</span> <br />
-
-
                </li>
             </ul>  
             ))}</div>
@@ -71,8 +69,7 @@ class Profile extends React.Component {
 function RenderGroups(props, user_id) {
 	if (typeof props !== "undefined") {
 		function leaveGroup(key) {
-			// console.log(props[key].id)
-
+			
 			axios.get(
 				"http://localhost:8080/rest/groups/leaveGroup/" + props[key].id +"/" + user_id
             ).then((response) => {
