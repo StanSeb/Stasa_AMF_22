@@ -24,6 +24,7 @@ public class GroupService {
             if (response == "successful")
             groupRepo.save(group);
                 return response;    }
+
     public String leaveGroup(long id, long groupID) {
         groupRepo.leaveGroup(id, groupID);
         return "Användare lämnade gruppen!";
@@ -32,10 +33,9 @@ public class GroupService {
 
     public List<Group> findAll() { return groupRepo.findAll();  }
 
-    public List<Group> getByUserId(long id) {
-        return groupRepo.findByUserId(id);
+    public List<Group> getByUserId(long userId) {
+        return groupRepo.getByUserId(userId);
     }
-
     public String getRole(long group_id, long id) {
         return groupRepo.getMemberStatus(group_id, id);
     }
