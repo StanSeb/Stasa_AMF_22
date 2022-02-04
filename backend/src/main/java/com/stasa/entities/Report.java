@@ -2,19 +2,19 @@ package com.stasa.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.Instant;
 
-@Table(name = "reports", indexes = {
-        @Index(name = "FK_USER_TARGET", columnList = "target_user_id")
-})
+/* report, target-type och target-id är unika tillsammans. Alla de tre kan inte vara samma.
+* Detta är för att förhindra att en användare rapporterar samma entitet flera gånger. */
+
+@Table(name = "reports")
 @Entity
 @Getter
 @Setter
-@ToString
-@RequiredArgsConstructor
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,19 +22,21 @@ public class Report {
     private Integer id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "target_user_id", nullable = false)
-    private User targetUser;
-
-    /** Retrieved using whoAmI */
-    @ManyToOne(optional = false)
     @JoinColumn(name = "reporter_id", nullable = false)
     private User reporter;
 
-    @Column(name = "description", length = 500)
+    @ManyToOne
+    @JoinColumn(name = "target_type", nullable = false)
+    private ReportType targetType;
+
+    @Column(name = "target_id", nullable = false)
+    private Integer targetId;
+
+    @Column(name = "description", length = 500, nullable = false)
     private String description;
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "creation_timestamp")
+    @GeneratedValue
     private Instant creationTimestamp;
 
     @JsonProperty

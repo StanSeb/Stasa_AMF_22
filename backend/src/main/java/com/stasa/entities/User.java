@@ -42,17 +42,7 @@ public class User {
     @Column(name = "deletion_timestamp")
     private String deletionTimestamp;
 
-    @OneToMany(mappedBy = "targetUser")
-    @JsonIgnoreProperties("targetUser")
-    @JsonIgnore
-    public List<Report> reports;
-
     /* -------------------- ACCESSORS -------------------- */
-
-    @JsonProperty
-    public boolean canBeDeleted() {
-        return reports.size() >= DELETION_REQUIRED_REPORTS;
-    }
 
     @JsonIgnore
     public String getPassword() {
@@ -63,11 +53,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-//
-//    @JsonProperty
-//    public String getUsername() {
-//        return "DeletedUser";
-//    }
 
     @JsonProperty
     public void setUsername(String username) {
