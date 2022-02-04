@@ -1,5 +1,7 @@
 package com.stasa;
 
+import com.stasa.entities.Group;
+import com.stasa.services.GroupService;
 import com.stasa.services.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,9 @@ class StasaProjectApplicationTests {
 
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	GroupService groupService;
 
 	@Test
 	void contextLoads() {
@@ -35,4 +40,43 @@ class StasaProjectApplicationTests {
 
 		assertTrue(foundEmail);
 	}
+
+	@Test
+	public void testCreateGroup() {
+		String group1Title = "Robin är bäst";
+		String group1Desc = "Philip är också bäst";
+
+		Group group1 = new Group();
+		group1.setTitle(group1Title);
+		group1.setDescription(group1Desc);
+		group1.setUserId(40);
+
+		String responseGroup1 = groupService.addGroup(group1);
+		assertEquals("successful", responseGroup1);
+	}
+
+	@Test
+	public void testCreateSameGroupName() {
+		String group1Title = "Robin är bäst";
+		String group1Desc = "Philip är också bäst";
+		String group2Title = "Robin är bäst";
+		String group2Desc = "Philip är också bäst";
+
+		Group group1 = new Group();
+		group1.setTitle(group1Title);
+		group1.setDescription(group1Desc);
+		group1.setUserId(40);
+
+		Group group2 = new Group();
+		group2.setTitle(group2Title);
+		group2.setDescription(group2Desc);
+		group2.setUserId(41);
+
+		String responseGroup1 = groupService.addGroup(group1);
+		String responseGroup2 = groupService.addGroup(group2);
+
+		assertEquals("successful", responseGroup1);
+		assertEquals("failed", responseGroup2);
+	}
+
 }
