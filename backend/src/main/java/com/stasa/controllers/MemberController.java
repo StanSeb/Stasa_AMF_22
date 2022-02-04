@@ -21,8 +21,8 @@ public class MemberController {
     }
 
     //Get method to retrieve data from Members, Member roles, group and user
-    @GetMapping("GetMembersByUserId/{userId}")
-    public List <Member> getByUserId(@PathVariable int userId){
+    @GetMapping("getMembersByUserId/{userId}")
+    public List <Member> getByUserId(@PathVariable long userId){
         return memberService.getByUserId(userId);
     }
 

@@ -4,8 +4,10 @@ export default class RegisterGroup extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      userObj : this.props.userObj,
+      
 			group: {
-        user_id: "",
+        userId: "",
 				title: "",
 				description: "",				        	
 			}       
@@ -25,7 +27,7 @@ export default class RegisterGroup extends Component {
   
   registerGroup(){
     let group = {
-      user_id : 1,
+      userId : this.state.userObj.id,
 			title: this.state.title,
 			description: this.state.description,      
 		};
@@ -33,7 +35,7 @@ export default class RegisterGroup extends Component {
     this.setState({ group }, () => {
       console.log(this.state.group)
 			axios
-				.post("http://localhost:8080/register/group", this.state.group)
+				.post("/rest/groups/register/group", this.state.group)
 				.then((response) =>{
           if(response.data ==="successful")
           {alert("Group created successfully")}
