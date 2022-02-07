@@ -79,6 +79,10 @@ public class UserController {
             throw new Exception("You are not logged in.");
         }
     }
+    @GetMapping("/rest/isAdmin/{id}")
+    public boolean isAdmin(@PathVariable long id){
+        return userService.isAdmin(id);
+    }
     
     @PutMapping("/auth/terminateUser/{userId}")
     public String terminateUser(@PathVariable long userId){

@@ -39,7 +39,13 @@ class GroupPage extends React.Component {
 		.then((response)=> {
 			console.log(response.data)
 			this.setState({group:response.data})
-		})	
+		})
+        axios.get("/rest/member/memberByGroupId/" + groupId) 
+        .then((response) => response.data)
+        .then((data) =>{
+         this.setState({users: data});
+         console.log(this.state.users);
+     });    
 
 		let threads;
 		axios

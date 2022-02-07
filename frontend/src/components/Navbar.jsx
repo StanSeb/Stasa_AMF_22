@@ -33,7 +33,7 @@ function Navbar(props) {
                         <Link to="/login"><h3>Login</h3></Link>
                     </li>
                     <li style={{ display: props.userObj ? 'block' : 'none' }}>
-                        <Link to="/profile"><h3>{props.userObj.username}</h3></Link>
+                        <Link to={"/profile/"+props.userObj.id}><h3>{props.userObj.username}</h3></Link>
                     </li>
                 </ul>
             </nav>
@@ -42,7 +42,7 @@ function Navbar(props) {
                 <Route path="/rules" element={<RulesPage />} />
                 <Route path="/integrity" element={<IntegrityPage />} />
                 <Route path="/login" element={<Login storeId={props.storeId} />} />
-                <Route path="/profile/" element={<Profile userObj={props.userObj} />} />
+                <Route path="/profile/:id" element={<Profile userObj={props.userObj} />} />
                 <Route path="/mailSent" element={<MailSentPage />}/>
                 <Route path="/registerGroup" element={<RegisterGroup userObj={props.userObj}/>} />
                 <Route path="/group/:id" element={<GroupPage loggedInUser={props.userObj}/>} />

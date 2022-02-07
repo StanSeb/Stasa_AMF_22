@@ -80,7 +80,8 @@ public class ReportService {
     }
 
     private boolean doesGroupExist(long id) {
-        return groupRepo.findById(id).isPresent();
+
+        return groupRepo.findById(id)!=null;
     }
 
     private boolean doesThreadExist(long id) {
