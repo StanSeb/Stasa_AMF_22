@@ -37,4 +37,10 @@ public class GroupController {
     public String leaveGroup(@PathVariable long id, @PathVariable long groupID){
         return groupService.leaveGroup(id, groupID);
     }
+
+    @GetMapping("/getGroupBy/{id}")
+    public Group findById(@PathVariable long id){
+        System.out.println(id);
+        return groupService.findById(id);
+    }
 }

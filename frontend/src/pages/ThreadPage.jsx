@@ -3,6 +3,7 @@ import React from "react";
 import ThreadCard from "../components/ThreadCard";
 import UserDropdown from "../components/UserDropdown";
 import CommentCard from "../components/CommentCard";
+import NewComment from "../components/NewComment";
 
 class ThreadPage extends React.Component {
 	constructor(props) {
@@ -10,28 +11,20 @@ class ThreadPage extends React.Component {
 		this.state = {
 			loggedInUser: this.props.loggedInUser,
 			thread: {},
-			comments: {
-				comment01: {
-					id: 1,
-					content: "Detta är en kommentar om James Bond",
-					creatorId: 1,
-				},
-				comment02: {
-					id: 2,
-					content: "Detta är en annan kommentar om James Bond",
-					creatorId: 1,
-				},
-				comment03: {
-					id: 3,
-					content: "Detta är ytterligare en kommentar om James Bond",
-					creatorId: 1,
-				},
-			},
+			comments: {},
+			showNewComment: false,
 		};
+		this.toggleComment=this.toggleComment.bind(this);
+		this.fetchComments=this.fetchComments.bind(this);
+	}
+
+	toggleComment(value){
+		this.setState({showNewComment:value});
 	}
 
 	componentDidMount() {
 		console.log(this.props.threadId)
+		console.log(this.props)
 		let thread;
 		axios
 			.get("http://localhost:8080/rest/threads/byId/" + this.props.threadId)
@@ -42,14 +35,16 @@ class ThreadPage extends React.Component {
 			});
 		
 //Avkommentera när det börjar bli dags att hämta kommentarer
-			// let comments;
-			// axios
-			// 	.get("http://localhost:8080/rest/comments/byThread/1")
-			// 	.then((response) => response.data)
-			// 	.then((data) => {
-			// 		comments = data;
-			// 		this.setState({ comments });
-			// 	});
+			this.fetchComments();
+	}
+	fetchComments(){
+		console.log("kallas denna?")
+		let comments;
+		axios
+		.get("http://localhost:8080/rest/threads/commentsForThread/"+this.props.threadId)
+		.then(response => {comments=response.data;
+		   console.log(comments)
+		   this.setState({ comments });})
 	}
 
 	render() {
@@ -57,8 +52,9 @@ class ThreadPage extends React.Component {
 			<>
 					<div className="group-posts-and-comments">
 						<div className="group-posts">
-							{RenderThreads(this.state.thread)}
+							{RenderThreads(this.state.thread,this.toggleComment)}
 						</div>
+						<div style={{display:this.state.showNewComment ? 'block' : 'none'}}><NewComment fetchComments={this.fetchComments} toggleComment={this.toggleComment} threadId={this.props.threadId} userId={this.props.loggedInUser.id}/></div>
 						<div className="group-comments">
 							{RenderComments(this.state.comments)}
 						</div>
@@ -68,9 +64,9 @@ class ThreadPage extends React.Component {
 	}
 }
 
-function RenderThreads(props) {
+function RenderThreads(props,toggleComment) {
 	if (Object.keys(props).length > 0) {
-		return <ThreadCard thread={props} />;
+		return <ThreadCard thread={props} loggedInUser={props} showCommentButton={props} toggleComment={toggleComment}/>;
 	} else return null;
 }
 

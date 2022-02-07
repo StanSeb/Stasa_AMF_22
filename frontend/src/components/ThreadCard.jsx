@@ -9,9 +9,13 @@ class ThreadCard extends React.Component {
 			content: props.thread.content,
 			title: props.thread.title,
 			isEditable: false,
+			showCommentButton:this.props.showCommentButton
 		};
 	}
 	handleClick(target) {
+		if(target.innerText==="Comment"){
+			this.props.toggleComment(true)
+		}
 		console.log(target.innerText + " on " + this.props.thread.id);
 	}
 
@@ -38,14 +42,14 @@ class ThreadCard extends React.Component {
 					{ThreadContent(this, this.state.isEditable)}
 				</div>
 				<div className="thread-footer">
-					<div className="thread-social-buttons">
-						<a
+					<div className="thread-social-buttons" >
+						<button
 							href={"/thread/comment/" + this.props.thread.id}
 							onClick={(e) => this.handleClick(e.target)}
-							className="thread-button"
+							className="thread-button" style={ {display:this.props.showCommentButton ? 'block' : 'none'}}
 						>
 							Comment
-						</a>
+						</button>
 						<a
 							href={"/thread/like/" + this.props.thread.id}
 							onClick={(e) => this.handleClick(e.target)}
@@ -83,7 +87,7 @@ function EditButton(props, threadProp, loggedInUser) {
 	if (threadProp.creatorId === loggedInUser.id) {
 		if (props.state.isEditable) {
 			function abortEdit() {
-				window.location.reload();
+				props.setState({ isEditable: !props.state.isEditable });
 				// props.setState({ isEditable: !props.state.isEditable });
 			}
 
@@ -98,6 +102,7 @@ function EditButton(props, threadProp, loggedInUser) {
 					.put("http://localhost:8080/rest/threads/editThread/", thread)
 					.then((response) => {
 						console.log(response);
+						props.setState({ isEditable: !props.state.isEditable });
 					})
 					.catch((error) => {
 						console.log(error);

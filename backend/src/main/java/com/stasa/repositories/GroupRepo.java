@@ -33,6 +33,6 @@ public interface GroupRepo extends JpaRepository <Group, Long> {
             nativeQuery = true)
     String getMemberStatus(long group_id, long id);
 
-
+    Group findById(long id);
 
 }
