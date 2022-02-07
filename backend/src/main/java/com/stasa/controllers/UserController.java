@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @GetMapping("/rest/username/{username}")
-    public String getByUserName(@PathVariable String username) { return userService.findByUserName(username); }
+    public User getByUserName(@PathVariable String username) { return userService.findByUserName(username); }
 
     @GetMapping("/rest/validateEmail/{email}")
     public boolean getByEmail(@PathVariable String email) { ;return userService.findByEmail(email); }

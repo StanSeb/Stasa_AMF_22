@@ -12,7 +12,7 @@ class Profile extends React.Component {
 		};
 	}
 
-	 checkIfSignedId(id) {
+	checkIfSignedId(id) {
 		const profileID = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
 
 		if (id == profileID || this.checkIfAdmin(id)) {
@@ -30,7 +30,7 @@ class Profile extends React.Component {
 		return <></>;
 	}
 
-	logOut() { 
+	logOut() {
 		fetch("/logout", {
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded",
@@ -98,7 +98,7 @@ function RenderGroups(props, user_id) {
 			window.location.reload()
 		}
 		let groups = Object.values(props);
-		
+
 		let groupList = [];
 		for (let i = 0; i < groups.length; i++) {
 			groupList.push(
@@ -113,8 +113,8 @@ function RenderGroups(props, user_id) {
 					</button>
 				</div>
 			);
-		}   
-    }    
+		}
+	}
 }
 
 export default Profile;

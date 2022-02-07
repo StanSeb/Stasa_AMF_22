@@ -106,7 +106,7 @@ public class UserService {
         return Optional.empty();
     }
 
-    public String findByUserName(String username) {
+    public User findByUserName(String username) {
         if (userRepo.findByUsername(username) != null) {
             return userRepo.findByUsername(username);
         }
@@ -126,7 +126,7 @@ public class UserService {
         //TODO: Kolla om användaren är admin eller ej
 
         for(String roles : userRepo.findUserRole(userId)){
-            if (roles.equals("Group Creator")) {
+            if (roles.equals("GROUPADMIN")) {
                 return "Du måste gå ur dina grupper där du är Admin innan du kan stänga av ditt konto!";
             }
         }

@@ -1,70 +1,79 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React from "react";
 import ThreadCard from "../components/ThreadCard";
 import ThreadPage from "../pages/ThreadPage";
 import UserDropdown from "../components/UserDropdown";
+import InviteMemberPopup from "../components/InviteMemberPopup";
 
 class GroupPage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			member: {
-				user: {id:""},
-				memberRole:{id:""},
-				group:{id:""},
-				},       
-			group: {name:"",info:""},
-			loggedInUser: this.props.loggedInUser,
+				user: { id: "" },
+				memberRole: { id: "" },
+				group: { id: "" },
+			},
+			group: { name: "", info: "", id: "" },
+			loggedInUser: "",
 			threads: {},
 			users: {},
 			clickedThread: 0,
+			invitePopup: false,
 		};
 		this.handleThreadClick = this.handleThreadClick.bind(this);
 	}
 
-	createMember(){
-		let member= {
-			user: {id: this.state.loggedInUser.id},
-			memberRole:{id: 1}, // id av "user" i Tabellen mamber_roles i Databasen.
-			group:{id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1)},
+	createMember() {
+		let member = {
+			user: { id: this.state.loggedInUser.id },
+			memberRole: { id: 4 }, // id av "user" i Tabellen mamber_roles i Databasen.
+			group: { id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1) },
 		};
-	
+
 		this.setState({ member }, () => {
 			axios
 				.post("/rest/member/join", this.state.member)
-				.then((response) =>{
-				alert(response.data);
-				window.location.reload();
-			})
+				.then((response) => {
+					alert(response.data);
+					window.location.reload();
+				})
 		});
+	}
+
+	toggleInviteMember() {
+		this.setState({ invitePopup: !this.state.invitePopup });
 	}
 
 	componentDidMount() {
 		let groupId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
-
-		axios.get("/rest/groups/getGroupBy/"+groupId)
-		.then((response)=> {
-			console.log(response.data)
-			this.setState({group:response.data})
+		this.setState({
+			group: {
+				id: groupId
+			},
+			loggedInUser: this.props.loggedInUser
 		})
-        axios.get("/rest/member/memberByGroupId/" + groupId) 
-        .then((response) => response.data)
-        .then((data) =>{
-         this.setState({users: data});
-         console.log(this.state.users);
-     });    
+
+		axios.get("/rest/groups/getGroupBy/" + groupId)
+			.then((response) => {
+				this.setState({ group: response.data })
+			})
+		axios.get("/rest/member/memberByGroupId/" + groupId)
+			.then((response) => response.data)
+			.then((data) => {
+				this.setState({ users: data });
+			});
 
 		let users;
-		axios.get("/rest/member/memberByGroupId/" + groupId) 
-		.then((response) => response.data)
-		.then((data) =>{
-		 this.setState({users: data});
-		 console.log(this.state.users);
-	 });	
+		axios.get("/rest/member/memberByGroupId/" + groupId)
+			.then((response) => response.data)
+			.then((data) => {
+				this.setState({ users: data });
+			});
 
 		let threads;
 		axios
-			.get("/rest/threads/byGroup/"+groupId)
+			.get("/rest/threads/byGroup/" + groupId)
 			.then((response) => response.data)
 			.then((data) => {
 				threads = data;
@@ -101,32 +110,30 @@ class GroupPage extends React.Component {
 
 	render() {
 		return (
-			<>
-				<div className="group-page">
-					<>
-						<div className="group-posts">
-							{ShowThread(
-								this.state.threads,
-								this.handleThreadClick,
-								this.state.clickedThread, // parent som behövs för handleThreadClick
-								// 			Frågar du är du tönt
-								this.props.loggedInUser
-							)}
-						</div>
-					</>
-					<div className="group-side-panel">
-						<div className="group-info">
-							<h3>{this.state.group.title}</h3>
-							<p>{this.state.group.description}</p>
-							<button onClick={() => this.createMember()}>Bli medlem</button>
-						</div>
-						<div className="group-members">
-							{RenderUsers(this.state.users, this.state.loggedInUser)}
-							
-						</div>
+			<div className="group-page">
+				{this.state.invitePopup ? <InviteMemberPopup groupAdmin={this.state.loggedInUser} groupId={this.state.group.id}/> : null}
+				<div className="group-posts">
+					{ShowThread(
+						this.state.threads,
+						this.handleThreadClick,
+						this.state.clickedThread, // parent som behövs för handleThreadClick
+						// 			Frågar du är du tönt
+						this.props.loggedInUser
+					)}
+				</div>
+				<div className="group-side-panel">
+					<div className="group-info">
+						<h3>{this.state.group.title}</h3>
+						<p>{this.state.group.description}</p>
+						<button onClick={() => this.createMember()}>Bli medlem</button>
+						<button onClick={() => this.toggleInviteMember()}>Bjud in medlem</button>
+					</div>
+					<div className="group-members">
+						{RenderUsers(this.state.users, this.state.loggedInUser)}
+
 					</div>
 				</div>
-			</>
+			</div>
 		);
 	}
 }
