@@ -6,8 +6,8 @@ class Profile extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			userObj: this.props.userObj,
-			userId:this.props.userObj.id,
+			userObj: props.userObj,
+			userId:  props.userObj.id,
 			groups:[]
 		};
 	}
@@ -48,7 +48,7 @@ class Profile extends React.Component {
 				<Link to="/registerGroup">
 					<button>Skapa grupp</button>
 				</Link>
-				<button onClick={this.terminateUserById}>Stäng av kontot</button>
+				<button onClick={() => {this.terminateUserById()}}>Stäng av kontot</button>
 				<button onClick={this.logOut}>Logga ut</button>
 
 				{RenderGroups(this.state.groupsList, this.state.userObj.id)}
