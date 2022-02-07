@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { Component } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 class Profile extends React.Component {
@@ -30,14 +30,14 @@ class Profile extends React.Component {
 		return <></>;
 	}
 
-	logOut() {
+	logOut() { 
 		fetch("/logout", {
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded",
 			},
 			mode: "no-cors",
 		});
-		window.location.reload(true);
+		window.location.assign("http://localhost:3000/home");
 	}
 
 	async componentDidMount() {

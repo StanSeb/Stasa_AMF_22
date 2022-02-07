@@ -27,7 +27,7 @@ class ThreadPage extends React.Component {
 		console.log(this.props)
 		let thread;
 		axios
-			.get("http://localhost:8080/rest/threads/byId/" + this.props.threadId)
+			.get("/rest/threads/byId/" + this.props.threadId)
 			.then((response) => response.data)
 			.then((data) => {
 				thread = data;
@@ -59,6 +59,10 @@ class ThreadPage extends React.Component {
 							{RenderComments(this.state.comments)}
 						</div>
 					</div>
+					<div className="group-comments">
+						{RenderComments(this.state.comments)}
+					</div>
+				</div>
 			</>
 		);
 	}

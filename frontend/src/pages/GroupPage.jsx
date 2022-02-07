@@ -16,8 +16,7 @@ class GroupPage extends React.Component {
 			group: {name:"",info:""},
 			loggedInUser: this.props.loggedInUser,
 			threads: {},
-			users: {
-			},
+			users: {},
 			clickedThread: 0,
 		};
 		this.handleThreadClick = this.handleThreadClick.bind(this);
