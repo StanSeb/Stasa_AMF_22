@@ -37,7 +37,6 @@ class GroupPage extends React.Component {
 
 		axios.get("/rest/groups/getGroupBy/"+groupId)
 		.then((response)=> {
-			console.log(response.data)
 			this.setState({group:response.data})
 		})
         axios.get("/rest/member/memberByGroupId/" + groupId) 

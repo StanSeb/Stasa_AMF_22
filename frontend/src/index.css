@@ -122,21 +122,27 @@ code {
 }
 
 .thread-social-buttons {
-	width: 42.5%;
+	margin-left: .4em;
 	display: flex;
 	justify-content: space-evenly;
 	line-height: 2em;
+	text-align: center;
 	padding-top: 0.5em;
 }
 
 .thread-button {
 	height: 2em;
-	width: 6vw;
+	width: 8vw;
 	color: black;
 	text-decoration: none;
 	display: block;
 	border: 1px solid gray;
 	background-color: lightgray;
+	margin: 2px;
+}
+
+.thread-social-buttons>button{
+	height: 2.55em;
 }
 
 .thread-button:hover {
@@ -256,17 +262,22 @@ code {
 	height: 4em;
 	padding: .5em;
 }
+
 .comment-card:first-of-type{
 	margin-top: 0;
 }
+
 .comment-card:last-of-type{
 	margin-bottom:1em;
 }
+
 .group-newComment{
 	width:68%;
 	margin:0;
 }
+
 .comment-newComment{
+	background-color: rgb(240, 240, 240);
 	display: flex;
 	align-items: center;
 	margin: 1em;

@@ -18,7 +18,6 @@ export default class Homepage extends Component {
       .then((response) => response.data)
       .then((data) => {
         this.setState({ groups: data });
-        console.log(this.state.groups);
       });
   }
 

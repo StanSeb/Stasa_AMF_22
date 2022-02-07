@@ -4,17 +4,14 @@ import com.stasa.entities.Comment;
 import com.stasa.repositories.CommentRepo;
 import com.stasa.repositories.ThreadRepo;
 import com.stasa.entities.Thread;
-import org.apache.tomcat.jni.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ThreadService {
@@ -84,7 +81,8 @@ public class ThreadService {
         }
     }
 
-    public List<String> findCommentById(long id) {
+    public List<Object> findCommentById(long id) {
+        System.out.println(commentRepo.findCommentsById(id));
        return commentRepo.findCommentsById(id);
     }
 

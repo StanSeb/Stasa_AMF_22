@@ -47,7 +47,6 @@ class ThreadCard extends React.Component {
 				<div className="thread-footer">
 					<div className="thread-social-buttons" >
 						<button
-							href={"/thread/comment/" + this.props.thread.id}
 							onClick={(e) => this.handleClick(e.target)}
 							className="thread-button" style={{ display: this.props.showCommentButton ? 'block' : 'none' }}
 						>

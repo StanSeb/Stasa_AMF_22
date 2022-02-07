@@ -62,8 +62,7 @@ public class ThreadController {
     }
 
     @GetMapping("commentsForThread/{id}")
-    public List<String> comments(@PathVariable long id){
-
+    public List<Object> comments(@PathVariable long id){
         return threadService.findCommentById(id);
     }
 }

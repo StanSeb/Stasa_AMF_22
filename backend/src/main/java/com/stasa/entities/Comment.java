@@ -29,5 +29,4 @@ public class Comment {
 
     @Column(name="delition_timestamp")
     private String  delitionTimeStamp;
-
 }
