@@ -1,7 +1,9 @@
 package com.stasa;
 
+import com.stasa.controllers.MemberController;
 import com.stasa.entities.Group;
 import com.stasa.services.GroupService;
+import com.stasa.services.MemberService;
 import com.stasa.services.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,12 @@ class StasaProjectApplicationTests {
 
 	@Autowired
 	GroupService groupService;
+
+	@Autowired
+	MemberService memberService;
+
+	@Autowired
+	MemberController memberController;
 
 	@Test
 	void contextLoads() {
@@ -76,5 +84,14 @@ class StasaProjectApplicationTests {
 
 		assertEquals("successful", responseGroup1);
 		assertEquals("failed", responseGroup2);
+	}
+
+	@Test
+	public void testGetMember() {
+		Object[] memberIdByUserId = memberController.getMemberIdByUserId(46L, 15L);
+		for (Object o : memberIdByUserId) {
+			System.out.println(o);
+		}
+
 	}
 }

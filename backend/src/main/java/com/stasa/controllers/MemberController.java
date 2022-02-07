@@ -12,16 +12,17 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:3000/")
 @RequestMapping("/rest/member")
 public class MemberController {
-        @Autowired
-        private MemberService memberService;
 
-        //Bli medlem i en group
-        @PostMapping("/join")
-        public String addMember(@RequestBody Member member) {return memberService.addMember(member); }
+    @Autowired
+    private MemberService memberService;
 
-        //Get alla members från en group by groupId
-        @GetMapping("/memberByGroupId/{groupId}")
-        public List<Map> getMembersByGroupId(@PathVariable long groupId) {return memberService.getMembersByGroupId(groupId); }
+    //Bli medlem i en group
+    @PostMapping("/join")
+    public String addMember(@RequestBody Member member) {return memberService.addMember(member); }
+
+    //Get alla members från en group by groupId
+    @GetMapping("/memberByGroupId/{groupId}")
+    public List<Map> getMembersByGroupId(@PathVariable long groupId) {return memberService.getMembersByGroupId(groupId); }
 
     @GetMapping("/getAllMembers")
     public List<Member> getallMembers() {
@@ -37,5 +38,10 @@ public class MemberController {
     @PostMapping("/register/member")
     public Member registerMember(@RequestBody Member member) {
         return memberService.register(member);
+    }
+
+    @GetMapping("/getMemberByIdUserId/{userId}/{groupId}")
+    public Object[] getMemberIdByUserId(@PathVariable Long userId, Long groupId) {
+        return memberService.getMemberIdByUserId(userId, groupId);
     }
 }

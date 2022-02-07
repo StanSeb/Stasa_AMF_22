@@ -14,7 +14,8 @@ import java.util.Map;
 public interface GroupRepo extends JpaRepository <Group, Long> {
 
     List<Group> getByUserId(long userId);
-    @Query(value= "SELECT id, title, description FROM `groups` WHERE id = ?", nativeQuery = true )
+
+    @Query(value= "SELECT id, title, description FROM groups WHERE id = ?", nativeQuery = true )
     List<Map> getGroupById(long groupId);
 
     @Query(value = "DELETE FROM members WHERE members.group_id = ?1 AND members.user_id = ?2",

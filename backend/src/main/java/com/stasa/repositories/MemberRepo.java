@@ -15,14 +15,21 @@ public interface MemberRepo extends JpaRepository<Member, Integer> {
     List<Member> getByUserId(long userId);
 
     //Hämtar alla member från en group
-    @Query(value= "SELECT m.user_id AS id, u.username, r.title AS role \n" +
+    @Query(value= "SELECT m.id, u.username, r.title AS role\n" +
             "FROM members m\n" +
-            "INNER JOIN users u on u.id = m.user_id\n" +
-            "INNER JOIN `groups` g on g.id = m.group_id\n" +
-            "INNER  JOIN member_roles r on r.id = m.role_id\n" +
-            "WHERE m.group_id = ?1\n" +
+            "INNER JOIN users u ON u.id = m.user_id\n" +
+            "INNER JOIN groups g ON g.id = m.group_id\n" +
+            "INNER JOIN member_roles r ON r.id = m.role_id\n" +
+            "WHERE m.group_id = ?\n" +
             "GROUP BY m.user_id", nativeQuery = true )
     List<Map> getMembersByGroupId(long groupId);
 
     List<Member> getByUserId(int userId);
+
+    @Query(value = "SELECT m.id, u.username, r.title AS role FROM members m" +
+            " INNER JOIN users u ON u.id = m.user_id INNER JOIN groups g ON g.id = m.group_id" +
+            " INNER JOIN member_roles r ON r.id = m.role_id" +
+            " WHERE m.user_id = ?1" +
+            " AND m.group_id = ?2", nativeQuery = true)
+    List<String> getMemberIdByUserId(Long userId, Long groupId);
 }

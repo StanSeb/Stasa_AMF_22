@@ -40,10 +40,7 @@ public class GroupController {
     }
 
     @GetMapping("/getGroupBy/{id}")
-    public Group findById(@PathVariable long id){
-        System.out.println(id);
-        return groupService.findById(id);
-    }
+    public Group findById(@PathVariable long id){ return groupService.findById(id); }
     @GetMapping("/rest/getGroupById/{groupId}")
     public List<Map> getGroupById(@PathVariable long groupId) { return groupService.getGroupById(groupId); }
 

@@ -14,8 +14,8 @@ class GroupPage extends React.Component {
 				memberRole: { id: "" },
 				group: { id: "" },
 			},
-			group: { name: "", info: "", id: "" },
-			loggedInUser: "",
+			group: {},
+			loggedInUser: this.props.loggedInUser.id,
 			threads: {},
 			users: {},
 			clickedThread: 0,
@@ -45,62 +45,23 @@ class GroupPage extends React.Component {
 		this.setState({ invitePopup: !this.state.invitePopup });
 	}
 
-	componentDidMount() {
+	async componentDidMount() {
 		let groupId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
+
+		//Kör dessa först för att få rätt memberId när en bjuder in till gruppen
+		const firstResponse = await Promise.all([
+			axios.get("/rest/groups/getGroupBy/" + groupId),
+			axios.get("/rest/member/memberByGroupId/" + groupId),
+			axios.get("/rest/threads/byGroup/" + groupId)
+		]);
+
+		const secondResponse = await axios.get("/rest/member/getMemberByIdUserId/" + this.state.loggedInUser + "/" + firstResponse[0].data.id)
+
 		this.setState({
-			group: {
-				id: groupId
-			},
-			loggedInUser: this.props.loggedInUser
-		})
-
-		axios.get("/rest/groups/getGroupBy/" + groupId)
-			.then((response) => {
-				this.setState({ group: response.data })
-			})
-		axios.get("/rest/member/memberByGroupId/" + groupId)
-			.then((response) => response.data)
-			.then((data) => {
-				this.setState({ users: data });
-			});
-
-		let users;
-		axios.get("/rest/member/memberByGroupId/" + groupId)
-			.then((response) => response.data)
-			.then((data) => {
-				this.setState({ users: data });
-			});
-
-		let threads;
-		axios
-			.get("/rest/threads/byGroup/" + groupId)
-			.then((response) => response.data)
-			.then((data) => {
-				threads = data;
-				this.setState({ threads });
-			});
-
-		let privilege;
-		let loggedInUser;
-		// axios
-		// 	.get(
-		// 		"http://localhost:8080/rest/getUserRole/" +
-		// 			this.state.group.id +
-		// 			"/" +
-		// 			this.state.loggedInUser.id
-		// 	)
-		// 	.then((response) => {
-		// 		privilege = response.data;
-		// 	})
-		// 	.then(
-		// 		this.setState({
-		// 			loggedInUser: {
-		// 				username: this.state.loggedInUser.username,
-		// 				id: this.state.loggedInUser.id,
-		// 				privilege: privilege,
-		// 			},
-		// 		}, () => {console.log(this.state.loggedInUser)})
-		// 	);
+			group: firstResponse[0].data,
+			users: firstResponse[1].data,
+			threads: firstResponse[2].data
+		})		
 	}
 
 	handleThreadClick(props) {
@@ -111,13 +72,12 @@ class GroupPage extends React.Component {
 	render() {
 		return (
 			<div className="group-page">
-				{this.state.invitePopup ? <InviteMemberPopup groupAdmin={this.state.loggedInUser} groupId={this.state.group.id}/> : null}
+				{this.state.invitePopup ? <InviteMemberPopup groupAdmin={this.state.loggedInUser} groupId={this.state.group.id} /> : null}
 				<div className="group-posts">
 					{ShowThread(
 						this.state.threads,
 						this.handleThreadClick,
 						this.state.clickedThread, // parent som behövs för handleThreadClick
-						// 			Frågar du är du tönt
 						this.props.loggedInUser
 					)}
 				</div>

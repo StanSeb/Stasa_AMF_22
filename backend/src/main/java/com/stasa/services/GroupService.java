@@ -32,6 +32,7 @@ public class GroupService {
     }
 
     public List<Group> findAll() { return groupRepo.findAll(); }
+
     public String leaveGroup(long id, long groupID) {
         groupRepo.leaveGroup(id, groupID);
         return "Användare lämnade gruppen!";
@@ -43,12 +44,10 @@ public class GroupService {
     public List<Map> getGroupById(long groupId) {
         return groupRepo.getGroupById(groupId);
     }
+
     public String getRole(long group_id, long id) {
         return groupRepo.getMemberStatus(group_id, id);
     }
 
-    public Group findById(long id) {
-        System.out.println(id);
-        return groupRepo.findById(id);
-    }
+    public Group findById(long id) { return groupRepo.findById(id); }
 }
