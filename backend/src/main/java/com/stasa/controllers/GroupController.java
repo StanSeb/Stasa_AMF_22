@@ -39,12 +39,21 @@ public class GroupController {
         return groupService.leaveGroup(id, groupID);
     }
 
-    @GetMapping("/getGroupBy/{id}")
+    @GetMapping("/getById/{id}")
     public Group findById(@PathVariable long id){
-        System.out.println(id);
         return groupService.findById(id);
     }
+
     @GetMapping("/rest/getGroupById/{groupId}")
     public List<Map> getGroupById(@PathVariable long groupId) { return groupService.getGroupById(groupId); }
 
+
+    @PutMapping("/deleteGroup/{id}")
+    public Group deleteGroup(@PathVariable long id){
+        return groupService.deleteGroup(id);
+    }
 }
+
+
+
+
