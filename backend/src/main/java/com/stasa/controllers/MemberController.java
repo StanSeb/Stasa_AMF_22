@@ -34,8 +34,13 @@ public class MemberController {
         return memberService.getByUserId(userId);
         }
 
-    @PostMapping("/register/member")
-    public Member registerMember(@RequestBody Member member) {
-        return memberService.register(member);
-    }
+        @PostMapping("/register/member")
+        public Member registerMember(@RequestBody Member member) {
+            return memberService.register(member);
+        }
+
+        @DeleteMapping("/delete/{id}")
+        public void deleteById(@PathVariable int id) {
+             memberService.deleteById(id);
+}
 }

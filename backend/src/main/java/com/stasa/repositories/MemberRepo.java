@@ -25,4 +25,5 @@ public interface MemberRepo extends JpaRepository<Member, Integer> {
     List<Map> getMembersByGroupId(long groupId);
 
     List<Member> getByUserId(int userId);
+
 }
