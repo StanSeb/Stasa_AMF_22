@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 import IntegrityPage from '../pages/IntegrityPage';
 import RulesPage from '../pages/RulesPage';
@@ -16,12 +16,9 @@ function Navbar(props) {
     return <div className="app">
         <Router>
             <nav className='containerNavbar'>
-                <ul>
+                <ul style={{padding: "0"}}>
                     <li>
                         <Link to="/home"><h3>Hem</h3></Link>
-                    </li>
-                    <li style={{ display: props.userObj.username ? 'none' : 'block' }}>
-                        <Link to="/register"><h3>Registrera</h3></Link>
                     </li>
                     <li>
                         <Link to="/rules"><h3>Regler</h3></Link>
@@ -30,9 +27,12 @@ function Navbar(props) {
                         <Link to="/integrity"><h3>Integritet</h3></Link>
                     </li>
                     <li style={{ display: props.userObj.username ? 'none' : 'block' }}>
+                        <Link to="/register"><h3>Registrera</h3></Link>
+                    </li>
+                    <li style={{ display: props.userObj.username ? 'none' : 'block' }}>
                         <Link to="/login"><h3>Login</h3></Link>
                     </li>
-                    <li style={{ display: props.userObj ? 'block' : 'none' }}>
+                    <li style={{ display: props.userObj.username ? 'block' : 'none' }}>
                         <Link to="/profile"><h3>{props.userObj.username}</h3></Link>
                     </li>
                 </ul>

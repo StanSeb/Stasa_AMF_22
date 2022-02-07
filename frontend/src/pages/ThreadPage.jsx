@@ -10,59 +10,42 @@ class ThreadPage extends React.Component {
 		this.state = {
 			loggedInUser: this.props.loggedInUser,
 			thread: {},
-			comments: {
-				comment01: {
-					id: 1,
-					content: "Detta är en kommentar om James Bond",
-					creatorId: 1,
-				},
-				comment02: {
-					id: 2,
-					content: "Detta är en annan kommentar om James Bond",
-					creatorId: 1,
-				},
-				comment03: {
-					id: 3,
-					content: "Detta är ytterligare en kommentar om James Bond",
-					creatorId: 1,
-				},
-			},
+			comments: {},
 		};
 	}
 
 	componentDidMount() {
-		console.log(this.props.threadId)
 		let thread;
 		axios
-			.get("http://localhost:8080/rest/threads/byId/" + this.props.threadId)
+			.get("/rest/threads/byId/" + this.props.threadId)
 			.then((response) => response.data)
 			.then((data) => {
 				thread = data;
 				this.setState({ thread });
 			});
-		
-//Avkommentera när det börjar bli dags att hämta kommentarer
-			// let comments;
-			// axios
-			// 	.get("http://localhost:8080/rest/comments/byThread/1")
-			// 	.then((response) => response.data)
-			// 	.then((data) => {
-			// 		comments = data;
-			// 		this.setState({ comments });
-			// 	});
+
+		//Avkommentera när det börjar bli dags att hämta kommentarer
+		// let comments;
+		// axios
+		// 	.get("http://localhost:8080/rest/comments/byThread/1")
+		// 	.then((response) => response.data)
+		// 	.then((data) => {
+		// 		comments = data;
+		// 		this.setState({ comments });
+		// 	});
 	}
 
 	render() {
 		return (
 			<>
-					<div className="group-posts-and-comments">
-						<div className="group-posts">
-							{RenderThreads(this.state.thread)}
-						</div>
-						<div className="group-comments">
-							{RenderComments(this.state.comments)}
-						</div>
+				<div className="group-posts-and-comments">
+					<div className="group-posts">
+						{RenderThreads(this.state.thread)}
 					</div>
+					<div className="group-comments">
+						{RenderComments(this.state.comments)}
+					</div>
+				</div>
 			</>
 		);
 	}

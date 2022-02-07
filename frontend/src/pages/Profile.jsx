@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { Component } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 class Profile extends React.Component {
@@ -7,8 +7,8 @@ class Profile extends React.Component {
 		super(props);
 		this.state = {
 			userObj: this.props.userObj,
-			userId:this.props.userObj.id,
-			groups:[]
+			userId: this.props.userObj.id,
+			groups: []
 		};
 	}
 
@@ -19,26 +19,26 @@ class Profile extends React.Component {
 				alert(response.data);
 			});
 	}
-	logOut() {
+
+	logOut() { 
 		fetch("/logout", {
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded",
 			},
 			mode: "no-cors",
 		});
-		window.location.reload(true);
+		window.location.assign("http://localhost:3000/home");
 	}
 
 	async componentDidMount() {
-		 axios
-			.get("/getMembersByUserId/"+ this.state.userId)
-			.then((response) => response.data)
-			.then((data) =>{
-		this.setState({groups: data});
-		console.log(this.state.groups);
-		});
-
-		
+		if(this.state.userId !== ''){
+			axios
+				.get("/getMembersByUserId/" + this.state.userId)
+				.then((response) => response.data)
+				.then((data) => {
+					this.setState({ groups: data });
+				});
+		}
 	}
 
 	render() {
@@ -53,14 +53,14 @@ class Profile extends React.Component {
 
 				{RenderGroups(this.state.groupsList, this.state.userObj.id)}
 
-				<div>{this.state.groups.map((group) =>( 
-            	<ul key={group.id}> 
-            	 <li> Title: <span>{group.group.title}</span> <br />
-                  Description: <span>{group.group.description}</span> <br />
-				  Role: <span>{group.memberRoles.title}</span> <br />
-               </li>
-            </ul>  
-            ))}</div>
+				<div>{this.state.groups.map((group) => (
+					<ul key={group.id}>
+						<li> Title: <span>{group.group.title}</span> <br />
+							Description: <span>{group.group.description}</span> <br />
+							Role: <span>{group.memberRoles.title}</span> <br />
+						</li>
+					</ul>
+				))}</div>
 			</div>
 		);
 	}
@@ -69,13 +69,13 @@ class Profile extends React.Component {
 function RenderGroups(props, user_id) {
 	if (typeof props !== "undefined") {
 		function leaveGroup(key) {
-			
+
 			axios.get(
-				"http://localhost:8080/rest/groups/leaveGroup/" + props[key].id +"/" + user_id
-            ).then((response) => {
-                console.log(response.data)
-            })
-            window.location.reload()
+				"/rest/groups/leaveGroup/" + props[key].id + "/" + user_id
+			).then((response) => {
+				console.log(response.data)
+			})
+			window.location.reload()
 		}
 		let groups = Object.values(props);
 
