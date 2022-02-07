@@ -43,50 +43,46 @@ class GroupPage extends React.Component {
 	componentDidMount() {
 		let groupId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
 
+		let privilege;
+		let loggedInUser;
+		 axios
+		 	.get("/rest/groups/getUserRole/" + groupId + "/" +this.state.loggedInUser.id)
+		 	.then((response) => {
+		 		privilege = response.data;
+
+				this.setState({
+					loggedInUser: {
+						username: this.state.loggedInUser.username,
+						id: this.state.loggedInUser.id,
+						privilege: privilege,
+					},
+				}, () => {console.log(this.state.loggedInUser)})
+		 	})
+
 		axios.get("/rest/groups/getGroupBy/"+groupId)
-		.then((response)=> {
+			.then((response)=> {
 			console.log(response.data)
 			this.setState({group:response.data})
 		})	
 
 		let users;
-		axios.get("http://localhost:8080/rest/member/memberByGroupId/" + groupId) 
-		.then((response) => response.data)
-		.then((data) =>{
-		 this.setState({users: data});
-		 console.log(this.state.users);
-	 });	
+		axios.get("/rest/member/memberByGroupId/" + groupId) 
+			.then((response) => response.data)
+			.then((data) =>{
+				users = data;
+		 		this.setState({users});
+	 		}
+		);	
 
 		let threads;
 		axios
-			.get("http://localhost:8080/rest/threads/byGroup/"+groupId)
+		    .get("/rest/threads/byGroup/"+groupId)
 			.then((response) => response.data)
 			.then((data) => {
 				threads = data;
 				this.setState({ threads });
-			});
-
-		let privilege;
-		let loggedInUser;
-		// axios
-		// 	.get(
-		// 		"http://localhost:8080/rest/getUserRole/" +
-		// 			this.state.group.id +
-		// 			"/" +
-		// 			this.state.loggedInUser.id
-		// 	)
-		// 	.then((response) => {
-		// 		privilege = response.data;
-		// 	})
-		// 	.then(
-		// 		this.setState({
-		// 			loggedInUser: {
-		// 				username: this.state.loggedInUser.username,
-		// 				id: this.state.loggedInUser.id,
-		// 				privilege: privilege,
-		// 			},
-		// 		}, () => {console.log(this.state.loggedInUser)})
-		// 	);
+			}
+		);		
 	}
 
 	handleThreadClick(props) {

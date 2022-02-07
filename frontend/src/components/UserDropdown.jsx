@@ -1,12 +1,34 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from 'react'
 
 class UserDropdown extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			moderator: {
+				user: {id:""},
+				memberRole:{id:""},
+				group:{id:""},
+				}, 
 			user: this.props.user,
 			loggedInUser: this.props.loggedInUser,
 		};
+	}
+
+	makeModerator(){
+		let moderator= {
+			user: {id: 1}, //this.props.user.id
+			memberRole:{id: 3}, // id av "moderator" i Tabellen member_roles i Databasen.
+			group:{id: 1}, // window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
+		};
+		this.setState({ moderator }, () => {
+			axios
+				.post("/rest/member/setModerator", this.state.moderator)
+				.then((response) =>{
+				alert(response.data);
+				window.location.reload();
+			})
+		});
 	}
 
 	handleClick(event) {
@@ -30,13 +52,13 @@ class UserDropdown extends React.Component {
 
 function CheckUser(props) {
 	let button;
-	if (props.privilege === "admin") {
+	if (props.privilege === "GROUPADMIN") {
 		button = (
 			<button className="user-drop-button" id="group-admin">
 				{props.username}
 			</button>
 		);
-	} else if (props.privilege === "moderator") {
+	} else if (props.privilege === "GROUPMODERATOR") {
 		button = (
 			<button className="user-drop-button" id="group-moderator">
 				{props.username}
@@ -51,9 +73,9 @@ function CheckUser(props) {
 function CheckYourPrivilege(user, loggedInUser) {
 	let dropdownOptions;
 	if (
-		loggedInUser.privilege === "admin" &&
-		user.privilege !== "moderator" &&
-		user.privilege !== "admin"
+		loggedInUser.privilege === "GROUPADMIN" &&
+		user.privilege !== "GROUPMODERATOR" &&
+		user.privilege !== "GROUPADMIN"
 	) {
 		dropdownOptions = (
 			<>
@@ -64,8 +86,7 @@ function CheckYourPrivilege(user, loggedInUser) {
 					Go to profile
 				</a>
 				<a
-					href={"/group/makeModerator/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					onClick={() => this.makeModerator()} 
 				>
 					Make Moderator
 				</a>
@@ -81,8 +102,8 @@ function CheckYourPrivilege(user, loggedInUser) {
 			</>
 		);
 	} else if (
-		loggedInUser.privilege === "admin" &&
-		user.privilege === "moderator"
+		loggedInUser.privilege === "GROUPADMIN" &&
+		user.privilege === "GROUPMODERATOR"
 	) {
 		dropdownOptions = (
 			<>
@@ -110,9 +131,9 @@ function CheckYourPrivilege(user, loggedInUser) {
 			</>
 		);
 	} else if (
-		loggedInUser.privilege === "moderator" &&
-		user.privilege !== "admin" &&
-		user.privilege !== "moderator"
+		loggedInUser.privilege === "GROUPMODERATOR" &&
+		user.privilege !== "GROUPADMIN" &&
+		user.privilege !== "GROUPMODERATOR"
 	) {
 		dropdownOptions = (
 			<>
