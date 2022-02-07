@@ -14,12 +14,12 @@ class ThreadPage extends React.Component {
 			comments: {},
 			showNewComment: false,
 		};
-		this.toggleComment=this.toggleComment.bind(this);
-		this.fetchComments=this.fetchComments.bind(this);
+		this.toggleComment = this.toggleComment.bind(this);
+		this.fetchComments = this.fetchComments.bind(this);
 	}
 
-	toggleComment(value){
-		this.setState({showNewComment:value});
+	toggleComment(value) {
+		this.setState({ showNewComment: value });
 	}
 
 	componentDidMount() {
@@ -33,44 +33,43 @@ class ThreadPage extends React.Component {
 				thread = data;
 				this.setState({ thread });
 			});
-		
-//Avkommentera när det börjar bli dags att hämta kommentarer
-			this.fetchComments();
+
+		//Avkommentera när det börjar bli dags att hämta kommentarer
+		this.fetchComments();
 	}
-	fetchComments(){
+	fetchComments() {
 		console.log("kallas denna?")
 		let comments;
 		axios
-		.get("http://localhost:8080/rest/threads/commentsForThread/"+this.props.threadId)
-		.then(response => {comments=response.data;
-		   console.log(comments)
-		   this.setState({ comments });})
+			.get("http://localhost:8080/rest/threads/commentsForThread/" + this.props.threadId)
+			.then(response => {
+				comments = response.data;
+				console.log(comments)
+				this.setState({ comments });
+			})
 	}
 
 	render() {
 		return (
-			<>
-					<div className="group-posts-and-comments">
-						<div className="group-posts">
-							{RenderThreads(this.state.thread,this.toggleComment)}
-						</div>
-						<div style={{display:this.state.showNewComment ? 'block' : 'none'}}><NewComment fetchComments={this.fetchComments} toggleComment={this.toggleComment} threadId={this.props.threadId} userId={this.props.loggedInUser.id}/></div>
-						<div className="group-comments">
-							{RenderComments(this.state.comments)}
-						</div>
-					</div>
-					<div className="group-comments">
-						{RenderComments(this.state.comments)}
-					</div>
+			<div className="group-posts-and-comments">
+				<div className="group-posts">
+					{RenderThreads(this.state.thread, this.toggleComment)}
 				</div>
-			</>
+				<div style={{ display: this.state.showNewComment ? 'block' : 'none' }}><NewComment fetchComments={this.fetchComments} toggleComment={this.toggleComment} threadId={this.props.threadId} userId={this.props.loggedInUser.id} /></div>
+				<div className="group-comments">
+					{RenderComments(this.state.comments)}
+				</div>
+				<div className="group-comments">
+					{RenderComments(this.state.comments)}
+				</div>
+			</div>
 		);
 	}
 }
 
-function RenderThreads(props,toggleComment) {
+function RenderThreads(props, toggleComment) {
 	if (Object.keys(props).length > 0) {
-		return <ThreadCard thread={props} loggedInUser={props} showCommentButton={props} toggleComment={toggleComment}/>;
+		return <ThreadCard thread={props} loggedInUser={props} showCommentButton={props} toggleComment={toggleComment} />;
 	} else return null;
 }
 
