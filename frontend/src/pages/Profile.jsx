@@ -42,7 +42,7 @@ class Profile extends React.Component {
 
 	async componentDidMount() {
 		axios
-			.get("/rest/getMembersByUserId/" + this.state.userId)
+			.get("/rest/member/getMembersByUserId/" + this.state.userId)
 			.then((response) => response.data)
 			.then((data) => {
 				this.setState({ groups: data });
@@ -75,7 +75,7 @@ class Profile extends React.Component {
 					<ul key={group.id}>
 						<li> Title: <span>{group.group.title}</span> <br />
 							Description: <span>{group.group.description}</span> <br />
-							Role: <span>{group.memberRoles.title}</span> <br />
+							Role: <span>{group.memberRole.title}</span> <br />
 						</li>
 					</ul>
 				))}</div>
@@ -91,7 +91,7 @@ function RenderGroups(props, user_id) {
 		function leaveGroup(key) {
 
 			axios.get(
-				"http://localhost:8080/rest/groups/leaveGroup/" + props[key].id + "/" + user_id
+				"/rest/groups/leaveGroup/" + props[key].id + "/" + user_id
 			).then((response) => {
 				console.log(response.data)
 			})

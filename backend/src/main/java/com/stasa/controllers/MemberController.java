@@ -23,18 +23,18 @@ public class MemberController {
         @GetMapping("/memberByGroupId/{groupId}")
         public List<Map> getMembersByGroupId(@PathVariable long groupId) {return memberService.getMembersByGroupId(groupId); }
 
-    @GetMapping("/rest/getAllMembers")
+    @GetMapping("/getAllMembers")
     public List<Member> getallMembers() {
         return memberService.getAll();
         }
 
     //Get method to retrieve data from Members, Member roles, group and user
-    @GetMapping("/rest/getMembersByUserId/{userId}")
+    @GetMapping("/getMembersByUserId/{userId}")
     public List <Member> getByUserId(@PathVariable long userId){
         return memberService.getByUserId(userId);
         }
 
-    @PostMapping("/rest/register/member")
+    @PostMapping("/register/member")
     public Member registerMember(@RequestBody Member member) {
         return memberService.register(member);
     }
