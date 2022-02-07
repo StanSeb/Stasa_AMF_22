@@ -119,6 +119,7 @@ class GroupPage extends React.Component {
 							<h3>{this.state.group.title}</h3>
 							<p>{this.state.group.description}</p>
 							<button onClick={() => this.createMember()}>Bli medlem</button>
+						
 						</div>
 						<div className="group-members">
 							{RenderUsers(this.state.users, this.state.loggedInUser)}
