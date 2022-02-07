@@ -1,11 +1,11 @@
 package com.stasa.controllers;
 
+import com.stasa.entities.Comment;
 import com.stasa.services.ThreadService;
 import com.stasa.entities.Thread;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.stream.events.Comment;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -38,6 +38,12 @@ public class ThreadController {
 
         return threadService.postNewThread(thread);
     }
+    @PostMapping("newComment")
+    public String newComment(@RequestBody Comment comment ){
+        System.out.println(comment);
+
+        return threadService.postNewComment(comment);
+    }
 
     @PutMapping("editThread")
     public String editThread(@RequestBody Thread thread){
@@ -50,7 +56,7 @@ public class ThreadController {
     }
 
     @GetMapping("commentsForThread/{id}")
-    public List<Comment> comments(@PathVariable long id){
+    public List<String> comments(@PathVariable long id){
 
         return threadService.findCommentById(id);
     }

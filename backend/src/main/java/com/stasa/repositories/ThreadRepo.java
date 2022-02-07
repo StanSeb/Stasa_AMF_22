@@ -1,11 +1,11 @@
 package com.stasa.repositories;
 
+import com.stasa.entities.Comment;
 import com.stasa.entities.Thread;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.xml.stream.events.Comment;
 import java.util.List;
 
 @Repository
@@ -23,5 +23,9 @@ public interface ThreadRepo extends JpaRepository<Thread, Long> {
                 "INNER JOIN users\n" +
                 "ON users.id = comments.creator_id\n" +
                 "WHERE comments.thread_id =?1", nativeQuery = true)
-    List<Comment> findCommentsById(long id);
+    List<String> findCommentsById(long id);
+
+
+    @Query(value="INSERT INTO comments (content,creator_id,thread_id) VALUES(?1,?2,?3)",nativeQuery = true)
+    void postNewComment(String comment, long creatorId, long threadId);
 }

@@ -112,7 +112,7 @@ function ShowThread(threads, handleThreadClick, clickedThread, loggedInUser) {
 	if (clickedThread === 0) {
 		return <>{RenderThreads(threads, handleThreadClick, loggedInUser)}</>;
 	} else {
-		return <ThreadPage threadId={clickedThread} loggedInUser={loggedInUser} />;
+		return <ThreadPage threadId={clickedThread} loggedInUser={loggedInUser} showCommentButton={true} />;
 	}
 }
 
@@ -127,6 +127,7 @@ function RenderThreads(props, handleThreadClick, loggedInUser) {
 					key={i}
 					handleThreadClick={(e) => handleThreadClick(e)}
 					loggedInUser={loggedInUser}
+					showCommentButton={false}
 				/>
 			);
 		}

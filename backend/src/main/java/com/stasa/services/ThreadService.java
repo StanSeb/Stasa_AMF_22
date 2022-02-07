@@ -1,12 +1,12 @@
 package com.stasa.services;
 
+import com.stasa.entities.Comment;
 import com.stasa.repositories.ThreadRepo;
 import com.stasa.entities.Thread;
 import org.apache.tomcat.jni.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.stream.events.Comment;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -66,8 +66,13 @@ public class ThreadService {
         }
     }
 
-    public List<Comment> findCommentById(long id) {
-        System.out.println(threadRepo.findCommentsById(id));
+    public List<String> findCommentById(long id) {
+
        return threadRepo.findCommentsById(id);
+    }
+
+    public String postNewComment(Comment comment) {
+         threadRepo.postNewComment(comment.getContent(), comment.getCreatorId(), comment.getThreadId());
+         return "threadService worked";
     }
 }

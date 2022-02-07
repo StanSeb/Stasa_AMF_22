@@ -1,40 +1,34 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 class CommentCart extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {};
+		this.state = {
+			comment: ""
+		};
 	}
 	render() {
 		return (
 			<div className="comment-card">
-				<span>{this.props.comment.content}</span>
+				{returnComments(this.props.comment)}
 				<div className="comment-social-buttons">
-					<a
-						href={"/thread/comment/" + this.props.comment.id}
-						onClick={(e) => this.handleClick(e.target)}
-						className="thread-button"
-					>
-						Comment
-					</a>
-					<a
-						href={"/thread/like/" + this.props.comment.id}
-						onClick={(e) => this.handleClick(e.target)}
-						className="thread-button"
-					>
-						Like
-					</a>
-					<a
-						href={"/thread/dislike/" + this.props.comment.id}
-						onClick={(e) => this.handleClick(e.target)}
-						className="thread-button"
-					>
-						Dislike
-					</a>
+
 				</div>
 			</div>
 		);
 	}
+}
+
+function returnComments(comment) {
+	if (typeof (comment) == "string") {
+		let username = comment.substring((comment + ("")).lastIndexOf(',') + 1)
+		let content = comment.split("," + username)[0]
+		return <> <span>{content}</span> / <span>{username}</span></>
+	}
+
+	console.log(typeof (comment) == "string")
+	return <></>
 }
 
 export default CommentCart;
