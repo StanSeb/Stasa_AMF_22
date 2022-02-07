@@ -23,7 +23,7 @@ public class Member {
 
     @ManyToOne
     @JoinColumn(name = "role_id")
-    private MemberRoles memberRoles;
+    private MemberRole memberRole;
 
     @ManyToOne
     @JoinColumn(name = "group_id")

@@ -7,14 +7,15 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
-
+import java.util.Map;
 
 @Repository
 @CrossOrigin(origins = "http://localhost:3000")
 public interface GroupRepo extends JpaRepository <Group, Long> {
 
     List<Group> getByUserId(long userId);
-
+    @Query(value= "SELECT id, title, description FROM `groups` WHERE id = ?", nativeQuery = true )
+    List<Map> getGroupById(long groupId);
 
     @Query(value = "DELETE FROM members WHERE members.group_id = ?1 AND members.user_id = ?2",
             nativeQuery = true)
@@ -36,3 +37,5 @@ public interface GroupRepo extends JpaRepository <Group, Long> {
     Group findById(long id);
 
 }
+
+

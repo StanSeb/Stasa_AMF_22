@@ -113,12 +113,8 @@ function RenderGroups(props, user_id) {
 					</button>
 				</div>
 			);
-		}
-
-		return groupList;
-	} else {
-		return <></>;
-	}
+		}   
+    }    
 }
 
 export default Profile;

@@ -22,9 +22,8 @@ export default class Homepage extends Component {
       });
   }
 
-
-
-  render() {
+ 
+render() {
 
     return <div>Homepage
 
@@ -40,5 +39,6 @@ export default class Homepage extends Component {
 
 
 
-  }
+  
+}
 }
