@@ -19,6 +19,10 @@ public class MemberController {
         @PostMapping("/join")
         public String addMember(@RequestBody Member member) {return memberService.addMember(member); }
 
+        //Bli moderator i en group
+        @PutMapping("/setModerator")
+        public String addModerator(@RequestBody Member member) {return memberService.addModerator(member); }
+
         //Get alla members från en group by groupId
         @GetMapping("/memberByGroupId/{groupId}")
         public List<Map> getMembersByGroupId(@PathVariable long groupId) {return memberService.getMembersByGroupId(groupId); }
@@ -34,8 +38,8 @@ public class MemberController {
         return memberService.getByUserId(userId);
         }
 
-    @PostMapping("register/member")
-    public Member registerMember(@RequestBody Member member) {
+        @PostMapping("register/member")
+        public Member registerMember(@RequestBody Member member) {
         return memberService.register(member);
     }
 }

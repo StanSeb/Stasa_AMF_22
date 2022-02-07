@@ -10,7 +10,7 @@ import java.util.Map;
 public interface MemberRepo extends JpaRepository<Member, Integer> {
 
     //Kollar om en user är redan member i en group
-    @Query(value= "Select COUNT(id) FROM members WHERE user_id = ?1 AND group_id = ?2", nativeQuery = true )
+    @Query(value= "Select COUNT(id) FROM members WHERE user_id = ?1 AND group_id = ?2", nativeQuery = true)
     int isMember(long memberUserId, long memberGroupId);
 
     //Hämtar alla member från en group
@@ -22,6 +22,14 @@ public interface MemberRepo extends JpaRepository<Member, Integer> {
             "WHERE m.group_id = ?1\n" +
             "GROUP BY m.user_id", nativeQuery = true )
     List<Map> getMembersByGroupId(long groupId);
+
+    //Räknar antal moderator som en group har
+    @Query(value= "Select COUNT(id) FROM members WHERE group_id = ?1 AND role_id = ?2", nativeQuery = true)
+    int countModeratorsInGroup(long groupId, long roleId);
+
+    //Updaterar en user till moderator
+    @Query(value= "UPDATE members SET role_id = ?1 WHERE user_id = ?2 AND group_id = ?3", nativeQuery = true)
+    void updateMemberRole(long roleId, long userId, long groupId);
 
     List<Member> getByUserId(int userId);
 }
