@@ -32,9 +32,10 @@ class GroupPage extends React.Component {
 	
 		this.setState({ member }, () => {
 			axios
-				.post("http://localhost:8080/rest/member/join", this.state.member)
+				.post("/rest/member/join", this.state.member)
 				.then((response) =>{
 				alert(response.data);
+				window.location.reload();
 			})
 		});
 	}
@@ -55,7 +56,7 @@ class GroupPage extends React.Component {
      });    
 
 		let users;
-		axios.get("http://localhost:8080/rest/member/memberByGroupId/" + groupId) 
+		axios.get("/rest/member/memberByGroupId/" + groupId) 
 		.then((response) => response.data)
 		.then((data) =>{
 		 this.setState({users: data});
@@ -64,7 +65,7 @@ class GroupPage extends React.Component {
 
 		let threads;
 		axios
-			.get("http://localhost:8080/rest/threads/byGroup/"+groupId)
+			.get("/rest/threads/byGroup/"+groupId)
 			.then((response) => response.data)
 			.then((data) => {
 				threads = data;
