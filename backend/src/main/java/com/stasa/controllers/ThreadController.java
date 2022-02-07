@@ -55,6 +55,12 @@ public class ThreadController {
         return threadService.deleteThread(id);
     }
 
+    @PutMapping("deleteComment/{id}")
+    public String deleteComment(@PathVariable long id){
+        System.out.println(id);
+        return threadService.deleteComment(id);
+    }
+
     @GetMapping("commentsForThread/{id}")
     public List<String> comments(@PathVariable long id){
 

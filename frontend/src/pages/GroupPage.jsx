@@ -45,7 +45,7 @@ class GroupPage extends React.Component {
         .then((data) =>{
          this.setState({users: data});
          console.log(this.state.users);
-     });    
+     });
 
 		let threads;
 		axios
@@ -93,8 +93,7 @@ class GroupPage extends React.Component {
 							{ShowThread(
 								this.state.threads,
 								this.handleThreadClick,
-								this.state.clickedThread, // parent som behövs för handleThreadClick
-								// 			Frågar du är du tönt
+								this.state.clickedThread,
 								this.props.loggedInUser
 							)}
 						</div>

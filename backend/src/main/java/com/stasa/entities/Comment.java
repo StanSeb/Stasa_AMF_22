@@ -30,12 +30,4 @@ public class Comment {
     @Column(name="delition_timestamp")
     private String  delitionTimeStamp;
 
-    private String username;
-
-    public Comment (String content, String username){
-
-        this.content = content;
-        this.username=username;
-    }
-
 }

@@ -256,7 +256,37 @@ code {
 	height: 4em;
 	padding: .5em;
 }
-
+.comment-card:first-of-type{
+	margin-top: 0;
+}
+.comment-card:last-of-type{
+	margin-bottom:1em;
+}
+.group-newComment{
+	width:68%;
+	margin:0;
+}
+.comment-newComment{
+	display: flex;
+	align-items: center;
+	margin: 1em;
+	margin-top: 0;
+	border:1px solid gray;
+	padding:0.5em;
+	height: 4em;
+}
+.comment-newComment>textarea{
+	resize: none;
+	width:68%;
+	height:100%;
+	box-sizing: border-box;
+}
+.comment-newComment>button{
+	height:100%;
+}
+.comment-newComment>*:not(:nth-child(1)){
+	margin-left: 1em;
+}
 .group-posts-and-comments {
 	display: flex;
 	flex-direction: column;

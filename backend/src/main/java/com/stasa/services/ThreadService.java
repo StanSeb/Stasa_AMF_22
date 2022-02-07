@@ -1,6 +1,7 @@
 package com.stasa.services;
 
 import com.stasa.entities.Comment;
+import com.stasa.repositories.CommentRepo;
 import com.stasa.repositories.ThreadRepo;
 import com.stasa.entities.Thread;
 import org.apache.tomcat.jni.Time;
@@ -19,6 +20,8 @@ import java.util.Optional;
 public class ThreadService {
     @Autowired
     private ThreadRepo threadRepo;
+    @Autowired
+    private CommentRepo commentRepo;
 
     public Thread findById(long id){
         if(threadRepo.findById(id).isPresent()){
@@ -65,14 +68,28 @@ public class ThreadService {
             return "Could not find thread in database";
         }
     }
+    public String deleteComment(long id) {
+        System.out.println(id);
+        System.err.println((commentRepo.findCommentById(id)));
+        if(commentRepo.findCommentById(id) != null){
+            Comment newComment = commentRepo.findCommentById(id);
+            Date date = Calendar.getInstance().getTime();
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+            String strDate = dateFormat.format(date);
+            newComment.setDelitionTimeStamp(strDate);
+            commentRepo.save(newComment);
+            return "Delete OK";
+        }else{
+            return "Could not find comment in database";
+        }
+    }
 
     public List<String> findCommentById(long id) {
-
-       return threadRepo.findCommentsById(id);
+       return commentRepo.findCommentsById(id);
     }
 
     public String postNewComment(Comment comment) {
-         threadRepo.postNewComment(comment.getContent(), comment.getCreatorId(), comment.getThreadId());
+         commentRepo.postNewComment(comment.getContent(), comment.getCreatorId(), comment.getThreadId());
          return "threadService worked";
     }
 }

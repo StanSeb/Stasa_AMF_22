@@ -9,14 +9,17 @@ class ThreadCard extends React.Component {
 			content: props.thread.content,
 			title: props.thread.title,
 			isEditable: false,
-			showCommentButton:this.props.showCommentButton
+			showCommentButton: this.props.showCommentButton
 		};
 	}
 	handleClick(target) {
-		if(target.innerText==="Comment"){
+		if (target.innerText === "Comment") {
 			this.props.toggleComment(true)
+			setTimeout(() => {
+				document.querySelector(".comment-newComment").childNodes[0].focus()
+			}, 50);
+
 		}
-		console.log(target.innerText + " on " + this.props.thread.id);
 	}
 
 	render() {
@@ -46,7 +49,7 @@ class ThreadCard extends React.Component {
 						<button
 							href={"/thread/comment/" + this.props.thread.id}
 							onClick={(e) => this.handleClick(e.target)}
-							className="thread-button" style={ {display:this.props.showCommentButton ? 'block' : 'none'}}
+							className="thread-button" style={{ display: this.props.showCommentButton ? 'block' : 'none' }}
 						>
 							Comment
 						</button>
@@ -141,15 +144,18 @@ function DeleteButton(threadProp, loggedInUser) {
 		loggedInUser.privilege === "moderator"
 	) {
 		function handleClick() {
-			axios
-				.put("http://localhost:8080/rest/threads/deleteThread/" + threadProp.id)
-				.then((response) => {
-					console.log(response);
-					window.location.reload();
-				})
-				.catch((error) => {
-					console.log(error);
-				});
+			if (window.confirm("Are you sure you want to delete this")) {
+
+				axios
+					.put("http://localhost:8080/rest/threads/deleteThread/" + threadProp.id)
+					.then((response) => {
+						window.location.reload();
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			}
+
 		}
 		return <button onClick={() => handleClick()}>Ta bort</button>;
 	} else {
