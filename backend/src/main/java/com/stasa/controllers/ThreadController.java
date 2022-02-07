@@ -1,5 +1,6 @@
 package com.stasa.controllers;
 
+import com.stasa.entities.Comment;
 import com.stasa.services.ThreadService;
 import com.stasa.entities.Thread;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,12 @@ public class ThreadController {
 
         return threadService.postNewThread(thread);
     }
+    @PostMapping("newComment")
+    public String newComment(@RequestBody Comment comment ){
+        System.out.println(comment);
+
+        return threadService.postNewComment(comment);
+    }
 
     @PutMapping("editThread")
     public String editThread(@RequestBody Thread thread){
@@ -46,5 +53,11 @@ public class ThreadController {
     @PutMapping("deleteThread/{id}")
     public String deleteThread(@PathVariable long id){
         return threadService.deleteThread(id);
+    }
+
+    @GetMapping("commentsForThread/{id}")
+    public List<String> comments(@PathVariable long id){
+
+        return threadService.findCommentById(id);
     }
 }

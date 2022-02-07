@@ -1,31 +1,41 @@
 package com.stasa.entities;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "comments")
 @Getter
 @Setter
+@Data
+@Table(name="comments")
 public class Comment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Integer id;
 
-    @Column(name = "content", nullable = false, length = 50)
+    @Column(name="id")
+    @Id
+    private long id;
+
+    @Column(name="content")
     private String content;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "thread_id", nullable = false)
-    private Thread thread;
+    @Column(name="thread_id")
+    private long threadId;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "creator_id", nullable = false)
-    private Member creator;
+    @Column(name="creator_id")
+    private long creatorId;
 
-    @Column(name = "delition_timestamp", length = 50)
-    private String delitionTimestamp;
+    @Column(name="delition_timestamp")
+    private String  delitionTimeStamp;
+
+    private String username;
+
+    public Comment (String content, String username){
+
+        this.content = content;
+        this.username=username;
+    }
+
 }

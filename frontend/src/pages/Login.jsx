@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
 import Axios from 'axios';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Login(props) {
-    const [getProps, setProps] = useState(0);
     const [getEmail, setEmail] = useState("");
     const [getPassword, setPassword] = useState("");
    
-
     let navigate = useNavigate();
 
     // POST request using fetch with async/await
@@ -18,12 +16,9 @@ function Login(props) {
             encodeURIComponent(getEmail) +
             "&password=" +
             encodeURIComponent(getPassword)
-        if(getEmail===''||getPassword===''){
+        if(getEmail === '' || getPassword === ''){
             alert("Du måste fylla i båda fälten")
-
-        }
-        else{
-
+        }else {
             await fetch("/login", {
                 method: "post",
                 headers: {
@@ -32,10 +27,11 @@ function Login(props) {
                 mode: 'no-cors',
                 body: credentials,
                 
-            })
+            }).catch(err => console.error(err))
             whoAmI(props)
         }
     }
+
     async function whoAmI(props) {
         await Axios
             .get("/rest/whoami", {
@@ -44,30 +40,18 @@ function Login(props) {
                 }
             })
             .then((response) => {
-                if(response.data !=''){
+                if(response.data !== ''){
                     const {id, username} = response.data
-                    
                     const userObject = {id: id, username: username}
-                    props.storeId(userObject)
-                    navigate("/");
+                    props.storeId(userObject.id)
+                    navigate("/home");
+                    window.location.reload(true);
                 }
-                else{
-                    alert("Fel inloggningsuppgifter! Försök igen")
-                }
-            
-            })
-            
+                else {
+                    alert("Fel inloggningsuppgifter! Försök igen.")
+                }            
+            })            
     }
-    async function logOut() {
-        await fetch("/logout", {
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            mode: 'no-cors',
-        })
-        navigate("/");
-    }
-
 
     const handleSubmit = (event, props) => {
         event.preventDefault()

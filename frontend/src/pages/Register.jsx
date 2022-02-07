@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Axios from 'axios';
-import  { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Register() {
     const [getName, setName] = useState("");
@@ -11,25 +11,25 @@ function Register() {
     const [getToggledRules, setToggledRules] = useState(false);
     const [getToggledIntegrity, setToggledIntegrity] = useState(false);
 
-    let navigate = useNavigate();    
+    let navigate = useNavigate();
 
     function registerUser() {
         const newUserObject = { username: getName, email: getEmail, password: getPassword };
         if (newUserObject.username === '' || newUserObject.email === '' || newUserObject.password === '') {
             alert('Du måste fylla i alla fälten!')
         }
-        else if(getToggledRules===false || getToggledIntegrity===false){
+        else if (getToggledRules === false || getToggledIntegrity === false) {
             alert("Du måste läsa våra regler och integritetspolicys")
         }
         else {
             Axios.post('http://localhost:8080/rest/process_register', newUserObject)
-            navigate("/mailSent", {state: {email: getEmail}});
+            navigate("/mailSent", { state: { email: getEmail } });
         }
     }
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if(isNameOk === 1) {
+        if (isNameOk === 1) {
             registerUser();
         }
     }
@@ -52,8 +52,8 @@ function Register() {
             } else {
                 setIsNameOk(2);
                 alert("Användarnamnet är upptaget.")
-            }            
-        })      
+            }
+        })
     }
 
     return (

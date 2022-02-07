@@ -126,18 +126,22 @@ public class UserService {
         //TODO: Kolla om användaren är admin eller ej
 
         for(String roles : userRepo.findUserRole(userId)){
-            if (roles.equals("Admin")){
+            if (roles.equals("Group Creator")) {
                 return "Du måste gå ur dina grupper där du är Admin innan du kan stänga av ditt konto!";
             }
-            else{
-                User user = userRepo.findById(userId).get();
-                detailsService.updateUser(user);
-
-                return "Användaren är avstängd!";
-            }
+        }
+        if(userRepo.existsById(userId)){
+            User user = userRepo.findById(userId).get();
+            detailsService.updateUser(user);
+            return "Användaren är avstängd!";
         }
 
         return "Kunde inte hitta användaren!";
+    }
+
+    public boolean isAdmin(long id){
+        return userRepo.findAdminById(id);
+
     }
 
     public void deleteById(long id) {

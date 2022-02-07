@@ -67,7 +67,7 @@ code {
 }
 /*#endregion*/
 
-/*"region mailSentPage*/
+/*#region mailSentPage*/
 .emailSent-container {
 	text-align: center;
 }
@@ -79,7 +79,7 @@ code {
 /*#region Threads*/
 .thread {
 	margin: 1em;
-	width: 65vw;
+	
 	border: 1px solid gray;
 	background-color: rgba(100, 100, 100, 0.1);
 }
@@ -222,7 +222,7 @@ code {
 .group-page {
 	position: relative;
 	margin: 0;
-	height: 100vh;
+	height: 100%;
 	display: flex;
 }
 
@@ -234,7 +234,8 @@ code {
 	overflow-y: auto;
 	overflow-x: hidden;
 	position: relative;
-	top: 20%;
+
+
 }
 
 .group-comments {
@@ -245,11 +246,15 @@ code {
 	flex-direction: column;
 	overflow-y: auto;
 	overflow-x: hidden;
+
 }
 
 .comment-card {
 	border: 1px solid gray;
-	margin: 0.5em;
+	margin: 1em;
+	margin-bottom: 0;
+	height: 4em;
+	padding: .5em;
 }
 
 .group-posts-and-comments {
@@ -259,10 +264,6 @@ code {
 	height: 100%;
 }
 
-.group-posts-and-comments > :first-child {
-	margin-bottom: -10vh;
-}
-
 .comment-social-buttons {
 	display: flex;
 }
@@ -270,23 +271,23 @@ code {
 .group-side-panel {
 	width: 30vw;
 	right: 0;
-	top: 20%;
 	margin: 1em;
 	position: fixed;
 }
 
 .group-info {
 	min-height: 20vh;
-	width: 100%;
+	width: 90%;
 	border: 1px solid gray;
 	background-color: rgba(100, 100, 100, 0.1);
 	margin: 2px;
+	padding: 1em;
 }
 
 .group-members {
 	border: 1px solid gray;
 	background-color: rgba(100, 100, 100, 0.1);
-	width: 100%;
+	width: 90%;
 	margin: 2px;
 	padding: 1em;
 	position: relative;

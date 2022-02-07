@@ -1,5 +1,6 @@
 package com.stasa.services;
 
+import com.stasa.entities.Comment;
 import com.stasa.repositories.ThreadRepo;
 import com.stasa.entities.Thread;
 import org.apache.tomcat.jni.Time;
@@ -63,5 +64,15 @@ public class ThreadService {
         }else{
             return "Could not find thread in database";
         }
+    }
+
+    public List<String> findCommentById(long id) {
+
+       return threadRepo.findCommentsById(id);
+    }
+
+    public String postNewComment(Comment comment) {
+         threadRepo.postNewComment(comment.getContent(), comment.getCreatorId(), comment.getThreadId());
+         return "threadService worked";
     }
 }

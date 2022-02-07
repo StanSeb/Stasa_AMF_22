@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.text.html.Option;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
@@ -71,13 +70,13 @@ public class UserController {
     }
 
     @GetMapping("/rest/whoami")
-    public User whoAmI() throws Exception {
+    public User whoAmI() {
         var user = Optional.ofNullable(userService.whoAmI());
-        if(user.isPresent()) {
-            return user.get();
-        } else {
-            throw new Exception("You are not logged in.");
-        }
+        return user.orElse(null);
+    }
+    @GetMapping("/rest/isAdmin/{id}")
+    public boolean isAdmin(@PathVariable long id){
+        return userService.isAdmin(id);
     }
     
     @PutMapping("/auth/terminateUser/{userId}")
