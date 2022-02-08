@@ -18,32 +18,49 @@ class NewThread extends React.Component {
 	}
 
 	titleChange(event) {
-		this.setState({ title: event.target.value });
+			this.setState((prevState)=>{
+
+			let thread=prevState.thread
+			thread.title=event.target.value
+			return {thread}
+		})
 	}
 
 	contentChange(event) {
-		this.setState({ content: event.target.value });
+		this.setState((prevState)=>{
+
+			let thread=prevState.thread
+			thread.content=event.target.value
+			return {thread}
+		})
 	}
 
 	postThread() {
-		let thread = {
-			title: this.state.title,
-			content: this.state.content,
-			groupId: this.props.group_id,
-			creatorId: this.props.user_id,
-		};
+		if(this.state.thread.title.length>3 && this.state.thread.content.length>3){
 
-    this.setState({ thread }, () => {
-      console.log(this.state.thread)
-			axios
-				.post("http://localhost:8080/rest/threads/newThread", this.state.thread)
+			let thread = {
+				title: this.state.thread.title,
+				content: this.state.thread.content,
+				groupId: this.props.groupId,
+				creatorId: this.props.loggedInUser.id,
+			};
+			
+			this.setState({ thread }, () => {
+				console.log(this.state.thread)
+				
+				axios
+				.post("/rest/threads/newThread", this.state.thread)
 				.then((response) => {
-					console.log(response);
+					this.props.cancelPost(false);
+					this.props.fetchThreads();
 				})
 				.catch((error) => {
 					console.log(error);
 				});
-		});
+			});
+		}else {
+			alert("Titel och/eller innehåll måste innehålla mer än 3 tecken!!")
+		}
 	}
 
 	render() {
@@ -54,16 +71,17 @@ class NewThread extends React.Component {
 					<input
 						type="text"
 						className="new-thread-title"
-						value={this.state.title || ""}
+						value={this.state.thread.title}
 						onChange={this.titleChange}
 					/>
 					<label>Content</label>
 					<textarea
 						className="new-thread-content"
-						value={this.state.content}
+						value={this.state.thread.content}
 						onChange={this.contentChange}
 					/>
-					<button onClick={() => this.postThread()}>Post</button>
+					<button onClick={() => this.postThread()}>Skapa</button>
+					<button onClick={() => this.props.cancelPost(false)}>Avbryt</button>
 				</div>
 			</>
 		);
