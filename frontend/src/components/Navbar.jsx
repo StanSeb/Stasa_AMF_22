@@ -8,7 +8,6 @@ import Login from '../pages/Login';
 import MailSentPage from '../pages/MailSentPage';
 import RegisterGroup from './RegisterGroup';
 import GroupPage from '../pages/GroupPage';
-import GroupComponent from './GroupComponent';
 import Homepage from '../pages/Homepage';
 import NewGroup from './NewGroup';
 
@@ -41,7 +40,6 @@ function Navbar(props) {
             </nav>
             <Routes>
                 <Route path="/register" element={<Register />} />
-                <Route path="/getGroups" element={<GroupComponent />} />
                 <Route path="/newGroup" element={<NewGroup />} />
                 <Route path="/rules" element={<RulesPage />} />
                 <Route path="/integrity" element={<IntegrityPage />} />

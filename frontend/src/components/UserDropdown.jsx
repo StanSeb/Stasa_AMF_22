@@ -1,4 +1,5 @@
 import React from "react";
+import axios from 'axios'
 
 class UserDropdown extends React.Component {
 	constructor(props) {
@@ -12,6 +13,16 @@ class UserDropdown extends React.Component {
 	handleClick(event) {
 		let buttonClicked = event.target.innerText;
 		console.log(buttonClicked + ", " + this.state.user.username);
+		console.log(this.state.user.id)
+		
+	}
+
+	deleteMember(){
+		let id = this.state.user.id; //id = member id, alltså id från Member entitet
+		console.log("this.state.user.id" , this.state.user.id)
+		axios.delete("http://localhost:8080/rest/member/delete/" + id)
+		.then(
+			console.log("member with username",this.state.user.username , "deleted"))
 	}
 
 	render() {
@@ -20,7 +31,7 @@ class UserDropdown extends React.Component {
 				<div className="user-drop">
 					{CheckUser(this.state.user)}
 					<div className="user-drop-content">
-						{CheckYourPrivilege(this.state.user, this.state.loggedInUser)}
+						{CheckYourPrivilege(this.state.user, this.state.loggedInUser, this)}
 					</div>
 				</div>
 			</>
@@ -48,34 +59,32 @@ function CheckUser(props) {
 	return button;
 }
 
-function CheckYourPrivilege(user, loggedInUser) {
+function CheckYourPrivilege(user, loggedInUser, dropdown) {
 	let dropdownOptions;
 	if (
 		loggedInUser.privilege === "admin" &&
 		user.privilege !== "moderator" &&
-		user.privilege !== "admin"
+		user.privilege !== "admin"  
 	) {
 		dropdownOptions = (
 			<>
 				<a
 					href={"/user/profile/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					onClick={(e) => dropdown.handleClick(e)}
 				>
 					Go to profile
 				</a>
 				<a
-					href={"/group/makeModerator/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					onClick={(e) => dropdown.handleClick(e)}
 				>
 					Make Moderator
 				</a>
 				<a
-					href={"/group/remove/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					onClick={() => dropdown.deleteMember()}
 				>
 					Remove from group
 				</a>
-				<a href={"/group/ban/" + user.id} onClick={(e) => this.handleClick(e)}>
+				<a href={"/group/ban/" + user.id} onClick={(e) => dropdown.handleClick(e)}>
 					Blacklist
 				</a>
 			</>
@@ -88,23 +97,22 @@ function CheckYourPrivilege(user, loggedInUser) {
 			<>
 				<a
 					href={"/user/profile/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					onClick={(e) => dropdown.handleClick(e)}
 				>
 					Go to profile
 				</a>
 				<a
 					href={"/group/removeModerator/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					onClick={(e) => dropdown.handleClick(e)}
 				>
 					Remove Moderator
 				</a>
 				<a
-					href={"/group/remove/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					onClick={() => dropdown.deleteMember()}
 				>
 					Remove from group
 				</a>
-				<a href={"/group/ban/" + user.id} onClick={(e) => this.handleClick(e)}>
+				<a href={"/group/ban/" + user.id} onClick={(e) => dropdown.handleClick(e)}>
 					Blacklist
 				</a>
 			</>
@@ -118,17 +126,16 @@ function CheckYourPrivilege(user, loggedInUser) {
 			<>
 				<a
 					href={"/user/profile/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					onClick={(e) => dropdown.handleClick(e)}
 				>
 					Go to profile
 				</a>
 				<a
-					href={"/group/remove/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					onClick={() => dropdown.deleteMember()}
 				>
 					Remove from group
 				</a>
-				<a href={"/group/ban/" + user.id} onClick={(e) => this.handleClick(e)}>
+				<a href={"/group/ban/" + user.id} onClick={(e) => dropdown.handleClick(e)}>
 					Blacklist
 				</a>
 			</>
@@ -137,11 +144,11 @@ function CheckYourPrivilege(user, loggedInUser) {
 		dropdownOptions = (
 			<>
 				<a
-					href={"/user/profile/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					onClick={(e) => dropdown.handleClick(e)}
 				>
 					Go to profile
 				</a>
+				
 			</>
 		);
 	}
