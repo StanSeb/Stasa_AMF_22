@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -175,16 +176,30 @@ public class UserService {
     }
 
     public String sendToBlacklist(long userId, long groupId) {
+        String response = null;
        int countBlockedTimes = userRepo.countBlockedTimes(userId);
-       if(countBlockedTimes == 0){
+       if(countBlockedTimes <1){
            int block = 1;
-           userRepo.insertInBlacklist(userId, block);
+           LocalDateTime today =  LocalDateTime.now();
+           LocalDateTime oneWeek = today.plusDays(7);
+           userRepo.insertInBlacklist(userId, block, oneWeek, groupId);
            userRepo.userBlockedFromGroup(userId, groupId);
-       }else {
-           countBlockedTimes += 1;
-           userRepo.insertInBlacklist(userId, countBlockedTimes);
+           response = "Den här användaren har blockerats. Den kommer att förbli inaktiv i en vecka.";
+       }else if (countBlockedTimes > 1 && countBlockedTimes > 4 ) {
+           int block = 1;
+           LocalDateTime today =  LocalDateTime.now();
+           LocalDateTime twoWeek = today.plusDays(30);
+           userRepo.insertInBlacklist(userId, block, twoWeek, groupId);
            userRepo.userBlockedFromGroup(userId, groupId);
+           response = "Den här användaren har blockerats: " + (countBlockedTimes +1 )+ " gånger. Därför kommer att förbli inaktiv i en månad.";
+       }else if (countBlockedTimes >= 5) {
+           int block = 1;
+           LocalDateTime today =  LocalDateTime.now();
+           LocalDateTime twoWeek = today.plusMonths(6);
+           userRepo.insertInBlacklist(userId, block, twoWeek, groupId);
+           userRepo.userBlockedFromGroup(userId, groupId);
+           response = "Den här användaren har blockerats: " + (countBlockedTimes +1 )+ " gånger. Därför kommer att förbli inaktiv i 6 månad.";
        }
-       return "Den här användaren har blockerats permanent från den här gruppen!";
+       return response;
     }
 }
