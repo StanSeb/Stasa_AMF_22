@@ -27,7 +27,7 @@ class Profile extends React.Component {
 		await axios.delete("/rest/deleteInvitation/"+ invitationId)
 		.then((response) => console.log(response.data))
 
-		window.location.reload()
+		this.componentDidMount();
 	}
 
 	async deny(invitationId){
@@ -35,7 +35,7 @@ class Profile extends React.Component {
 		await axios.delete("/rest/deleteInvitation/"+ invitationId)
 		.then((response) => console.log(response.data))
 
-		window.location.reload()
+		this.componentDidMount();
 	}
 
 	checkIfSignedId(id) {
