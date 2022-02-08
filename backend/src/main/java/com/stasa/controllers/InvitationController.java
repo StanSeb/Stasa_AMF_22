@@ -24,4 +24,7 @@ public class InvitationController {
     public ArrayList<Map> getUserInvitations(@PathVariable Long userId){
         return invitationService.getUserInvitations(userId);
     }
+
+    @DeleteMapping("/rest/deleteInvitation/{id}")
+    public void deleteInvitation(@PathVariable Long id) {invitationService.deleteInvitation(id);}
 }

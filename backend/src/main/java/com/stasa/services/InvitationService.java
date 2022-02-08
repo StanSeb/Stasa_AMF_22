@@ -21,4 +21,8 @@ public class InvitationService {
     public ArrayList<Map> getUserInvitations(Long userId) {
         return invitationRepo.getByUserId(userId);
     }
+
+    public void deleteInvitation(Long id) {
+        invitationRepo.deleteById(id);
+    }
 }
