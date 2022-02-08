@@ -51,19 +51,25 @@ public class MemberService {
         return memberRepo.save(member);
     }
 
-    // Updaterar en member i en group till moderator
-    public String addModerator(Member member) {
-        String response;
+    //Update från user till moderator och vice-versa
+    public String updateMemberRole(Member member) {
+        String response = null;
         long userId = member.getUser().getId();
         long groupId = member.getGroup().getId();
         long roleId = member.getMemberRole().getId();
         int moderatorCount = memberRepo.countModeratorsInGroup(groupId, roleId); // Räknar antalet moderatorer som gruppen redan har.
+
+        if(roleId == 3){
             if(moderatorCount >= 5){
                 response = "Det går inte att lägga till en ny medorador. Denna grupp har redan det maximala antalet moderatorer!";
             }else {
                 memberRepo.updateMemberRole(roleId, userId, groupId); // Updaterar user till moderator baserat på userId och groupId
                 response = "Den nya moderatorn har lagts till!";
             }
+        }else if(roleId == 4){
+            memberRepo.updateMemberRole(roleId, userId, groupId); // Updaterar moderator till user baserat på userId och groupId
+            response = "Användaren är inte längre moderator!";
+        }
         return response;
     }
 }

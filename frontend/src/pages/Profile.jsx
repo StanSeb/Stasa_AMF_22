@@ -32,7 +32,7 @@ class Profile extends React.Component {
 		let groups;
 
 		await axios
-			.get("http://localhost:8080/rest/groups/getGroupsByUserId/40")
+			.get("/rest/groups/getGroupsByUserId/"+this.state.userObj.id)
 			.then((response) => {
 				groups = response.data;
 			});
@@ -62,7 +62,7 @@ function RenderGroups(props, user_id) {
 			// console.log(props[key].id)
 
 			axios.get(
-				"http://localhost:8080/rest/groups/leaveGroup/" + props[key].id +"/" + user_id
+				"/rest/groups/leaveGroup/" + props[key].id +"/" + user_id
             ).then((response) => {
                 console.log(response.data)
             })

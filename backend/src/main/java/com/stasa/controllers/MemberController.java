@@ -19,9 +19,9 @@ public class MemberController {
         @PostMapping("/join")
         public String addMember(@RequestBody Member member) {return memberService.addMember(member); }
 
-        //Bli moderator i en group
-        @PutMapping("/setModerator")
-        public String addModerator(@RequestBody Member member) {return memberService.addModerator(member); }
+        //Update från user till moderator och vice-versa
+        @PutMapping("/updateMemberRole")
+        public String updateMemberRole(@RequestBody Member member) {return memberService.updateMemberRole(member); }
 
         //Get alla members från en group by groupId
         @GetMapping("/memberByGroupId/{groupId}")

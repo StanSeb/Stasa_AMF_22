@@ -27,7 +27,7 @@ public interface MemberRepo extends JpaRepository<Member, Integer> {
     @Query(value= "Select COUNT(id) FROM members WHERE group_id = ?1 AND role_id = ?2", nativeQuery = true)
     int countModeratorsInGroup(long groupId, long roleId);
 
-    //Updaterar en user till moderator
+    //Update från user till moderator och vice-versa
     @Query(value= "UPDATE members SET role_id = ?1 WHERE user_id = ?2 AND group_id = ?3", nativeQuery = true)
     void updateMemberRole(long roleId, long userId, long groupId);
 
