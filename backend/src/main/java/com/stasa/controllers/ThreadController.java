@@ -55,9 +55,20 @@ public class ThreadController {
         return threadService.deleteThread(id);
     }
 
-    @GetMapping("commentsForThread/{id}")
-    public List<String> comments(@PathVariable long id){
+    @PutMapping("deleteComment/{id}")
+    public String deleteComment(@PathVariable long id){
+        System.out.println(id);
+        return threadService.deleteComment(id);
+    }
 
+    @GetMapping("commentsForThread/{id}")
+    public List<Object> comments(@PathVariable long id){
         return threadService.findCommentById(id);
+    }
+
+    @PutMapping("editComment")
+    public String editComment(@RequestBody Comment comment){
+
+        return threadService.editComment(comment);
     }
 }

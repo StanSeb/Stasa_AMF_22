@@ -23,8 +23,7 @@ class ThreadPage extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log(this.props.threadId)
-		console.log(this.props)
+
 		let thread;
 		axios
 			.get("/rest/threads/byId/" + this.props.threadId)
@@ -38,31 +37,28 @@ class ThreadPage extends React.Component {
 		this.fetchComments();
 	}
 	fetchComments() {
-		console.log("kallas denna?")
 		let comments;
 		axios
-			.get("http://localhost:8080/rest/threads/commentsForThread/" + this.props.threadId)
+			.get("/rest/threads/commentsForThread/" + this.props.threadId)
 			.then(response => {
 				comments = response.data;
-				console.log(comments)
 				this.setState({ comments });
 			})
 	}
 
 	render() {
 		return (
-			<div className="group-posts-and-comments">
-				<div className="group-posts">
-					{RenderThreads(this.state.thread, this.toggleComment)}
+			<>
+				<div className="group-posts-and-comments">
+					<div className="group-posts">
+						{RenderThreads(this.state.thread, this.toggleComment)}
+					</div>
+					<div className="group-newComment" style={{ display: this.state.showNewComment ? 'block' : 'none' }}><NewComment fetchComments={this.fetchComments} toggleComment={this.toggleComment} threadId={this.props.threadId} userId={this.props.loggedInUser.id} /></div>
+					<div className="group-comments">
+						{RenderComments(this.state.comments,this.props.loggedInUser,this.fetchComments)}
+					</div>
 				</div>
-				<div style={{ display: this.state.showNewComment ? 'block' : 'none' }}><NewComment fetchComments={this.fetchComments} toggleComment={this.toggleComment} threadId={this.props.threadId} userId={this.props.loggedInUser.id} /></div>
-				<div className="group-comments">
-					{RenderComments(this.state.comments)}
-				</div>
-				<div className="group-comments">
-					{RenderComments(this.state.comments)}
-				</div>
-			</div>
+			</>
 		);
 	}
 }
@@ -73,15 +69,15 @@ function RenderThreads(props, toggleComment) {
 	} else return null;
 }
 
-function RenderComments(props, loggedInUser) {
+function RenderComments(props, loggedInUser, fetchComments) {
 	let comments = Object.values(props);
 	let commentList = [];
 	for (let i = 0; i < comments.length; i++) {
 		commentList.push(
-			<CommentCard comment={comments[i]} key={i} loggedInUser={loggedInUser} />
+			<CommentCard comment={comments[i]} key={i} loggedInUser={loggedInUser} fetchComments={fetchComments} />
 		);
 	}
-	return commentList;
+	return commentList.reverse();
 }
 
 export default ThreadPage;

@@ -44,7 +44,6 @@ class GroupPage extends React.Component {
 
 		axios.get("/rest/groups/getGroupBy/"+groupId)
 		.then((response)=> {
-			console.log(response.data)
 			this.setState({group:response.data})
 		})
         axios.get("/rest/member/memberByGroupId/" + groupId) 
@@ -52,7 +51,7 @@ class GroupPage extends React.Component {
         .then((data) =>{
          this.setState({users: data});
          console.log(this.state.users);
-     });    
+     });
 
 		let users;
 		axios.get("/rest/member/memberByGroupId/" + groupId) 
@@ -108,8 +107,7 @@ class GroupPage extends React.Component {
 							{ShowThread(
 								this.state.threads,
 								this.handleThreadClick,
-								this.state.clickedThread, // parent som behövs för handleThreadClick
-								// 			Frågar du är du tönt
+								this.state.clickedThread,
 								this.props.loggedInUser
 							)}
 						</div>

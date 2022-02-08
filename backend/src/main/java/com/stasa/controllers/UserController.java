@@ -72,7 +72,11 @@ public class UserController {
     @GetMapping("/rest/whoami")
     public User whoAmI() {
         var user = Optional.ofNullable(userService.whoAmI());
-        return user.orElse(null);
+        if(user.isPresent()) {
+            return user.get();
+        } else {
+            throw new Exception("You are not logged in.");
+        }
     }
     @GetMapping("/rest/isAdmin/{id}")
     public boolean isAdmin(@PathVariable long id){

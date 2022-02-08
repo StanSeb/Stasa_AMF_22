@@ -130,12 +130,12 @@ public class UserService {
                 return "Du måste gå ur dina grupper där du är Admin innan du kan stänga av ditt konto!";
             }
         }
-        if(userRepo.existsById(userId)){
+        if(userRepo.existsById(userId)) {
             User user = userRepo.findById(userId).get();
             detailsService.updateUser(user);
             return "Användaren är avstängd!";
         }
-
+        
         return "Kunde inte hitta användaren!";
     }
 
