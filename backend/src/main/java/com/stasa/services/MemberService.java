@@ -43,7 +43,7 @@ public class MemberService {
         return memberRepo.findAll();
     }
 
-    public List<Member> getByUserId(int userId) {
+    public List<Member> getByUserId(long userId) {
         return memberRepo.getByUserId(userId);
     }
 

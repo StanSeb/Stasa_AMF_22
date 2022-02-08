@@ -16,8 +16,7 @@ class GroupPage extends React.Component {
 			group: {name:"",info:""},
 			loggedInUser: this.props.loggedInUser,
 			threads: {},
-			users: {
-			},
+			users: {},
 			clickedThread: 0,
 		};
 		this.handleThreadClick = this.handleThreadClick.bind(this);
@@ -32,7 +31,7 @@ class GroupPage extends React.Component {
 	
 		this.setState({ member }, () => {
 			axios
-				.post("http://localhost:8080/rest/member/join", this.state.member)
+				.post("/rest/member/join", this.state.member)
 				.then((response) =>{
 				alert(response.data);
 				window.location.reload();
@@ -60,10 +59,15 @@ class GroupPage extends React.Component {
 		 	})
 
 		axios.get("/rest/groups/getGroupBy/"+groupId)
-			.then((response)=> {
-			console.log(response.data)
+		.then((response)=> {
 			this.setState({group:response.data})
-		})	
+		})
+        axios.get("/rest/member/memberByGroupId/" + groupId) 
+        .then((response) => response.data)
+        .then((data) =>{
+         this.setState({users: data});
+         console.log(this.state.users);
+     });
 
 		let users;
 		axios.get("/rest/member/memberByGroupId/" + groupId) 
@@ -99,8 +103,7 @@ class GroupPage extends React.Component {
 							{ShowThread(
 								this.state.threads,
 								this.handleThreadClick,
-								this.state.clickedThread, // parent som behövs för handleThreadClick
-								// 			Frågar du är du tönt
+								this.state.clickedThread,
 								this.props.loggedInUser
 							)}
 						</div>
@@ -126,7 +129,7 @@ function ShowThread(threads, handleThreadClick, clickedThread, loggedInUser) {
 	if (clickedThread === 0) {
 		return <>{RenderThreads(threads, handleThreadClick, loggedInUser)}</>;
 	} else {
-		return <ThreadPage threadId={clickedThread} loggedInUser={loggedInUser} />;
+		return <ThreadPage threadId={clickedThread} loggedInUser={loggedInUser} showCommentButton={true} />;
 	}
 }
 
@@ -141,6 +144,7 @@ function RenderThreads(props, handleThreadClick, loggedInUser) {
 					key={i}
 					handleThreadClick={(e) => handleThreadClick(e)}
 					loggedInUser={loggedInUser}
+					showCommentButton={false}
 				/>
 			);
 		}

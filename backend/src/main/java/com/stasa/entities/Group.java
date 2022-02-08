@@ -7,7 +7,6 @@ import java.util.List;
 
 @Entity
 @Data
-
 @Table(name="groups", schema="stasa", catalog="stasa")
 public class Group {
     @Id

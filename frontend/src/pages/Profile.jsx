@@ -1,43 +1,62 @@
 import axios from "axios";
-import React, { Component } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 class Profile extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			userObj: this.props.userObj,
-			groupsList: "",
+			userObj: props.userObj,
+			userId: props.userObj.id,
+			groups: []
 		};
 	}
 
-	terminateUserById() {
-		axios
-			.put("/auth/terminateUser/" + this.state.userObj.id)
-			.then((response) => {
-				alert(response.data);
-			});
+	 checkIfSignedId(id) {
+		const profileID = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
+
+		if (id == profileID || this.checkIfAdmin(id)) {
+			function terminateUserById() {
+				console.log(id)
+				axios.put("/auth/terminateUser/" + id)
+					.then(response => {
+						alert(response.data)
+					}).catch((error) => {
+						console.log(error)
+					})
+			}
+			return <button onClick={terminateUserById}>Stäng av kontot</button>;
+		}
+		return <></>;
 	}
-	logOut() {
+
+	logOut() { 
 		fetch("/logout", {
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded",
 			},
 			mode: "no-cors",
 		});
-		window.location.reload(true);
+		window.location.assign("http://localhost:3000/home");
 	}
 
 	async componentDidMount() {
-		let groups;
-
-		await axios
-			.get("/rest/groups/getGroupsByUserId/"+this.state.userObj.id)
-			.then((response) => {
-				groups = response.data;
+		axios
+			.get("/rest/member/getMembersByUserId/" + this.state.userId)
+			.then((response) => response.data)
+			.then((data) => {
+				this.setState({ groups: data });
 			});
+	}
 
-		this.setState({ groupsList: groups });
+
+	checkIfAdmin(id) {
+		if (typeof (id) != "undefined") {
+			axios.get("/rest/isAdmin/" + id)
+				.then(response => {
+					return response.data;
+				})
+		}
 	}
 
 	render() {
@@ -47,29 +66,39 @@ class Profile extends React.Component {
 				<Link to="/registerGroup">
 					<button>Skapa grupp</button>
 				</Link>
-				<button onClick={this.terminateUserById}>Stäng av kontot</button>
+				{this.checkIfSignedId(this.state.userObj.id)}
 				<button onClick={this.logOut}>Logga ut</button>
 
 				{RenderGroups(this.state.groupsList, this.state.userObj.id)}
+
+				<div>{this.state.groups.map((group) => (
+					<ul key={group.id}>
+						<li> Title: <span>{group.group.title}</span> <br />
+							Description: <span>{group.group.description}</span> <br />
+							Role: <span>{group.memberRole.title}</span> <br />
+						</li>
+					</ul>
+				))}</div>
 			</div>
 		);
 	}
 }
 
+
+
 function RenderGroups(props, user_id) {
 	if (typeof props !== "undefined") {
 		function leaveGroup(key) {
-			// console.log(props[key].id)
 
 			axios.get(
-				"/rest/groups/leaveGroup/" + props[key].id +"/" + user_id
-            ).then((response) => {
-                console.log(response.data)
-            })
-            window.location.reload()
+				"/rest/groups/leaveGroup/" + props[key].id + "/" + user_id
+			).then((response) => {
+				console.log(response.data)
+			})
+			window.location.reload()
 		}
 		let groups = Object.values(props);
-
+		
 		let groupList = [];
 		for (let i = 0; i < groups.length; i++) {
 			groupList.push(

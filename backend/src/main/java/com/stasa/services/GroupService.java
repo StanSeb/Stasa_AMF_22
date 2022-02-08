@@ -17,15 +17,19 @@ public class GroupService {
     private GroupRepo groupRepo;
 
     public String addGroup(Group group) {
-        List <Group> filteredGroup = groupRepo.findAll();
+        List<Group> filteredGroup = groupRepo.findAll();
         String response = "successful";
-        for(Group filter : filteredGroup){
-            if(filter.getTitle().equalsIgnoreCase(group.getTitle())){
-                response = "failed";}
+        for (Group filter : filteredGroup) {
+            if (filter.getTitle().equalsIgnoreCase(group.getTitle())) {
+                response = "failed";
+            }
         }
-        if (response == "successful"){
-            groupRepo.save(group);}
-        return response;    }
+        if (response.equalsIgnoreCase("successful")) {
+            groupRepo.save(group);
+            return response;
+        }
+        return response;
+    }
 
     public List<Group> findAll() { return groupRepo.findAll(); }
     public String leaveGroup(long id, long groupID) {

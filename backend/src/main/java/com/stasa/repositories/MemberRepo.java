@@ -12,6 +12,7 @@ public interface MemberRepo extends JpaRepository<Member, Integer> {
     //Kollar om en user är redan member i en group
     @Query(value= "Select COUNT(id) FROM members WHERE user_id = ?1 AND group_id = ?2", nativeQuery = true)
     int isMember(long memberUserId, long memberGroupId);
+    List<Member> getByUserId(long userId);
 
     //Hämtar alla member från en group
     @Query(value= "SELECT m.user_id AS id, u.username, r.title AS privilege \n" +

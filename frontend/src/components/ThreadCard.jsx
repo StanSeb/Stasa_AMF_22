@@ -9,10 +9,17 @@ class ThreadCard extends React.Component {
 			content: props.thread.content,
 			title: props.thread.title,
 			isEditable: false,
+			showCommentButton: this.props.showCommentButton
 		};
 	}
 	handleClick(target) {
-		console.log(target.innerText + " on " + this.props.thread.id);
+		if (target.innerText === "Comment") {
+			this.props.toggleComment(true)
+			setTimeout(() => {
+				document.querySelector(".comment-newComment").childNodes[0].focus()
+			}, 50);
+
+		}
 	}
 
 	render() {
@@ -38,14 +45,13 @@ class ThreadCard extends React.Component {
 					{ThreadContent(this, this.state.isEditable)}
 				</div>
 				<div className="thread-footer">
-					<div className="thread-social-buttons">
-						<a
-							href={"/thread/comment/" + this.props.thread.id}
+					<div className="thread-social-buttons" >
+						<button
 							onClick={(e) => this.handleClick(e.target)}
-							className="thread-button"
+							className="thread-button" style={{ display: this.props.showCommentButton ? 'block' : 'none' }}
 						>
 							Comment
-						</a>
+						</button>
 						<a
 							href={"/thread/like/" + this.props.thread.id}
 							onClick={(e) => this.handleClick(e.target)}
@@ -80,11 +86,10 @@ class ThreadCard extends React.Component {
 }
 
 function EditButton(props, threadProp, loggedInUser) {
-	console.log(loggedInUser)
 	if (threadProp.creatorId === loggedInUser.id) {
 		if (props.state.isEditable) {
 			function abortEdit() {
-				window.location.reload();
+				props.setState({ isEditable: !props.state.isEditable });
 				// props.setState({ isEditable: !props.state.isEditable });
 			}
 
@@ -99,6 +104,7 @@ function EditButton(props, threadProp, loggedInUser) {
 					.put("http://localhost:8080/rest/threads/editThread/", thread)
 					.then((response) => {
 						console.log(response);
+						props.setState({ isEditable: !props.state.isEditable });
 					})
 					.catch((error) => {
 						console.log(error);
@@ -137,15 +143,18 @@ function DeleteButton(threadProp, loggedInUser) {
 		loggedInUser.privilege === "moderator"
 	) {
 		function handleClick() {
-			axios
-				.put("http://localhost:8080/rest/threads/deleteThread/" + threadProp.id)
-				.then((response) => {
-					console.log(response);
-					window.location.reload();
-				})
-				.catch((error) => {
-					console.log(error);
-				});
+			if (window.confirm("Are you sure you want to delete this")) {
+
+				axios
+					.put("http://localhost:8080/rest/threads/deleteThread/" + threadProp.id)
+					.then((response) => {
+						window.location.reload();
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			}
+
 		}
 		return <button onClick={() => handleClick()}>Ta bort</button>;
 	} else {
