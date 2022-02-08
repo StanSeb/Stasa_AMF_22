@@ -5,6 +5,7 @@ import com.stasa.services.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public class MemberController {
     }
 
     @GetMapping("/getMemberByIdUserId/{userId}/{groupId}")
-    public Object[] getMemberIdByUserId(@PathVariable Long userId, Long groupId) {
+    public ArrayList<Map> getMemberIdByUserId(@PathVariable Long userId, @PathVariable Long groupId) {
         return memberService.getMemberIdByUserId(userId, groupId);
     }
 }

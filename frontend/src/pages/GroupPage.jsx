@@ -16,6 +16,7 @@ class GroupPage extends React.Component {
 			},
 			group: {},
 			loggedInUser: this.props.loggedInUser.id,
+			loggedInMember: "",
 			threads: {},
 			users: {},
 			clickedThread: 0,
@@ -49,18 +50,19 @@ class GroupPage extends React.Component {
 		let groupId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
 
 		//Kör dessa först för att få rätt memberId när en bjuder in till gruppen
-		const firstResponse = await Promise.all([
+		const [firstResponse, secondResponse, thirdResponse] = await Promise.all([
 			axios.get("/rest/groups/getGroupBy/" + groupId),
 			axios.get("/rest/member/memberByGroupId/" + groupId),
 			axios.get("/rest/threads/byGroup/" + groupId)
 		]);
 
-		const secondResponse = await axios.get("/rest/member/getMemberByIdUserId/" + this.state.loggedInUser + "/" + firstResponse[0].data.id)
-
+		const fourthResponse = await axios.get("/rest/member/getMemberByIdUserId/" + this.state.loggedInUser + "/" + firstResponse.data.id);
+		
 		this.setState({
-			group: firstResponse[0].data,
-			users: firstResponse[1].data,
-			threads: firstResponse[2].data
+			group: firstResponse.data,
+			users: secondResponse.data[0],
+			threads: thirdResponse.data,
+			loggedInMember: fourthResponse.data
 		})		
 	}
 

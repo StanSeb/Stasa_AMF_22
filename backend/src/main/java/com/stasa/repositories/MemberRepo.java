@@ -4,6 +4,7 @@ import com.stasa.entities.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -31,5 +32,5 @@ public interface MemberRepo extends JpaRepository<Member, Integer> {
             " INNER JOIN member_roles r ON r.id = m.role_id" +
             " WHERE m.user_id = ?1" +
             " AND m.group_id = ?2", nativeQuery = true)
-    List<String> getMemberIdByUserId(Long userId, Long groupId);
+    ArrayList<Map> getMemberIdByUserId(Long userId, Long groupId);
 }

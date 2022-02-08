@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -87,11 +90,9 @@ class StasaProjectApplicationTests {
 	}
 
 	@Test
-	public void testGetMember() {
-		Object[] memberIdByUserId = memberController.getMemberIdByUserId(46L, 15L);
-		for (Object o : memberIdByUserId) {
-			System.out.println(o);
-		}
+	public void testGetMember(){
+		ArrayList<Map> memberIdByUserId = memberService.getMemberIdByUserId(46L, 16L);
 
 	}
+
 }

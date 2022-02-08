@@ -12,7 +12,7 @@ function InviteMemberPopup(props) {
         groupId: props.groupId
     }
 
-    async function checkUserExists() {
+    /* async function checkUserExists() {
         axios.get("/rest/username/" + getUserName)
             .then((response) => {
                 if(response.data !== ''){
@@ -21,22 +21,30 @@ function InviteMemberPopup(props) {
                     alert("Användaren finns inte.")
                 }           
             });         
-    }
+    } */
 
-    function sendInvite() {
-        console.log(getUserId)
-        checkUserExists();
-        if(getUserId !== "") {
-            axios.post("/rest/invite", inviteObj)
+    async function sendInvite() {
+        await axios.get("/rest/username/" + getUserName)
             .then((response) => {
-                console.log(response)
+                if(response.data !== ''){
+                    setUserId(response.data.id);
+                } else {
+                    alert("Användaren finns inte.")
+                }           
             })
-        }
+            .then(() => {
+                if(getUserId !== "") {
+                        axios.post("/rest/invite", inviteObj)
+                        .then((response) => {
+                            console.log(response.data)
+                        })
+                }}
+            );
     }
 
     return (
         <div className="popup-container">
-            <h3>Användarnamn</h3>
+            <h3>Ange användarnam att skicka inbjudan till.</h3>
             <input type="text" value={getUserName} onChange={(e) => setUserName(e.target.value)}
                 placeholder='Ange användarnamn'></input>
             <button onClick={() => sendInvite()}>Skicka inbjudan</button>

@@ -5,6 +5,7 @@ import com.stasa.repositories.MemberRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -47,9 +48,7 @@ public class MemberService {
         return memberRepo.save(member);
     }
 
-    public Object[] getMemberIdByUserId(Long userId, Long groupId) {
-        List<String> memberIdByUserId = memberRepo.getMemberIdByUserId(userId, groupId);
-
-        return memberIdByUserId.toArray();
+    public ArrayList<Map> getMemberIdByUserId(Long userId, Long groupId) {
+        return memberRepo.getMemberIdByUserId(userId, groupId);
     }
 }
