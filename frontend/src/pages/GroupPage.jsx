@@ -40,6 +40,13 @@ class GroupPage extends React.Component {
 		});
 	}
 
+	deleteMember(){
+		let memberId = this.state.member.id;
+		axios.delete("rest/member/delete/", memberId)
+		.then(
+			console.log(memberId))
+	}
+
 	componentDidMount() {
 		let groupId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
 
