@@ -28,6 +28,7 @@ public interface GroupRepo extends JpaRepository <Group, Long> {
             "WHERE " +
             "AND members.user_id = ?1", nativeQuery = true )
              List<Group> findByUserId(int userid);
+
     @Query(value = "SELECT member_roles.title\n" +
             "\tFROM member_roles INNER JOIN members\n" +
             "\tON members.role_id = member_roles.id AND members.group_id = ?1 AND members.user_id" +

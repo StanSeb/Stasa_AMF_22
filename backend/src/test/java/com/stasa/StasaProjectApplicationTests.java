@@ -1,5 +1,6 @@
 package com.stasa;
 
+import com.stasa.controllers.InvitationController;
 import com.stasa.controllers.MemberController;
 import com.stasa.entities.Group;
 import com.stasa.services.GroupService;
@@ -29,6 +30,9 @@ class StasaProjectApplicationTests {
 
 	@Autowired
 	MemberController memberController;
+
+	@Autowired
+	InvitationController invitationController;
 
 	@Test
 	void contextLoads() {
@@ -90,9 +94,9 @@ class StasaProjectApplicationTests {
 	}
 
 	@Test
-	public void testGetMember(){
-		ArrayList<Map> memberIdByUserId = memberService.getMemberIdByUserId(46L, 16L);
-
+	public void testGetInvitations() {
+		ArrayList<Map> userInvitations = invitationController.getUserInvitations(47L);
+		assertEquals(2, userInvitations.size());
 	}
 
 }
