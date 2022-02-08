@@ -25,7 +25,7 @@ class GroupPage extends React.Component {
 	createMember(){
 		let member= {
 			user: {id: this.state.loggedInUser.id},
-			memberRole:{id: 1}, // id av "user" i Tabellen mamber_roles i Databasen.
+			memberRole:{id: 4}, // id av "user" i Tabellen member_roles i Databasen.
 			group:{id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1)},
 		};
 	

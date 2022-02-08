@@ -139,14 +139,14 @@ function EditButton(props, threadProp, loggedInUser) {
 function DeleteButton(threadProp, loggedInUser) {
 	if (
 		threadProp.creatorId === loggedInUser.id ||
-		loggedInUser.privilege === "admin" ||
-		loggedInUser.privilege === "moderator"
+		loggedInUser.privilege === "GROUPADMIN" ||
+		loggedInUser.privilege === "GROUPMODERATOR"
 	) {
 		function handleClick() {
 			if (window.confirm("Are you sure you want to delete this")) {
 
 				axios
-					.put("http://localhost:8080/rest/threads/deleteThread/" + threadProp.id)
+					.put("/rest/threads/deleteThread/" + threadProp.id)
 					.then((response) => {
 						window.location.reload();
 					})
