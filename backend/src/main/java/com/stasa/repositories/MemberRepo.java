@@ -34,4 +34,9 @@ public interface MemberRepo extends JpaRepository<Member, Integer> {
 
     List<Member> getByUserId(int userId);
 
+    @Query(value= "DELETE FROM members WHERE members.group_id = ?1 AND members.user_id = ?2",nativeQuery = true)
+    void deleteById(long groupId,long userId);
+
+    @Query(value = "DELETE FROM members WHERE members.id=?1",nativeQuery = true)
+    void deleteByMemberId(int id);
 }

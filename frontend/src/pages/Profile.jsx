@@ -13,6 +13,7 @@ class Profile extends React.Component {
 	}
 
 	 checkIfSignedId(id) {
+		
 		const profileID = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
 
 		if (id == profileID || this.checkIfAdmin(id)) {
@@ -66,19 +67,10 @@ class Profile extends React.Component {
 				<Link to="/registerGroup">
 					<button>Skapa grupp</button>
 				</Link>
-				{this.checkIfSignedId(this.state.userObj.id)}
+				{this.checkIfSignedId(this.state.userId)}
 				<button onClick={this.logOut}>Logga ut</button>
 
-				{RenderGroups(this.state.groupsList, this.state.userObj.id)}
-
-				<div>{this.state.groups.map((group) => (
-					<ul key={group.id}>
-						<li><Link to={`/group/${group.id}`}><span>{group.group.title}</span></Link> <br />
-							Description: <span>{group.group.description}</span> <br />
-							Role: <span>{group.memberRole.title}</span> <br />
-							</li>
-					</ul>
-				))}</div>
+				{RenderGroups(this.state.groups, this.state.userObj.id)}
 			</div>
 		);
 	}
@@ -87,15 +79,15 @@ class Profile extends React.Component {
 
 
 function RenderGroups(props, user_id) {
+	console.log(props)
 	if (typeof props !== "undefined") {
 		function leaveGroup(key) {
-
-			axios.get(
-				"/rest/groups/leaveGroup/" + props[key].id + "/" + user_id
+			axios.delete(
+				"/rest/member/delete/" + key + "/" + user_id
 			).then((response) => {
 				console.log(response.data)
+				//window.location.reload()
 			})
-			window.location.reload()
 		}
 		let groups = Object.values(props);
 		
@@ -103,17 +95,21 @@ function RenderGroups(props, user_id) {
 		for (let i = 0; i < groups.length; i++) {
 			groupList.push(
 				<div key={i} className="profile-groups-list">
-					<p>{groups[i].title}</p>
+					<div><Link to={`/group/${groups[i].group.id}`}><span>{groups[i].group.title}</span></Link> <br />
+							Description: <span>{groups[i].group.description}</span> <br />
+							Role: <span>{groups[i].memberRole.title}</span> <br />
+							</div>
 					<button
 						onClick={() => {
-							leaveGroup(i);
+							leaveGroup(groups[i].group.id);
 						}}
 					>
 						Leave Group
 					</button>
 				</div>
 			);
-		}   
+		}  
+		return groupList; 
     }    
 }
 

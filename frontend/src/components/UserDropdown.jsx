@@ -14,6 +14,7 @@ class UserDropdown extends React.Component {
 			loggedInUser: this.props.loggedInUser,
 		};
 		this.updateMemberRole= this.updateMemberRole.bind(this);
+		this.deleteMember=this.deleteMember.bind(this);
 	}
 
 	handleClick(event) {
@@ -53,7 +54,7 @@ class UserDropdown extends React.Component {
 	deleteMember(){
 		let id = this.state.user.id; //id = member id, alltså id från Member entitet
 		console.log("this.state.user.id" , this.state.user.id)
-		axios.delete("http://localhost:8080/rest/member/delete/" + id)
+		axios.delete("/rest/member/deleteMember/" + id)
 		.then(
 			console.log("member with username",this.state.user.username , "deleted"))
 	}
@@ -64,7 +65,7 @@ class UserDropdown extends React.Component {
 				<div className="user-drop">
 					{CheckUser(this.state.user)}
 					<div className="user-drop-content">
-						{CheckYourPrivilege(this.state.user, this.state.loggedInUser, this.updateMemberRole)}
+						{CheckYourPrivilege(this.state.user, this.state.loggedInUser, this.updateMemberRole,this.deleteMember)}
 					</div>
 				</div>
 			</>
@@ -92,7 +93,7 @@ function CheckUser(props) {
 	return button;
 }
 
-function CheckYourPrivilege(user, loggedInUser, updateMemberRole) {
+function CheckYourPrivilege(user, loggedInUser, updateMemberRole,handleClick,deleteMember) {
 	let dropdownOptions;
 	if (
 		loggedInUser.privilege === "GROUPADMIN" &&
@@ -103,7 +104,7 @@ function CheckYourPrivilege(user, loggedInUser, updateMemberRole) {
 			<>
 				<button
 					href={"/user/profile/" + user.id}
-					onClick={(e) => dropdown.handleClick(e)}
+					onClick={(e) => handleClick(e)}
 				>
 					Go to profile
 				</button>
@@ -113,12 +114,11 @@ function CheckYourPrivilege(user, loggedInUser, updateMemberRole) {
 					Make moderator
 				</button>
 				<button
-					href={"/group/remove/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					onClick={() => deleteMember()}
 				>
 					Remove from group
 				</button>
-				<button href={"/group/ban/" + user.id} onClick={(e) => this.handleClick(e)}>
+				<button href={"/group/ban/" + user.id} onClick={(e) => handleClick(e)}>
 					Blacklist
 				</button>
 			</>
@@ -131,7 +131,7 @@ function CheckYourPrivilege(user, loggedInUser, updateMemberRole) {
 			<>
 				<button
 					href={"/user/profile/" + user.id}
-					onClick={(e) => dropdown.handleClick(e)}
+					onClick={(e) => handleClick(e)}
 				>
 					Go to profile
 				</button>
@@ -141,12 +141,11 @@ function CheckYourPrivilege(user, loggedInUser, updateMemberRole) {
 					Remove Moderator
 				</button>
 				<button
-					href={"/group/remove/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					onClick={() => deleteMember()}
 				>
 					Remove from group
 				</button>
-				<button href={"/group/ban/" + user.id} onClick={(e) => this.handleClick(e)}>
+				<button href={"/group/ban/" + user.id} onClick={(e) => handleClick(e)}>
 					Blacklist
 				</button>
 			</>
@@ -160,17 +159,17 @@ function CheckYourPrivilege(user, loggedInUser, updateMemberRole) {
 			<>
 				<button
 					href={"/user/profile/" + user.id}
-					onClick={(e) => dropdown.handleClick(e)}
+					onClick={(e) => handleClick(e)}
 				>
 					Go to profile
 				</button>
 				<button
-					href={"/group/remove/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+				
+					onClick={() => deleteMember()}
 				>
 					Remove from group
 				</button>
-				<button href={"/group/ban/" + user.id} onClick={(e) => this.handleClick(e)}>
+				<button href={"/group/ban/" + user.id} onClick={(e) => handleClick(e)}>
 					Blacklist
 				</button>
 			</>
@@ -180,7 +179,7 @@ function CheckYourPrivilege(user, loggedInUser, updateMemberRole) {
 			<>
 				<button
 					href={"/user/profile/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					onClick={(e) => handleClick(e)}
 				>
 					Go to profile
 				</button>

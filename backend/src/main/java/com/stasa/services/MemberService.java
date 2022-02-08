@@ -73,7 +73,11 @@ public class MemberService {
         return response;
     }
 
-    public void deleteById(int id) {
-         memberRepo.deleteById(id);
+    public void deleteById(long groupId,long userId) {
+         memberRepo.deleteById(groupId,userId);
+    }
+
+    public void deleteByMemberId(int id) {
+        memberRepo.deleteByMemberId(id);
     }
 }
