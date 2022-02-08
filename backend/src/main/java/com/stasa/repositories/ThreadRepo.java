@@ -19,13 +19,5 @@ public interface ThreadRepo extends JpaRepository<Thread, Long> {
     @Query(value = "SELECT * from threads where id =?", nativeQuery = true)
     Thread findThreadById(Long id);
 
-        @Query(value="SELECT content, users.username FROM comments\n" +
-                "INNER JOIN users\n" +
-                "ON users.id = comments.creator_id\n" +
-                "WHERE comments.thread_id =?1", nativeQuery = true)
-    List<String> findCommentsById(long id);
 
-
-    @Query(value="INSERT INTO comments (content,creator_id,thread_id) VALUES(?1,?2,?3)",nativeQuery = true)
-    void postNewComment(String comment, long creatorId, long threadId);
 }

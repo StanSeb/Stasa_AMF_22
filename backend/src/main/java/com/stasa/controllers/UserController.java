@@ -2,6 +2,7 @@ package com.stasa.controllers;
 
 import com.stasa.entities.User;
 import com.stasa.services.UserService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -69,10 +70,15 @@ public class UserController {
         return "register_success";
     }
 
+    @SneakyThrows
     @GetMapping("/rest/whoami")
-    public User whoAmI() {
+    public User whoAmI() throws Exception {
         var user = Optional.ofNullable(userService.whoAmI());
-        return user.orElse(null);
+        if(user.isPresent()) {
+            return user.get();
+        } else {
+            throw new Exception("You are not logged in.");
+        }
     }
     @GetMapping("/rest/isAdmin/{id}")
     public boolean isAdmin(@PathVariable long id){

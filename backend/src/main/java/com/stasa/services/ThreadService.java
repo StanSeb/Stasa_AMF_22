@@ -1,24 +1,24 @@
 package com.stasa.services;
 
 import com.stasa.entities.Comment;
+import com.stasa.repositories.CommentRepo;
 import com.stasa.repositories.ThreadRepo;
 import com.stasa.entities.Thread;
-import org.apache.tomcat.jni.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ThreadService {
     @Autowired
     private ThreadRepo threadRepo;
+    @Autowired
+    private CommentRepo commentRepo;
 
     public Thread findById(long id){
         if(threadRepo.findById(id).isPresent()){
@@ -65,14 +65,39 @@ public class ThreadService {
             return "Could not find thread in database";
         }
     }
+    public String deleteComment(long id) {
+        System.out.println(id);
+        System.err.println((commentRepo.findCommentById(id)));
+        if(commentRepo.findCommentById(id) != null){
+            Comment newComment = commentRepo.findCommentById(id);
+            Date date = Calendar.getInstance().getTime();
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+            String strDate = dateFormat.format(date);
+            newComment.setDelitionTimeStamp(strDate);
+            commentRepo.save(newComment);
+            return "Delete OK";
+        }else{
+            return "Could not find comment in database";
+        }
+    }
 
-    public List<String> findCommentById(long id) {
-
-       return threadRepo.findCommentsById(id);
+    public List<Object> findCommentById(long id) {
+        System.out.println(commentRepo.findCommentsById(id));
+       return commentRepo.findCommentsById(id);
     }
 
     public String postNewComment(Comment comment) {
-         threadRepo.postNewComment(comment.getContent(), comment.getCreatorId(), comment.getThreadId());
+         commentRepo.postNewComment(comment.getContent(), comment.getCreatorId(), comment.getThreadId());
          return "threadService worked";
+    }
+
+    public String editComment(Comment comment) {
+        if(commentRepo.findCommentById(comment.getId()) != null){
+            Comment newComment = commentRepo.findCommentById(comment.getId());
+            newComment.setContent(comment.getContent());
+            commentRepo.save(newComment);
+            return "Saved OK";
+        }
+            return "Could not find comment!";
     }
 }

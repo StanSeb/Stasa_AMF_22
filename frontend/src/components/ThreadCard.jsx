@@ -9,14 +9,17 @@ class ThreadCard extends React.Component {
 			content: props.thread.content,
 			title: props.thread.title,
 			isEditable: false,
-			showCommentButton:this.props.showCommentButton
+			showCommentButton: this.props.showCommentButton
 		};
 	}
 	handleClick(target) {
-		if(target.innerText==="Comment"){
+		if (target.innerText === "Comment") {
 			this.props.toggleComment(true)
+			setTimeout(() => {
+				document.querySelector(".comment-newComment").childNodes[0].focus()
+			}, 50);
+
 		}
-		console.log(target.innerText + " on " + this.props.thread.id);
 	}
 
 	render() {
@@ -44,9 +47,8 @@ class ThreadCard extends React.Component {
 				<div className="thread-footer">
 					<div className="thread-social-buttons" >
 						<button
-							href={"/thread/comment/" + this.props.thread.id}
 							onClick={(e) => this.handleClick(e.target)}
-							className="thread-button" style={ {display:this.props.showCommentButton ? 'block' : 'none'}}
+							className="thread-button" style={{ display: this.props.showCommentButton ? 'block' : 'none' }}
 						>
 							Comment
 						</button>
@@ -83,26 +85,28 @@ class ThreadCard extends React.Component {
 	}
 }
 
-function EditButton(props, threadProp, loggedInUser) {
+function EditButton(parent, threadProp, loggedInUser) {
 	if (threadProp.creatorId === loggedInUser.id) {
-		if (props.state.isEditable) {
+		if (parent.state.isEditable) {
 			function abortEdit() {
-				props.setState({ isEditable: !props.state.isEditable });
+				parent.setState({title:parent.props.thread.title})
+				parent.setState({content:parent.props.thread.content})
+				parent.setState({ isEditable: !parent.state.isEditable });
 				// props.setState({ isEditable: !props.state.isEditable });
 			}
 
 			function saveThread() {
 				let thread = {
 					id: threadProp.id,
-					title: props.state.title,
-					content: props.state.content,
+					title: parent.state.title,
+					content: parent.state.content,
 				};
 
 				axios
 					.put("http://localhost:8080/rest/threads/editThread/", thread)
 					.then((response) => {
 						console.log(response);
-						props.setState({ isEditable: !props.state.isEditable });
+						parent.setState({ isEditable: !parent.state.isEditable });
 					})
 					.catch((error) => {
 						console.log(error);
@@ -117,7 +121,7 @@ function EditButton(props, threadProp, loggedInUser) {
 			);
 		} else {
 			function handleClick() {
-				props.setState({ isEditable: !props.state.isEditable });
+				parent.setState({ isEditable: !parent.state.isEditable });
 			}
 
 			return (
@@ -137,19 +141,22 @@ function EditButton(props, threadProp, loggedInUser) {
 function DeleteButton(threadProp, loggedInUser) {
 	if (
 		threadProp.creatorId === loggedInUser.id ||
-		loggedInUser.privilege === "admin" ||
-		loggedInUser.privilege === "moderator"
+		loggedInUser.privilege === "GROUPADMIN" ||
+		loggedInUser.privilege === "GROUPMODERATOR"
 	) {
 		function handleClick() {
-			axios
-				.put("http://localhost:8080/rest/threads/deleteThread/" + threadProp.id)
-				.then((response) => {
-					console.log(response);
-					window.location.reload();
-				})
-				.catch((error) => {
-					console.log(error);
-				});
+			if (window.confirm("Are you sure you want to delete this")) {
+
+				axios
+					.put("/rest/threads/deleteThread/" + threadProp.id)
+					.then((response) => {
+						window.location.reload();
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+			}
+
 		}
 		return <button onClick={() => handleClick()}>Ta bort</button>;
 	} else {

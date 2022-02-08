@@ -19,6 +19,10 @@ public class MemberController {
         @PostMapping("/join")
         public String addMember(@RequestBody Member member) {return memberService.addMember(member); }
 
+        //Update från user till moderator och vice-versa
+        @PutMapping("/updateMemberRole")
+        public String updateMemberRole(@RequestBody Member member) {return memberService.updateMemberRole(member); }
+
         //Get alla members från en group by groupId
         @GetMapping("/memberByGroupId/{groupId}")
         public List<Map> getMembersByGroupId(@PathVariable long groupId) {return memberService.getMembersByGroupId(groupId); }

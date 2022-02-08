@@ -51,6 +51,7 @@ function Navbar(props) {
                 <Route path="/registerGroup" element={<RegisterGroup userObj={props.userObj}/>} />
                 <Route path="/group/:id" element={<GroupPage loggedInUser={props.userObj}/>} />
                 <Route path="/home" element={<Homepage/>} />
+                <Route path="/" element={<Homepage/>} />
             </Routes>
         </Router>
     </div>;
