@@ -18,9 +18,9 @@ import javax.mail.internet.MimeMessage;
 import javax.persistence.Id;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -174,4 +174,17 @@ public class UserService {
         return userRepo.findByEmail(email);
     }
 
+    public String sendToBlacklist(long userId, long groupId) {
+       int countBlockedTimes = userRepo.countBlockedTimes(userId);
+       if(countBlockedTimes == 0){
+           int block = 1;
+           userRepo.insertInBlacklist(userId, block);
+           userRepo.userBlockedFromGroup(userId, groupId);
+       }else {
+           countBlockedTimes += 1;
+           userRepo.insertInBlacklist(userId, countBlockedTimes);
+           userRepo.userBlockedFromGroup(userId, groupId);
+       }
+       return "Den här användaren har blockerats permanent från den här gruppen!";
+    }
 }

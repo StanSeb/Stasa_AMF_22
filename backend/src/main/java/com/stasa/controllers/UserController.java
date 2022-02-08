@@ -50,6 +50,9 @@ public class UserController {
         return userService.findById(id).orElseThrow(() -> new Exception("User not found!"));
     }
 
+    @GetMapping("/rest/userToBlacklist/{userId}/{groupId}")
+    public String sendToBlacklist(@PathVariable long userId, @PathVariable long groupId){ ;return userService.sendToBlacklist(userId, groupId); }
+
     @GetMapping("/rest/username/{username}")
     public String getByUserName(@PathVariable String username) { return userService.findByUserName(username); }
 
