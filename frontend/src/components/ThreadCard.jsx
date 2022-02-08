@@ -85,26 +85,28 @@ class ThreadCard extends React.Component {
 	}
 }
 
-function EditButton(props, threadProp, loggedInUser) {
+function EditButton(parent, threadProp, loggedInUser) {
 	if (threadProp.creatorId === loggedInUser.id) {
-		if (props.state.isEditable) {
+		if (parent.state.isEditable) {
 			function abortEdit() {
-				props.setState({ isEditable: !props.state.isEditable });
+				parent.setState({title:parent.props.thread.title})
+				parent.setState({content:parent.props.thread.content})
+				parent.setState({ isEditable: !parent.state.isEditable });
 				// props.setState({ isEditable: !props.state.isEditable });
 			}
 
 			function saveThread() {
 				let thread = {
 					id: threadProp.id,
-					title: props.state.title,
-					content: props.state.content,
+					title: parent.state.title,
+					content: parent.state.content,
 				};
 
 				axios
 					.put("http://localhost:8080/rest/threads/editThread/", thread)
 					.then((response) => {
 						console.log(response);
-						props.setState({ isEditable: !props.state.isEditable });
+						parent.setState({ isEditable: !parent.state.isEditable });
 					})
 					.catch((error) => {
 						console.log(error);
@@ -119,7 +121,7 @@ function EditButton(props, threadProp, loggedInUser) {
 			);
 		} else {
 			function handleClick() {
-				props.setState({ isEditable: !props.state.isEditable });
+				parent.setState({ isEditable: !parent.state.isEditable });
 			}
 
 			return (

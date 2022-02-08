@@ -160,11 +160,16 @@ code {
 
 /*#region new-thread*/
 .new-thread {
-	width: 40%;
+	width: 40vw;
+	height:30vh;
 	display: flex;
 	flex-wrap: wrap;
 	border: 1px solid gray;
 	z-index: 6;
+	background-color:rgb(240, 240, 240);
+	position:fixed;
+	left:30vw;
+	top:35vh;
 }
 
 .new-thread-title {
@@ -175,6 +180,7 @@ code {
 }
 
 .new-thread-content {
+	resize:none;
 	width: 98%;
 	height: 8em;
 	margin: 1%;
@@ -230,6 +236,14 @@ code {
 	margin: 0;
 	height: 100%;
 	display: flex;
+}
+.group-overlay{
+	position: fixed;
+	width:100vw;
+	height:100vh;
+	background-color:rgba(0,0,0,0.2);
+	top:0;
+	z-index: 5;
 }
 
 .group-posts {

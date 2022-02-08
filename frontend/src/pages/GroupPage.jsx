@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import ThreadCard from "../components/ThreadCard";
 import ThreadPage from "../pages/ThreadPage";
 import UserDropdown from "../components/UserDropdown";
+import NewThread from "../components/NewThread";
 
 class GroupPage extends React.Component {
 	constructor(props) {
@@ -18,8 +19,11 @@ class GroupPage extends React.Component {
 			threads: {},
 			users: {},
 			clickedThread: 0,
+			toggleNewThread:false,
 		};
 		this.handleThreadClick = this.handleThreadClick.bind(this);
+		this.toggleNewThread= this.toggleNewThread.bind(this);
+		this.fetchThreads=this.fetchThreads.bind(this);
 	}
 
 	createMember(){
@@ -41,6 +45,12 @@ class GroupPage extends React.Component {
 
 	componentDidMount() {
 		let groupId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
+		this.setState((prevState)=>{
+		let group=prevState.group
+		group.id=window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
+		return{group}
+	
+		})
 
 		let privilege;
 		let loggedInUser;
@@ -62,13 +72,6 @@ class GroupPage extends React.Component {
 		.then((response)=> {
 			this.setState({group:response.data})
 		})
-        axios.get("/rest/member/memberByGroupId/" + groupId) 
-        .then((response) => response.data)
-        .then((data) =>{
-         this.setState({users: data});
-         console.log(this.state.users);
-     });
-
 		let users;
 		axios.get("/rest/member/memberByGroupId/" + groupId) 
 			.then((response) => response.data)
@@ -88,16 +91,41 @@ class GroupPage extends React.Component {
 			}
 		);		
 	}
+	toggleNewThread(value){
+		this.setState({toggleNewThread:value})
+		if(value){
+
+			document.querySelector('html').style.overflow='hidden';
+		}else {
+
+			document.querySelector('html').style.overflow='auto';
+		}
+	}
 
 	handleThreadClick(props) {
 		let clickedThread = props.id;
 		this.setState({ clickedThread });
 	}
+	fetchThreads() {
+		let threads;
+		axios
+		    .get("/rest/threads/byGroup/"+this.state.group.id)
+			.then((response) => response.data)
+			.then((data) => {
+				threads = data;
+				this.setState({ threads });
+			}
+		);		
+	}
 
 	render() {
 		return (
 			<>
-				<div className="group-page">
+				<div className="group-page" >
+
+					<div className="group-overlay" style={{ display: this.state.toggleNewThread ? 'block' : 'none' }}>
+						<NewThread cancelPost={this.toggleNewThread} groupId={this.state.group.id} loggedInUser={this.state.loggedInUser} fetchThreads={this.fetchThreads}/>
+					</div>
 					<>
 						<div className="group-posts">
 							{ShowThread(
@@ -108,7 +136,7 @@ class GroupPage extends React.Component {
 							)}
 						</div>
 					</>
-					<div className="group-side-panel">
+					<div className="group-side-panel" >
 						<div className="group-info">
 							<h3>{this.state.group.title}</h3>
 							<p>{this.state.group.description}</p>
@@ -118,12 +146,16 @@ class GroupPage extends React.Component {
 							{RenderUsers(this.state.users, this.state.loggedInUser)}
 							
 						</div>
+						<button className="group-new-thread" style={{ display:typeof( this.state.loggedInUser.privilege) ==="undefined" ? 'none' : 'block' }}  onClick={()=> this.toggleNewThread(true)}>Skapa nytt inlägg</button>
 					</div>
 				</div>
 			</>
 		);
 	}
 }
+
+
+
 
 function ShowThread(threads, handleThreadClick, clickedThread, loggedInUser) {
 	if (clickedThread === 0) {
