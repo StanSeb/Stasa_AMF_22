@@ -43,6 +43,8 @@ class GroupPage extends React.Component {
 		});
 	}
 
+	
+
 	componentDidMount() {
 		let groupId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
 		this.setState((prevState)=>{

@@ -15,7 +15,7 @@ public interface MemberRepo extends JpaRepository<Member, Integer> {
     List<Member> getByUserId(long userId);
 
     //Hämtar alla member från en group
-    @Query(value= "SELECT m.user_id AS id, u.username, r.title AS privilege \n" +
+    @Query(value= "SELECT m.user_id ,  m.id, u.username, r.title AS role \n" +
             "FROM members m\n" +
             "INNER JOIN users u on u.id = m.user_id\n" +
             "INNER JOIN `groups` g on g.id = m.group_id\n" +
@@ -33,4 +33,5 @@ public interface MemberRepo extends JpaRepository<Member, Integer> {
     void updateMemberRole(long roleId, long userId, long groupId);
 
     List<Member> getByUserId(int userId);
+
 }

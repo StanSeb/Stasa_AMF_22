@@ -1,5 +1,5 @@
-import axios from "axios";
-import React, { useState } from 'react'
+import React from "react";
+import axios from 'axios'
 
 class UserDropdown extends React.Component {
 	constructor(props) {
@@ -19,6 +19,8 @@ class UserDropdown extends React.Component {
 	handleClick(event) {
 		let buttonClicked = event.target.innerText;
 		console.log(buttonClicked + ", " + this.state.user.username);
+		console.log(this.state.user.id)
+		
 	}
 
 	updateMemberRole(){
@@ -46,6 +48,14 @@ class UserDropdown extends React.Component {
 				window.location.reload();
 			})
 		});
+	}
+
+	deleteMember(){
+		let id = this.state.user.id; //id = member id, alltså id från Member entitet
+		console.log("this.state.user.id" , this.state.user.id)
+		axios.delete("http://localhost:8080/rest/member/delete/" + id)
+		.then(
+			console.log("member with username",this.state.user.username , "deleted"))
 	}
 
 	render() {
@@ -93,7 +103,7 @@ function CheckYourPrivilege(user, loggedInUser, updateMemberRole) {
 			<>
 				<button
 					href={"/user/profile/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					onClick={(e) => dropdown.handleClick(e)}
 				>
 					Go to profile
 				</button>
@@ -121,7 +131,7 @@ function CheckYourPrivilege(user, loggedInUser, updateMemberRole) {
 			<>
 				<button
 					href={"/user/profile/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					onClick={(e) => dropdown.handleClick(e)}
 				>
 					Go to profile
 				</button>
@@ -150,7 +160,7 @@ function CheckYourPrivilege(user, loggedInUser, updateMemberRole) {
 			<>
 				<button
 					href={"/user/profile/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					onClick={(e) => dropdown.handleClick(e)}
 				>
 					Go to profile
 				</button>

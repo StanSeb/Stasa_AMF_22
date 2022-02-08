@@ -73,10 +73,10 @@ class Profile extends React.Component {
 
 				<div>{this.state.groups.map((group) => (
 					<ul key={group.id}>
-						<li> Title: <span>{group.group.title}</span> <br />
+						<li><Link to={`/group/${group.id}`}><span>{group.group.title}</span></Link> <br />
 							Description: <span>{group.group.description}</span> <br />
 							Role: <span>{group.memberRole.title}</span> <br />
-						</li>
+							</li>
 					</ul>
 				))}</div>
 			</div>

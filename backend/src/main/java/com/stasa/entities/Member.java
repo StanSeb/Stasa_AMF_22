@@ -15,7 +15,7 @@ public class Member {
     @Column(name = "id")
     @GeneratedValue(generator = "NATIVE")
     @GenericGenerator(name = "NATIVE", strategy = "native")
-    private long id;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

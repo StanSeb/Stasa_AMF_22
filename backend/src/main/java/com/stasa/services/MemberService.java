@@ -72,4 +72,8 @@ public class MemberService {
         }
         return response;
     }
+
+    public void deleteById(int id) {
+         memberRepo.deleteById(id);
+    }
 }
