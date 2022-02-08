@@ -63,7 +63,8 @@ class GroupPage extends React.Component {
 			users: secondResponse.data[0],
 			threads: thirdResponse.data,
 			loggedInMember: fourthResponse.data
-		})		
+		})	
+
 	}
 
 	handleThreadClick(props) {
@@ -74,7 +75,7 @@ class GroupPage extends React.Component {
 	render() {
 		return (
 			<div className="group-page">
-				{this.state.invitePopup ? <InviteMemberPopup groupAdmin={this.state.loggedInUser} groupId={this.state.group.id} /> : null}
+				{this.state.invitePopup ? <InviteMemberPopup loggedInUser={this.state.loggedInUser} groupId={this.state.group.id} memberId={this.state.users.id} /> : null}
 				<div className="group-posts">
 					{ShowThread(
 						this.state.threads,

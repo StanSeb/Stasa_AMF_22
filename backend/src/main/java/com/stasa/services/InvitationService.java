@@ -18,7 +18,7 @@ public class InvitationService {
         return "Invitation has been sent!";
     }
 
-    public ArrayList<Map> getUserInvitations(Long userId) {
+    public ArrayList<Map> getUserInvitations(long userId) {
         return invitationRepo.getByUserId(userId);
     }
 

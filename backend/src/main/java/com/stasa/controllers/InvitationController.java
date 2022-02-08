@@ -21,7 +21,7 @@ public class InvitationController {
     }
 
     @GetMapping("/rest/invitations/{userId}")
-    public ArrayList<Map> getUserInvitations(@PathVariable Long userId){
+    public ArrayList<Map> getUserInvitations(@PathVariable long userId){
         return invitationService.getUserInvitations(userId);
     }
 

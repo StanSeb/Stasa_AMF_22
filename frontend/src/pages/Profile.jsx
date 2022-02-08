@@ -8,8 +8,34 @@ class Profile extends React.Component {
 		this.state = {
 			userObj: props.userObj,
 			userId: props.userObj.id,
-			groups: []
+			groups: [],
+			invitations: [],
 		};
+	}
+
+	async accept(groupId, invitationId){
+
+		const memberObject = {
+			user: { id: this.state.userId, },
+			memberRole: { id: 4 },
+			group: { id: groupId },
+		}
+
+		await axios.post("/rest/member/join",  memberObject)
+
+		//DELETE: Ta bort invitation
+		await axios.delete("/rest/deleteInvitation/"+ invitationId)
+		.then((response) => console.log(response.data))
+
+		window.location.reload()
+	}
+
+	async deny(invitationId){
+		//DELETE: Ta bort invitation
+		await axios.delete("/rest/deleteInvitation/"+ invitationId)
+		.then((response) => console.log(response.data))
+
+		window.location.reload()
 	}
 
 	checkIfSignedId(id) {
@@ -41,12 +67,19 @@ class Profile extends React.Component {
 	}
 
 	async componentDidMount() {
-		axios
+		await axios
 			.get("/rest/member/getMembersByUserId/" + this.state.userId)
 			.then((response) => response.data)
 			.then((data) => {
 				this.setState({ groups: data });
 			});
+		
+		await axios.get("/rest/invitations/" + this.state.userId)
+		.then((response) => {
+				this.setState({invitations: response.data})
+				console.log(response.data)
+			}
+		);
 	}
 
 
@@ -60,6 +93,17 @@ class Profile extends React.Component {
 	}
 
 	render() {
+
+		const data = this.state.invitations
+		const listItems = data.map((d) => <li key={d.id}>
+			<h4>Inbjuden av: {d.username} </h4>
+			<p>Grupp: {d.title} 
+		
+			<button onClick={() => this.accept(d.groupId, d.id)}>Godkänn</button>
+			<button onClick={() => this.deny(d.id)}>Neka</button>
+			</p>
+		</li>);
+
 		return (
 			<div className="profileContainer">
 				<div> Welcome to profile </div>
@@ -68,6 +112,11 @@ class Profile extends React.Component {
 				</Link>
 				{this.checkIfSignedId(this.state.userObj.id)}
 				<button onClick={this.logOut}>Logga ut</button>
+
+				
+				<div>
+					{listItems}
+				</div>
 
 				{RenderGroups(this.state.groupsList, this.state.userObj.id)}
 
@@ -83,8 +132,6 @@ class Profile extends React.Component {
 		);
 	}
 }
-
-
 
 function RenderGroups(props, user_id) {
 	if (typeof props !== "undefined") {
