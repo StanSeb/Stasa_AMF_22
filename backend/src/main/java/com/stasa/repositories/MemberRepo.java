@@ -14,14 +14,13 @@ public interface MemberRepo extends JpaRepository<Member, Integer> {
     int isMember(long memberUserId, long memberGroupId);
     List<Member> getByUserId(long userId);
 
-    //Hämtar alla member från en group
-    @Query(value= "SELECT m.user_id AS id, u.username, r.title AS privilege \n" +
+    //Hämtar alla member från en group och kollar att member inte finns i Blacklist
+    @Query(value= "SELECT m.user_id AS userId, u.username, m.group_id AS groupId, g.title, r.title AS role \n" +
             "FROM members m\n" +
             "INNER JOIN users u on u.id = m.user_id\n" +
             "INNER JOIN `groups` g on g.id = m.group_id\n" +
             "INNER  JOIN member_roles r on r.id = m.role_id\n" +
-            "WHERE m.group_id = ?1\n" +
-            "GROUP BY m.user_id", nativeQuery = true )
+            "WHERE m.group_id = ?1 AND m.user_id NOT IN (SELECT user_id FROM blacklist WHERE group_id = ?1)", nativeQuery = true )
     List<Map> getMembersByGroupId(long groupId);
 
     //Räknar antal moderator som en group har

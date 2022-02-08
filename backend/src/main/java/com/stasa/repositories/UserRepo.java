@@ -29,7 +29,7 @@ public interface UserRepo extends JpaRepository<User, Long> {
     @Query(value = "SELECT CASE WHEN EXISTS (SELECT * FROM priviledge WHERE priviledge.user_id = ?) THEN 'TRUE' ELSE 'FALSE' END", nativeQuery = true)
     boolean findAdminById(long id);
 
-    @Query(value = "SELECT COUNT(amount_blocked) FROM blacklist WHERE user_id= ?1", nativeQuery = true)
+    @Query(value = "SELECT amount_blocked FROM blacklist WHERE user_id= ?1", nativeQuery = true)
     int countBlockedTimes(long userId);
 
     @Query(value = "insert into blacklist (user_id, amount_blocked) Values (?1, ?2)", nativeQuery = true)
