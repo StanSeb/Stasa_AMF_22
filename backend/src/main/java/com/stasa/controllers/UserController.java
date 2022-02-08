@@ -70,7 +70,7 @@ public class UserController {
     }
 
     @GetMapping("/rest/whoami")
-    public User whoAmI() {
+    public User whoAmI() throws Exception {
         var user = Optional.ofNullable(userService.whoAmI());
         if(user.isPresent()) {
             return user.get();
