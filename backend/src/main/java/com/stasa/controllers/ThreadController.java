@@ -65,4 +65,10 @@ public class ThreadController {
     public List<Object> comments(@PathVariable long id){
         return threadService.findCommentById(id);
     }
+
+    @PutMapping("editComment")
+    public String editComment(@RequestBody Comment comment){
+
+        return threadService.editComment(comment);
+    }
 }

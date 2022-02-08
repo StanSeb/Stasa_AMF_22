@@ -90,4 +90,14 @@ public class ThreadService {
          commentRepo.postNewComment(comment.getContent(), comment.getCreatorId(), comment.getThreadId());
          return "threadService worked";
     }
+
+    public String editComment(Comment comment) {
+        if(commentRepo.findCommentById(comment.getId()) != null){
+            Comment newComment = commentRepo.findCommentById(comment.getId());
+            newComment.setContent(comment.getContent());
+            commentRepo.save(newComment);
+            return "Saved OK";
+        }
+            return "Could not find comment!";
+    }
 }
