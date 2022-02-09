@@ -2,10 +2,9 @@ package com.stasa.services;
 
 import com.stasa.entities.EReportType;
 import com.stasa.entities.Report;
-import com.stasa.repositories.CommentRepo;
-import com.stasa.repositories.GroupRepo;
-import com.stasa.repositories.ReportRepo;
-import com.stasa.repositories.ThreadRepo;
+import com.stasa.entities.ReportType;
+import com.stasa.entities.User;
+import com.stasa.repositories.*;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,12 +30,15 @@ public class ReportService {
     @Autowired
     CommentRepo commentRepo;
 
-    public Report makeReport(Report report) throws Exception {
-        // return reportRepository.
-        var loggedUser = userService.whoAmI();
-        report.setReporter(loggedUser);
+    @Autowired
+    ReportTypeRepository reportTypeRepo;
 
-        long reporterId = loggedUser.getId();
+    public Report makeReport(Report report, long reporterId) throws Exception {
+        // var loggedUser = userService.whoAmI(); <-- funkar inte (antagligen pga login-implementationen)
+        User reporter = new User();
+        reporter.setId(reporterId);
+        report.setReporter(reporter);
+
         long targetId = report.getTargetId();
 
         // Validate report target.
@@ -50,7 +52,7 @@ public class ReportService {
                     throw new Exception("Group doesn't exist.");
                 break;
             case THREAD:
-                if(!doesGroupExist(targetId))
+                if(!doesThreadExist(targetId))
                     throw new Exception("Thread doesn't exist.");
                 break;
             case USER:
@@ -64,7 +66,10 @@ public class ReportService {
         }
 
         try {
-            return reportRepository.save(report);
+            System.out.println("SAVING");
+            var savedReport = reportRepository.save(report);
+            System.out.println("SAVED");
+            return savedReport;
         } catch (Exception e) {
             // fixa bättre error handling?
             throw new Exception("Could not submit report. This could be because you've already submitted one with the same target.");
@@ -80,8 +85,7 @@ public class ReportService {
     }
 
     private boolean doesGroupExist(long id) {
-
-        return groupRepo.findById(id)!=null;
+        return groupRepo.findById(id) != null;
     }
 
     private boolean doesThreadExist(long id) {
@@ -100,4 +104,7 @@ public class ReportService {
         return reportRepository.findReportsByTargetUser(userId);
     }
 
+    public List<ReportType> getReportTypes() {
+        return reportTypeRepo.findAll();
+    }
 }

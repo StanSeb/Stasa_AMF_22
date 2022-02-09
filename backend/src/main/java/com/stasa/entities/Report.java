@@ -41,16 +41,11 @@ public class Report {
     @Generated(GenerationTime.INSERT) // Behövs för att få med det när värdet ändras
     private Instant creationTimestamp;
 
-    @JsonProperty
-    public User getReporter() {
-        return reporter;
-    }
-
-    /** The reporter is set using whoAmI */
-    @JsonIgnore
-    public void setReporter(User reporter) {
-        this.reporter = reporter;
-    }
+    /** The reporter is set using whoAmI (eller inte för det funkar ej) */
+//    @JsonIgnore
+//    public void setReporter(User reporter) {
+//        this.reporter = reporter;
+//    }
 
     // todo: returnera timestamp med rätt tidsformat (GMT)
 }

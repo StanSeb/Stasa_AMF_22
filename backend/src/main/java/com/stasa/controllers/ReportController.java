@@ -1,6 +1,7 @@
 package com.stasa.controllers;
 
 import com.stasa.entities.Report;
+import com.stasa.entities.ReportType;
 import com.stasa.services.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +15,9 @@ public class ReportController {
     @Autowired
     private ReportService reportService;
 
-    @PostMapping("/report")
-    public Report makeReport(@RequestBody Report report) throws Exception {
-        return reportService.makeReport(report);
+    @PostMapping("/report/{user_id}")
+    public Report makeReport(@RequestBody Report report, @PathVariable long user_id) throws Exception {
+        return reportService.makeReport(report, user_id);
     }
 
     @GetMapping("/reports")
@@ -32,6 +33,11 @@ public class ReportController {
     @GetMapping("/reports/committed/{user_id}")
     public List<Report> getCommittedReports(@PathVariable int user_id) throws Exception {
         return reportService.getCommittedReportsByUser(user_id);
+    }
+
+    @GetMapping("/reports/types")
+    public List<ReportType> getReportTypes() {
+        return reportService.getReportTypes();
     }
 
 }

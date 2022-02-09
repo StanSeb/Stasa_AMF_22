@@ -48,16 +48,14 @@ class GroupPage extends React.Component {
 	componentDidMount() {
 		let groupId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
 		this.setState((prevState)=>{
-		let group=prevState.group
-		group.id=window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
-		return{group}
-	
+			let group=prevState.group
+			group.id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
+			return { group };
 		})
 
 		let privilege;
-		let loggedInUser;
-		 axios
-		 	.get("/rest/groups/getUserRole/" + groupId + "/" +this.state.loggedInUser.id)
+		axios
+			.get("/rest/groups/getUserRole/" + groupId + "/" +this.state.loggedInUser.id) // hämta user role för grupp
 		 	.then((response) => {
 		 		privilege = response.data;
 
@@ -70,10 +68,18 @@ class GroupPage extends React.Component {
 				}, () => {console.log(this.state.loggedInUser)})
 		 	})
 
-		axios.get("/rest/groups/getGroupBy/"+groupId)
-		.then((response)=> {
-			this.setState({group:response.data})
-		})
+		axios.get("/rest/groups/getGroupBy/" + groupId) // hämta grupp
+			.then((response)=> {
+				// console.log(response.data)
+				this.setState({group:response.data})
+			});
+
+        // axios.get("/rest/member/memberByGroupId/" + groupId)  // hämta gruppmedlem
+		// 	.then((response) => response.data)
+		// 	.then((data) => {
+		// 		this.setState({users: data});
+     	// 	});
+
 		let users;
 		axios.get("/rest/member/memberByGroupId/" + groupId) 
 			.then((response) => response.data)
@@ -81,7 +87,7 @@ class GroupPage extends React.Component {
 				users = data;
 		 		this.setState({users});
 	 		}
-		);	
+		);
 
 		let threads;
 		axios
@@ -93,6 +99,7 @@ class GroupPage extends React.Component {
 			}
 		);		
 	}
+
 	toggleNewThread(value){
 		this.setState({toggleNewThread:value})
 		if(value){

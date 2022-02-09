@@ -3,6 +3,8 @@ import "./App.css";
 import "./index.css";
 import Axios from "axios";
 import Navbar from "./components/Navbar";
+import ReportPopup from "./components/ReportPopup";
+import ReportContextProvider from "./contexts/ReportContext";
 
 class App extends Component {
 	constructor() {
@@ -14,6 +16,7 @@ class App extends Component {
 			},
 		};
 		this.handleWhoAmI = this.handleWhoAmI.bind(this);
+		this.instanceRef = React.createRef();
 	}
 
 	handleWhoAmI(id) {
@@ -34,14 +37,25 @@ class App extends Component {
 					const userObject = { id: id, username: username };
 					this.setState({ user: userObject });
 				} else {
-					console.log("Status: " + response.status)
+					console.log("Status: " + response.status);
 				}
 			});
 	}
 
+	static showAlert() {
+		alert("Hello there :P");
+	}
+
+	showReportPopup() {
+
+	}
+
 	render() {
 		return (
-			<Navbar storeId={this.handleWhoAmI} userObj={this.state.user} />
+			<ReportContextProvider>
+				<Navbar storeId={this.handleWhoAmI} userObj={this.state.user} />
+				<ReportPopup userObj={this.state.user} />
+			</ReportContextProvider>
 		);
 	}
 }
