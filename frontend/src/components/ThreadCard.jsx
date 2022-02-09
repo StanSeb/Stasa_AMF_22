@@ -3,11 +3,12 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import App from "../App";
 import { ReportContext } from "../contexts/ReportContext";
+import { AuthContext } from "../contexts/AuthContext";
 
 const reportType = 4; // thread report type (in database)
 
 class ThreadCard extends React.Component {
-	static contextType = ReportContext;
+	static contextType = AuthContext;
 
 	constructor(props) {
 		// props.thread innehåller all information om tråden.
@@ -26,79 +27,84 @@ class ThreadCard extends React.Component {
 			setTimeout(() => {
 				document.querySelector(".comment-newComment").childNodes[0].focus()
 			}, 50);
-
 		}
 	}
 
-	handleReport() {
-		this.context.showReportPopup({ targetType: reportType, targetId: this.props.thread.id });
+	handleReport(showReportPopup) {
+		showReportPopup({ targetType: reportType, targetId: this.props.thread.id });
 	}
 
 	render() {
 		return (
-			<div className="thread">
-				<div className="thread-header">
-					<div className="thread-thread-header-buttons">
-						{EditButton(this, this.props.thread, this.props.loggedInUser,this.props.fetchThreads)}
-						{DeleteButton(this.props.thread, this.props.loggedInUser)}
+			<ReportContext.Consumer>{(context => {
+				const { showReportPopup } = context;
+				return (
+					<div className="thread">
+						<div className="thread-header">
+							<div className="thread-thread-header-buttons">
+								{EditButton(this, this.props.thread, this.props.loggedInUser,this.props.fetchThreads)}
+								{DeleteButton(this.props.thread, this.props.loggedInUser)}
+							</div>
+							<div className="thread-title">
+								<ThreadTitle
+									title={this.state.title}
+									id={this.props.thread.id}
+									handleThreadClick={this.props.handleThreadClick}
+									parent={this}
+									isEditable={this.state.isEditable}
+								/>
+							</div>
+							<span>/ {this.props.thread.creatorId}</span>
+						</div>
+						<div className="thread-main">
+							{ThreadContent(this, this.state.isEditable)}
+						</div>
+						<div className="thread-footer">
+							<div className="thread-social-buttons" >
+								<button
+									onClick={(e) => this.handleClick(e.target)}
+									className="thread-button" style={{ display: this.props.showCommentButton ? 'block' : 'none' }}
+								>
+									Comment
+								</button>
+								<a
+									href={"/thread/like/" + this.props.thread.id}
+									onClick={(e) => this.handleClick(e.target)}
+									className="thread-button"
+								>
+									Like
+								</a>
+								<a
+									href={"/thread/dislike/" + this.props.thread.id}
+									onClick={(e) => this.handleClick(e.target)}
+									className="thread-button"
+								>
+									Dislike
+								</a>
+								<a
+									href={"/thread/share/" + this.props.thread.id}
+									onClick={(e) => this.handleClick(e.target)}
+									className="thread-button"
+								>
+									Share
+								</a>
+								<a
+									onClick={(e) => this.handleReport(showReportPopup)}
+									className="thread-button"
+								>
+									Report
+								</a>
+							</div>
+							<div className="thread-tags">
+								<p>#tag1 </p>
+								<p>#tag2 </p>
+								<p>#tag3 </p>
+							</div>
+						</div>
 					</div>
-					<div className="thread-title">
-						<ThreadTitle
-							title={this.state.title}
-							id={this.props.thread.id}
-							handleThreadClick={this.props.handleThreadClick}
-							parent={this}
-							isEditable={this.state.isEditable}
-						/>
-					</div>
-					<span>/ {this.props.thread.creatorId}</span>
-				</div>
-				<div className="thread-main">
-					{ThreadContent(this, this.state.isEditable)}
-				</div>
-				<div className="thread-footer">
-					<div className="thread-social-buttons" >
-						<button
-							onClick={(e) => this.handleClick(e.target)}
-							className="thread-button" style={{ display: this.props.showCommentButton ? 'block' : 'none' }}
-						>
-							Comment
-						</button>
-						<a
-							href={"/thread/like/" + this.props.thread.id}
-							onClick={(e) => this.handleClick(e.target)}
-							className="thread-button"
-						>
-							Like
-						</a>
-						<a
-							href={"/thread/dislike/" + this.props.thread.id}
-							onClick={(e) => this.handleClick(e.target)}
-							className="thread-button"
-						>
-							Dislike
-						</a>
-						<a
-							href={"/thread/share/" + this.props.thread.id}
-							onClick={(e) => this.handleClick(e.target)}
-							className="thread-button"
-						>
-							Share
-						</a>
-						<a
-							onClick={(e) => this.handleReport()}
-							className="thread-button"
-						>
-							Report
-						</a>
-					</div>
-					<div className="thread-tags">
-						<p>#tag1 </p>
-						<p>#tag2 </p>
-						<p>#tag3 </p>
-					</div>
-				</div>
-			</div>
+				)
+			})}
+			</ReportContext.Consumer>
 		);
 	}
 }

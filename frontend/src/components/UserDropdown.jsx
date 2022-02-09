@@ -1,7 +1,13 @@
 import React from "react";
-import axios from 'axios'
+import axios from 'axios';
+import { ReportContext } from "../contexts/ReportContext";
+import { AuthContext } from "../contexts/AuthContext";
+
+const reportType = 1; // user report type (in database)
 
 class UserDropdown extends React.Component {
+	static contextType = AuthContext;
+
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -10,18 +16,19 @@ class UserDropdown extends React.Component {
 				memberRole:{id:""},
 				group:{id:""},
 				}, 
-			user: this.props.user,
+			user: this.props.user, // <- member, inte user
 			loggedInUser: this.props.loggedInUser,
 		};
 		this.updateMemberRole= this.updateMemberRole.bind(this);
 		this.deleteMember=this.deleteMember.bind(this);
+		this.handleReport = this.handleReport.bind(this);
+		this.handleClick = this.handleClick.bind(this);
 	}
 
 	handleClick(event) {
 		let buttonClicked = event.target.innerText;
 		console.log(buttonClicked + ", " + this.state.user.username);
 		console.log(this.state.user.id)
-		
 	}
 
 	updateMemberRole(){
@@ -59,16 +66,25 @@ class UserDropdown extends React.Component {
 			console.log("member with username",this.state.user.username , "deleted"))
 	}
 
+	handleReport(showReportPopup) {
+		showReportPopup({targetType: reportType, targetId: this.state.user.user_id});
+	}
+
 	render() {
 		return (
-			<>
-				<div className="user-drop">
-					{CheckUser(this.state.user)}
-					<div className="user-drop-content">
-						{CheckYourPrivilege(this.state.user, this.state.loggedInUser, this.updateMemberRole,this.deleteMember)}
-					</div>
-				</div>
-			</>
+				<ReportContext.Consumer>{(context => {
+					const { showReportPopup } = context;
+					const loggedInUser = this.context.loggedInUser;
+						return (
+							<div className="user-drop">
+								{CheckUser(this.state.user)}
+								<div className="user-drop-content">
+									{CheckYourPrivilege(this.state.user, this.state.loggedInUser, this.updateMemberRole,this.deleteMember, this.handleReport, this.handleClick, showReportPopup, this.context.loggedInUser)}
+								</div>
+							</div>
+						);
+				})}
+				</ReportContext.Consumer>
 		);
 	}
 }
@@ -93,7 +109,7 @@ function CheckUser(props) {
 	return button;
 }
 
-function CheckYourPrivilege(user, loggedInUser, updateMemberRole,handleClick,deleteMember) {
+function CheckYourPrivilege(user, loggedInUser /*<- detta är en member, inte en user.*/, updateMemberRole, deleteMember, handleReport, handleClick, showReportPopup, realLoggedInUser) {
 	let dropdownOptions;
 	if (
 		loggedInUser.privilege === "GROUPADMIN" &&
@@ -121,6 +137,7 @@ function CheckYourPrivilege(user, loggedInUser, updateMemberRole,handleClick,del
 				<button href={"/group/ban/" + user.id} onClick={(e) => handleClick(e)}>
 					Blacklist
 				</button>
+				{ReportButton(realLoggedInUser, handleReport, showReportPopup, user)}
 			</>
 		);
 	} else if (
@@ -148,6 +165,7 @@ function CheckYourPrivilege(user, loggedInUser, updateMemberRole,handleClick,del
 				<button href={"/group/ban/" + user.id} onClick={(e) => handleClick(e)}>
 					Blacklist
 				</button>
+				{ReportButton(realLoggedInUser, handleReport, showReportPopup, user)}
 			</>
 		);
 	} else if (
@@ -172,6 +190,7 @@ function CheckYourPrivilege(user, loggedInUser, updateMemberRole,handleClick,del
 				<button href={"/group/ban/" + user.id} onClick={(e) => handleClick(e)}>
 					Blacklist
 				</button>
+				{ReportButton(realLoggedInUser, handleReport, showReportPopup, user)}
 			</>
 		);
 	} else {
@@ -183,10 +202,28 @@ function CheckYourPrivilege(user, loggedInUser, updateMemberRole,handleClick,del
 				>
 					Go to profile
 				</button>
+				{ReportButton(realLoggedInUser, handleReport, showReportPopup, user)}
 			</>
 		);
 	}
 	return dropdownOptions;
+}
+
+function ReportButton(realLoggedInUser, handleReport, showReportPopup, targetMember) {
+
+	if(realLoggedInUser == null) {
+		return;
+	} 
+
+	let isTargetLoggedInUser = realLoggedInUser.id === targetMember.user_id;
+
+	if(realLoggedInUser !== null && !isTargetLoggedInUser) {
+		return (
+			<button onClick={(e) => handleReport(showReportPopup)}>
+				Report
+			</button>
+		);
+	}
 }
 
 export default UserDropdown;
