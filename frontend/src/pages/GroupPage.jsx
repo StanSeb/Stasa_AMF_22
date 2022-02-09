@@ -85,7 +85,7 @@ class GroupPage extends React.Component {
 			.then((response) => response.data)
 			.then((data) =>{
 				users = data;
-		 		this.setState({users});
+		 		this.setState({users}); // detta är en member, inte en user.
 	 		}
 		);
 
