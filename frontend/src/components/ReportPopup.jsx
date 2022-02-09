@@ -44,6 +44,7 @@ class ReportPopup extends React.Component {
   }
 
   submitReport = (e) => {
+    this.clearData();
     e.preventDefault();
 
     let targetType = this.context.targetType;
@@ -84,8 +85,12 @@ class ReportPopup extends React.Component {
   }
 
   hidePopup() {
-    this.setState({ error: { isPresent: false, description: "" }, success: { status: false, report: null } });
+    this.clearData();
     this.context.hideReportPopup();
+  }
+
+  clearData() {
+    this.setState({ error: { isPresent: false, description: "" }, success: { status: false, report: null } });
   }
   
   targetTypeName(id) {
