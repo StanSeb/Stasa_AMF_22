@@ -10,7 +10,6 @@ class ReportContextProvider extends Component {
     }
 
     showReportPopup = (reportInfo) => {
-        console.log(reportInfo);
         this.setState({ 
             targetType: reportInfo.targetType,
             targetId: reportInfo.targetId,
