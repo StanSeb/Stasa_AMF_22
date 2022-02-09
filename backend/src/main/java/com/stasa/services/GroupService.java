@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @CrossOrigin(origins = "http://localhost:3000")
@@ -74,4 +71,16 @@ public class GroupService {
 
         return null;
     }
+
+    public List<Group> getAllActiveGroups() {
+        List <Group> allGroups = groupRepo.findAll();
+        List <Group> activeGroups = new ArrayList<>();
+        for (Group filter: allGroups){
+            if(filter.getDeletionTimestamp() ==null){
+                activeGroups.add(filter);
+            }
+        }
+        return activeGroups;
+    }
+
 }

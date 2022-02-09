@@ -42,4 +42,11 @@ public class MemberController {
     public Member registerMember(@RequestBody Member member) {
         return memberService.register(member);
     }
+
+    //@GetMapping to get Entites member ,MemberRole and group based on deletionTimestamp
+    //Alltså groups with deletion_timestamp ==null
+    @GetMapping("getActiveDataByUserId/{userId}")
+    public List <Member> getActiveData(@PathVariable long userId){
+        return memberService.getActiveData(userId);
+    }
 }

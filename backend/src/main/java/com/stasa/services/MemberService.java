@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -72,4 +73,16 @@ public class MemberService {
         }
         return response;
     }
+
+    public List<Member> getActiveData(long userId) {
+        List<Member> allMember =memberRepo.getByUserId(userId);
+        List <Member> activeMember = new ArrayList<>();
+        for (Member filter: allMember){
+            if(filter.getGroup().getDeletionTimestamp() == null){
+                activeMember.add(filter);
+            }
+        }
+        return activeMember;
+    }
+
 }

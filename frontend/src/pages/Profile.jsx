@@ -42,12 +42,20 @@ class Profile extends React.Component {
 
 	async componentDidMount() {
 		axios
-			.get("/rest/member/getMembersByUserId/" + this.state.userId)
+		.get("/rest/member/getActiveDataByUserId/" + this.state.userId)
 			.then((response) => response.data)
 			.then((data) => {
 				this.setState({ groups: data });
 			});
 	}
+
+	deleteGroup(id){
+        let groupId = id;
+        axios
+        .put("/rest/groups/deleteGroup/" + id)
+        console.log("Group with id",id ,"has been deleted")
+
+    }
 
 
 	checkIfAdmin(id) {
@@ -76,6 +84,7 @@ class Profile extends React.Component {
 						<li> Title: <span>{group.group.title}</span> <br />
 							Description: <span>{group.group.description}</span> <br />
 							Role: <span>{group.memberRole.title}</span> <br />
+							<button onClick={() => this.deleteGroup(group.group.id)}>Radera grupp</button>
 						</li>
 					</ul>
 				))}</div>

@@ -52,6 +52,16 @@ public class GroupController {
     public Group deleteGroup(@PathVariable long id){
         return groupService.deleteGroup(id);
     }
+
+
+    //@GetMapping to get all activeGroups
+    @GetMapping("getAllActiveGroups")
+    public List <Group> getAllActiveGroups(){
+        return groupService.getAllActiveGroups();
+    }
+
+
+
 }
 
 
