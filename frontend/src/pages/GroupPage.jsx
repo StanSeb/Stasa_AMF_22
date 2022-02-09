@@ -10,97 +10,117 @@ class GroupPage extends React.Component {
 		super(props);
 		this.state = {
 			member: {
-				user: {id:""},
-				memberRole:{id:""},
-				group:{id:""},
-				},       
-			group: {name:"",info:""},
+				user: { id: "" },
+				memberRole: { id: "" },
+				group: { id: "" },
+			},
+			group: { name: "", info: "" },
 			loggedInUser: this.props.loggedInUser,
 			threads: {},
 			users: {},
 			clickedThread: 0,
-			toggleNewThread:false,
+			toggleNewThread: false,
 		};
 		this.handleThreadClick = this.handleThreadClick.bind(this);
-		this.toggleNewThread= this.toggleNewThread.bind(this);
-		this.fetchThreads=this.fetchThreads.bind(this);
+		this.toggleNewThread = this.toggleNewThread.bind(this);
+		this.fetchThreads = this.fetchThreads.bind(this);
 	}
 
-	createMember(){
-		let member= {
-			user: {id: this.state.loggedInUser.id},
-			memberRole:{id: 4}, // id av "user" i Tabellen member_roles i Databasen.
-			group:{id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1)},
+	createMember() {
+		let member = {
+			user: { id: this.state.loggedInUser.id },
+			memberRole: { id: 4 }, // id av "user" i Tabellen member_roles i Databasen.
+			group: {
+				id: window.location.href.substring(
+					window.location.href.lastIndexOf("/") + 1
+				),
+			},
 		};
-	
+
 		this.setState({ member }, () => {
-			axios
-				.post("/rest/member/join", this.state.member)
-				.then((response) =>{
+			axios.post("/rest/member/join", this.state.member).then((response) => {
 				alert(response.data);
 				window.location.reload();
-			})
+			});
 		});
 	}
 
-	
+	LoopUntilPropped() {
+		setTimeout(() => {
+			console.log("Waiting")
+			if (this.props.loggedInUser.id === '')
+				this.LoopUntilPropped()
+			else {
+				this.SetupStates()
+			}
+		}, 200);
+	}
 
-	componentDidMount() {
-		let groupId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
-		this.setState((prevState)=>{
-		let group=prevState.group
-		group.id=window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
-		return{group}
-	
-		})
+	SetupStates() {
+		let groupId = window.location.href.substring(
+			window.location.href.lastIndexOf("/") + 1
+		);
+
+		this.setState((prevState) => {
+			let group = prevState.group;
+			group.id = window.location.href.substring(
+				window.location.href.lastIndexOf("/") + 1
+			);
+			return { group };
+		});
 
 		let privilege;
-		let loggedInUser;
-		 axios
-		 	.get("/rest/groups/getUserRole/" + groupId + "/" +this.state.loggedInUser.id)
-		 	.then((response) => {
-		 		privilege = response.data;
+		axios
+			.get(
+				"/rest/groups/getUserRole/" + groupId + "/" + this.props.loggedInUser.id
+			)
+			.then((response) => {
+				privilege = response.data;
 
-				this.setState({
-					loggedInUser: {
-						username: this.state.loggedInUser.username,
-						id: this.state.loggedInUser.id,
-						privilege: privilege,
-					},
-				}, () => {console.log(this.state.loggedInUser)})
-		 	})
+				this.setState(
+					{
+						loggedInUser: {
+							username: this.state.loggedInUser.username,
+							id: this.state.loggedInUser.id,
+							privilege: privilege,
+						},
+					}
+				);
+			});
 
-		axios.get("/rest/groups/getGroupBy/"+groupId)
-		.then((response)=> {
-			this.setState({group:response.data})
-		})
+		axios.get("/rest/groups/getGroupBy/" + groupId).then((response) => {
+			this.setState({ group: response.data });
+		});
+
 		let users;
-		axios.get("/rest/member/memberByGroupId/" + groupId) 
+		axios
+			.get("/rest/member/memberByGroupId/" + groupId)
 			.then((response) => response.data)
-			.then((data) =>{
+			.then((data) => {
 				users = data;
-		 		this.setState({users});
-	 		}
-		);	
+				this.setState({ users });
+			});
 
 		let threads;
 		axios
-		    .get("/rest/threads/byGroup/"+groupId)
+			.get("/rest/threads/byGroup/" + groupId)
 			.then((response) => response.data)
 			.then((data) => {
 				threads = data;
 				this.setState({ threads });
-			}
-		);		
+			});
 	}
-	toggleNewThread(value){
-		this.setState({toggleNewThread:value})
-		if(value){
 
-			document.querySelector('html').style.overflow='hidden';
-		}else {
+	componentDidMount() {
+		this.LoopUntilPropped()
+	}
 
-			document.querySelector('html').style.overflow='auto';
+	toggleNewThread(value) {
+		this.setState({ toggleNewThread: value });
+		if (value) {
+			document.querySelector("html").style.overflow = "hidden";
+		} else {
+			document.querySelector("html").style.overflow = "auto";
 		}
 	}
 
@@ -111,23 +131,29 @@ class GroupPage extends React.Component {
 	fetchThreads() {
 		let threads;
 		axios
-		.get("/rest/threads/byGroup/"+this.state.group.id)
-		.then((response) => response.data)
-		.then((data) => {
-			threads = data;
-			this.setState({ threads });
-			console.log(threads)
-			}
-		);		
+			.get("/rest/threads/byGroup/" + this.state.group.id)
+			.then((response) => response.data)
+			.then((data) => {
+				threads = data;
+				this.setState({ threads });
+				console.log(threads);
+			});
 	}
 
 	render() {
 		return (
 			<>
-				<div className="group-page" >
-
-					<div className="group-overlay" style={{ display: this.state.toggleNewThread ? 'block' : 'none' }}>
-						<NewThread cancelPost={this.toggleNewThread} groupId={this.state.group.id} loggedInUser={this.state.loggedInUser} fetchThreads={this.fetchThreads}/>
+				<div className="group-page">
+					<div
+						className="group-overlay"
+						style={{ display: this.state.toggleNewThread ? "block" : "none" }}
+					>
+						<NewThread
+							cancelPost={this.toggleNewThread}
+							groupId={this.state.group.id}
+							loggedInUser={this.state.loggedInUser}
+							fetchThreads={this.fetchThreads}
+						/>
 					</div>
 					<>
 						<div className="group-posts">
@@ -140,7 +166,7 @@ class GroupPage extends React.Component {
 							)}
 						</div>
 					</>
-					<div className="group-side-panel" >
+					<div className="group-side-panel">
 						<div className="group-info">
 							<h3>{this.state.group.title}</h3>
 							<p>{this.state.group.description}</p>
@@ -148,9 +174,19 @@ class GroupPage extends React.Component {
 						</div>
 						<div className="group-members">
 							{RenderUsers(this.state.users, this.state.loggedInUser)}
-							
 						</div>
-						<button className="group-new-thread" style={{ display:typeof( this.state.loggedInUser.privilege) ==="undefined" ? 'none' : 'block' }}  onClick={()=> this.toggleNewThread(true)}>Skapa nytt inlägg</button>
+						<button
+							className="group-new-thread"
+							style={{
+								display:
+									typeof this.state.loggedInUser.privilege === "undefined"
+										? "none"
+										: "block",
+							}}
+							onClick={() => this.toggleNewThread(true)}
+						>
+							Skapa nytt inlägg
+						</button>
 					</div>
 				</div>
 			</>
@@ -158,18 +194,32 @@ class GroupPage extends React.Component {
 	}
 }
 
-
-
-
-function ShowThread(threads, handleThreadClick, clickedThread, loggedInUser, fetchThreads) {
+function ShowThread(
+	threads,
+	handleThreadClick,
+	clickedThread,
+	loggedInUser,
+	fetchThreads
+) {
 	if (clickedThread === 0) {
-		return <>{RenderThreads(threads, handleThreadClick, loggedInUser, fetchThreads)}</>;
+		return (
+			<>
+				{RenderThreads(threads, handleThreadClick, loggedInUser, fetchThreads)}
+			</>
+		);
 	} else {
-		return <ThreadPage threadId={clickedThread} loggedInUser={loggedInUser} showCommentButton={true} fetchThreads={fetchThreads}/>;
+		return (
+			<ThreadPage
+				threadId={clickedThread}
+				loggedInUser={loggedInUser}
+				showCommentButton={true}
+				fetchThreads={fetchThreads}
+			/>
+		);
 	}
 }
 
-function RenderThreads(props, handleThreadClick, loggedInUser,fetchThreads) {
+function RenderThreads(props, handleThreadClick, loggedInUser, fetchThreads) {
 	if (props !== null) {
 		let threads = Object.values(props);
 		let threadList = [];
