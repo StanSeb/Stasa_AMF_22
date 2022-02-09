@@ -25,7 +25,7 @@ function Login(props) {
                     "Content-Type": "application/x-www-form-urlencoded"
                 },
                 mode: 'no-cors',
-                body: credentials,
+                body: new URLSearchParams(credentials),
                 
             }).catch(err => console.error(err))
             whoAmI(props)

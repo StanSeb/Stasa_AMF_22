@@ -44,14 +44,14 @@ class GroupPage extends React.Component {
 
 		axios.get("/rest/groups/getGroupBy/"+groupId)
 		.then((response)=> {
-			console.log(response.data)
+			// console.log(response.data)
 			this.setState({group:response.data})
 		})
         axios.get("/rest/member/memberByGroupId/" + groupId) 
         .then((response) => response.data)
         .then((data) =>{
          this.setState({users: data});
-         console.log(this.state.users);
+         // console.log(this.state.users);
      });    
 
 		let users;
@@ -59,7 +59,7 @@ class GroupPage extends React.Component {
 		.then((response) => response.data)
 		.then((data) =>{
 		 this.setState({users: data});
-		 console.log(this.state.users);
+		 // console.log(this.state.users);
 	 });	
 
 		let threads;

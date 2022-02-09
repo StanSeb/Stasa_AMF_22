@@ -171,6 +171,7 @@ public class UserService {
 
     public @Nullable User whoAmI() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println("EMAIL: " + email);
         return userRepo.findByEmail(email);
     }
 

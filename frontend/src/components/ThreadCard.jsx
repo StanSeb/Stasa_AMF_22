@@ -1,22 +1,35 @@
 import axios from "axios";
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import App from "../App";
+import { ReportContext } from "../contexts/ReportContext";
+
+const reportType = 4; // thread report type (in database)
 
 class ThreadCard extends React.Component {
+	static contextType = ReportContext;
+
 	constructor(props) {
+		// props.thread innehåller all information om tråden.
 		super(props);
 		this.state = {
 			content: props.thread.content,
 			title: props.thread.title,
 			isEditable: false,
-			showCommentButton:this.props.showCommentButton
+			showCommentButton:this.props.showCommentButton,
 		};
 	}
+
 	handleClick(target) {
 		if(target.innerText==="Comment"){
 			this.props.toggleComment(true)
 		}
+		console.log(target);
 		console.log(target.innerText + " on " + this.props.thread.id);
+	}
+
+	handleReport() {
+		this.context.showReportPopup({ targetType: reportType, targetId: this.props.thread.id });
 	}
 
 	render() {
@@ -70,6 +83,12 @@ class ThreadCard extends React.Component {
 							className="thread-button"
 						>
 							Share
+						</a>
+						<a
+							onClick={(e) => this.handleReport()}
+							className="thread-button"
+						>
+							Report
 						</a>
 					</div>
 					<div className="thread-tags">

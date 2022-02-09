@@ -137,6 +137,7 @@ code {
 	display: block;
 	border: 1px solid gray;
 	background-color: lightgray;
+	cursor: pointer;
 }
 
 .thread-button:hover {
