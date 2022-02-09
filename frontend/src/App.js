@@ -5,8 +5,12 @@ import Axios from "axios";
 import Navbar from "./components/Navbar";
 import ReportPopup from "./components/ReportPopup";
 import ReportContextProvider from "./contexts/ReportContext";
+import AppContextProvider from "./contexts/AuthContext";
+import { AuthContext } from "./contexts/AuthContext";
 
 class App extends Component {
+	static contextType = AuthContext;
+
 	constructor() {
 		super();
 		this.state = {
@@ -42,20 +46,14 @@ class App extends Component {
 			});
 	}
 
-	static showAlert() {
-		alert("Hello there :P");
-	}
-
-	showReportPopup() {
-
-	}
-
 	render() {
 		return (
-			<ReportContextProvider>
-				<Navbar storeId={this.handleWhoAmI} userObj={this.state.user} />
-				<ReportPopup userObj={this.state.user} />
-			</ReportContextProvider>
+			<AppContextProvider>
+				<ReportContextProvider>
+					<Navbar storeId={this.handleWhoAmI} userObj={this.state.user} />
+					<ReportPopup userObj={this.state.user} />
+				</ReportContextProvider>
+			</AppContextProvider>
 		);
 	}
 }
