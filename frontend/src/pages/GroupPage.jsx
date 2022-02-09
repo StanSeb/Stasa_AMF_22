@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import ThreadCard from "../components/ThreadCard";
 import ThreadPage from "../pages/ThreadPage";
 import UserDropdown from "../components/UserDropdown";
+import NewThread from "../components/NewThread";
 
 class GroupPage extends React.Component {
 	constructor(props) {
@@ -18,14 +19,17 @@ class GroupPage extends React.Component {
 			threads: {},
 			users: {},
 			clickedThread: 0,
+			toggleNewThread:false,
 		};
 		this.handleThreadClick = this.handleThreadClick.bind(this);
+		this.toggleNewThread= this.toggleNewThread.bind(this);
+		this.fetchThreads=this.fetchThreads.bind(this);
 	}
 
 	createMember(){
 		let member= {
 			user: {id: this.state.loggedInUser.id},
-			memberRole:{id: 1}, // id av "user" i Tabellen mamber_roles i Databasen.
+			memberRole:{id: 4}, // id av "user" i Tabellen member_roles i Databasen.
 			group:{id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1)},
 		};
 	
@@ -39,21 +43,37 @@ class GroupPage extends React.Component {
 		});
 	}
 
+	
+
 	componentDidMount() {
 		let groupId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
+		this.setState((prevState)=>{
+		let group=prevState.group
+		group.id=window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
+		return{group}
+	
+		})
+
+		let privilege;
+		let loggedInUser;
+		 axios
+		 	.get("/rest/groups/getUserRole/" + groupId + "/" +this.state.loggedInUser.id)
+		 	.then((response) => {
+		 		privilege = response.data;
+
+				this.setState({
+					loggedInUser: {
+						username: this.state.loggedInUser.username,
+						id: this.state.loggedInUser.id,
+						privilege: privilege,
+					},
+				}, () => {console.log(this.state.loggedInUser)})
+		 	})
 
 		axios.get("/rest/groups/getGroupBy/"+groupId)
 		.then((response)=> {
-			// console.log(response.data)
 			this.setState({group:response.data})
 		})
-        axios.get("/rest/member/memberByGroupId/" + groupId) 
-        .then((response) => response.data)
-        .then((data) =>{
-         this.setState({users: data});
-         // console.log(this.state.users);
-     });    
-
 		let users;
 		axios.get("/rest/member/memberByGroupId/" + groupId) 
 		.then((response) => response.data)
@@ -61,60 +81,71 @@ class GroupPage extends React.Component {
 		 this.setState({users: data});
 		 // console.log(this.state.users);
 	 });	
+			.then((response) => response.data)
+			.then((data) =>{
+				users = data;
+		 		this.setState({users});
+	 		}
+		);	
 
 		let threads;
 		axios
-			.get("/rest/threads/byGroup/"+groupId)
+		    .get("/rest/threads/byGroup/"+groupId)
 			.then((response) => response.data)
 			.then((data) => {
 				threads = data;
 				this.setState({ threads });
-			});
+			}
+		);		
+	}
+	toggleNewThread(value){
+		this.setState({toggleNewThread:value})
+		if(value){
 
-		let privilege;
-		let loggedInUser;
-		// axios
-		// 	.get(
-		// 		"http://localhost:8080/rest/getUserRole/" +
-		// 			this.state.group.id +
-		// 			"/" +
-		// 			this.state.loggedInUser.id
-		// 	)
-		// 	.then((response) => {
-		// 		privilege = response.data;
-		// 	})
-		// 	.then(
-		// 		this.setState({
-		// 			loggedInUser: {
-		// 				username: this.state.loggedInUser.username,
-		// 				id: this.state.loggedInUser.id,
-		// 				privilege: privilege,
-		// 			},
-		// 		}, () => {console.log(this.state.loggedInUser)})
-		// 	);
+			document.querySelector('html').style.overflow='hidden';
+		}else {
+
+			document.querySelector('html').style.overflow='auto';
+		}
 	}
 
 	handleThreadClick(props) {
 		let clickedThread = props.id;
 		this.setState({ clickedThread });
 	}
+	fetchThreads() {
+		let threads;
+		axios
+		.get("/rest/threads/byGroup/"+this.state.group.id)
+		.then((response) => response.data)
+		.then((data) => {
+			threads = data;
+			this.setState({ threads });
+			console.log(threads)
+			}
+		);		
+	}
 
 	render() {
 		return (
 			<>
-				<div className="group-page">
+				<div className="group-page" >
+
+					<div className="group-overlay" style={{ display: this.state.toggleNewThread ? 'block' : 'none' }}>
+						<NewThread cancelPost={this.toggleNewThread} groupId={this.state.group.id} loggedInUser={this.state.loggedInUser} fetchThreads={this.fetchThreads}/>
+					</div>
 					<>
 						<div className="group-posts">
 							{ShowThread(
 								this.state.threads,
 								this.handleThreadClick,
-								this.state.clickedThread, // parent som behövs för handleThreadClick
-								// 			Frågar du är du tönt
-								this.props.loggedInUser
+								this.state.clickedThread,
+								this.props.loggedInUser,
+								this.fetchThreads
 							)}
 						</div>
 					</>
-					<div className="group-side-panel">
+					<div className="group-side-panel" >
 						<div className="group-info">
 							<h3>{this.state.group.title}</h3>
 							<p>{this.state.group.description}</p>
@@ -124,6 +155,7 @@ class GroupPage extends React.Component {
 							{RenderUsers(this.state.users, this.state.loggedInUser)}
 							
 						</div>
+						<button className="group-new-thread" style={{ display:typeof( this.state.loggedInUser.privilege) ==="undefined" ? 'none' : 'block' }}  onClick={()=> this.toggleNewThread(true)}>Skapa nytt inlägg</button>
 					</div>
 				</div>
 			</>
@@ -131,15 +163,18 @@ class GroupPage extends React.Component {
 	}
 }
 
-function ShowThread(threads, handleThreadClick, clickedThread, loggedInUser) {
+
+
+
+function ShowThread(threads, handleThreadClick, clickedThread, loggedInUser,fetchThreads) {
 	if (clickedThread === 0) {
-		return <>{RenderThreads(threads, handleThreadClick, loggedInUser)}</>;
+		return <>{RenderThreads(threads, handleThreadClick, loggedInUser,fetchThreads)}</>;
 	} else {
-		return <ThreadPage threadId={clickedThread} loggedInUser={loggedInUser} showCommentButton={true} />;
+		return <ThreadPage threadId={clickedThread} loggedInUser={loggedInUser} showCommentButton={true} fetchThreads={fetchThreads}/>;
 	}
 }
 
-function RenderThreads(props, handleThreadClick, loggedInUser) {
+function RenderThreads(props, handleThreadClick, loggedInUser,fetchThreads) {
 	if (props !== null) {
 		let threads = Object.values(props);
 		let threadList = [];
@@ -151,6 +186,7 @@ function RenderThreads(props, handleThreadClick, loggedInUser) {
 					handleThreadClick={(e) => handleThreadClick(e)}
 					loggedInUser={loggedInUser}
 					showCommentButton={false}
+					fetchThreads={fetchThreads}
 				/>
 			);
 		}

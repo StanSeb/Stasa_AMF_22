@@ -1,17 +1,62 @@
 import React from "react";
+import axios from 'axios'
 
 class UserDropdown extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			moderator: {
+				user: {id:""},
+				memberRole:{id:""},
+				group:{id:""},
+				}, 
 			user: this.props.user,
 			loggedInUser: this.props.loggedInUser,
 		};
+		this.updateMemberRole= this.updateMemberRole.bind(this);
+		this.deleteMember=this.deleteMember.bind(this);
 	}
 
 	handleClick(event) {
 		let buttonClicked = event.target.innerText;
 		console.log(buttonClicked + ", " + this.state.user.username);
+		console.log(this.state.user.id)
+		
+	}
+
+	updateMemberRole(){
+		let moderator;
+
+		if(this.props.user.privilege == "MEMBER"){
+			moderator= {
+				user: {id: this.props.user.id}, 
+				memberRole:{id: 3}, // id av "moderator" i Tabellen member_roles i Databasen.
+				group:{id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}, 
+			};
+		}else if(this.props.user.privilege == "GROUPMODERATOR"){
+			moderator= {
+				user: {id: this.props.user.id}, 
+				memberRole:{id: 4}, // id av "member" i Tabellen member_roles i Databasen.
+				group:{id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}, 
+			};
+		}
+		
+		this.setState({ moderator }, () => {
+			axios
+				.put("/rest/member/updateMemberRole", this.state.moderator)
+				.then((response) =>{
+				alert(response.data);
+				window.location.reload();
+			})
+		});
+	}
+
+	deleteMember(){
+		let id = this.state.user.id; //id = member id, alltså id från Member entitet
+		console.log("this.state.user.id" , this.state.user.id)
+		axios.delete("/rest/member/deleteMember/" + id)
+		.then(
+			console.log("member with username",this.state.user.username , "deleted"))
 	}
 
 	render() {
@@ -20,7 +65,7 @@ class UserDropdown extends React.Component {
 				<div className="user-drop">
 					{CheckUser(this.state.user)}
 					<div className="user-drop-content">
-						{CheckYourPrivilege(this.state.user, this.state.loggedInUser)}
+						{CheckYourPrivilege(this.state.user, this.state.loggedInUser, this.updateMemberRole,this.deleteMember)}
 					</div>
 				</div>
 			</>
@@ -30,13 +75,13 @@ class UserDropdown extends React.Component {
 
 function CheckUser(props) {
 	let button;
-	if (props.privilege === "admin") {
+	if (props.privilege === "GROUPADMIN") {
 		button = (
 			<button className="user-drop-button" id="group-admin">
 				{props.username}
 			</button>
 		);
-	} else if (props.privilege === "moderator") {
+	} else if (props.privilege === "GROUPMODERATOR") {
 		button = (
 			<button className="user-drop-button" id="group-moderator">
 				{props.username}
@@ -48,100 +93,96 @@ function CheckUser(props) {
 	return button;
 }
 
-function CheckYourPrivilege(user, loggedInUser) {
+function CheckYourPrivilege(user, loggedInUser, updateMemberRole,handleClick,deleteMember) {
 	let dropdownOptions;
 	if (
-		loggedInUser.privilege === "admin" &&
-		user.privilege !== "moderator" &&
-		user.privilege !== "admin"
+		loggedInUser.privilege === "GROUPADMIN" &&
+		user.privilege !== "GROUPMODERATOR" &&
+		user.privilege !== "GROUPADMIN"
 	) {
 		dropdownOptions = (
 			<>
-				<a
+				<button
 					href={"/user/profile/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					onClick={(e) => handleClick(e)}
 				>
 					Go to profile
-				</a>
-				<a
-					href={"/group/makeModerator/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+				</button>
+				<button
+					onClick={() => updateMemberRole()}
 				>
-					Make Moderator
-				</a>
-				<a
-					href={"/group/remove/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					Make moderator
+				</button>
+				<button
+					onClick={() => deleteMember()}
 				>
 					Remove from group
-				</a>
-				<a href={"/group/ban/" + user.id} onClick={(e) => this.handleClick(e)}>
+				</button>
+				<button href={"/group/ban/" + user.id} onClick={(e) => handleClick(e)}>
 					Blacklist
-				</a>
+				</button>
 			</>
 		);
 	} else if (
-		loggedInUser.privilege === "admin" &&
-		user.privilege === "moderator"
+		loggedInUser.privilege === "GROUPADMIN" &&
+		user.privilege === "GROUPMODERATOR"
 	) {
 		dropdownOptions = (
 			<>
-				<a
+				<button
 					href={"/user/profile/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					onClick={(e) => handleClick(e)}
 				>
 					Go to profile
-				</a>
-				<a
-					href={"/group/removeModerator/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+				</button>
+				<button
+					onClick={() => updateMemberRole()}
 				>
 					Remove Moderator
-				</a>
-				<a
-					href={"/group/remove/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+				</button>
+				<button
+					onClick={() => deleteMember()}
 				>
 					Remove from group
-				</a>
-				<a href={"/group/ban/" + user.id} onClick={(e) => this.handleClick(e)}>
+				</button>
+				<button href={"/group/ban/" + user.id} onClick={(e) => handleClick(e)}>
 					Blacklist
-				</a>
+				</button>
 			</>
 		);
 	} else if (
-		loggedInUser.privilege === "moderator" &&
-		user.privilege !== "admin" &&
-		user.privilege !== "moderator"
+		loggedInUser.privilege === "GROUPMODERATOR" &&
+		user.privilege !== "GROUPADMIN" &&
+		user.privilege !== "GROUPMODERATOR"
 	) {
 		dropdownOptions = (
 			<>
-				<a
+				<button
 					href={"/user/profile/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					onClick={(e) => handleClick(e)}
 				>
 					Go to profile
-				</a>
-				<a
-					href={"/group/remove/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+				</button>
+				<button
+				
+					onClick={() => deleteMember()}
 				>
 					Remove from group
-				</a>
-				<a href={"/group/ban/" + user.id} onClick={(e) => this.handleClick(e)}>
+				</button>
+				<button href={"/group/ban/" + user.id} onClick={(e) => handleClick(e)}>
 					Blacklist
-				</a>
+				</button>
 			</>
 		);
 	} else {
 		dropdownOptions = (
 			<>
-				<a
+				<button
 					href={"/user/profile/" + user.id}
-					onClick={(e) => this.handleClick(e)}
+					onClick={(e) => handleClick(e)}
 				>
 					Go to profile
-				</a>
+				</button>
 			</>
 		);
 	}

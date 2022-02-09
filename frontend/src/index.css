@@ -122,22 +122,28 @@ code {
 }
 
 .thread-social-buttons {
-	width: 42.5%;
+	margin-left: .4em;
 	display: flex;
 	justify-content: space-evenly;
 	line-height: 2em;
+	text-align: center;
 	padding-top: 0.5em;
 }
 
 .thread-button {
 	height: 2em;
-	width: 6vw;
+	width: 8vw;
 	color: black;
 	text-decoration: none;
 	display: block;
 	border: 1px solid gray;
 	background-color: lightgray;
 	cursor: pointer;
+	margin: 2px;
+}
+
+.thread-social-buttons>button{
+	height: 2.55em;
 }
 
 .thread-button:hover {
@@ -155,11 +161,16 @@ code {
 
 /*#region new-thread*/
 .new-thread {
-	width: 40%;
+	width: 40vw;
+	height:30vh;
 	display: flex;
 	flex-wrap: wrap;
 	border: 1px solid gray;
 	z-index: 6;
+	background-color:rgb(240, 240, 240);
+	position:fixed;
+	left:30vw;
+	top:35vh;
 }
 
 .new-thread-title {
@@ -170,6 +181,7 @@ code {
 }
 
 .new-thread-content {
+	resize:none;
 	width: 98%;
 	height: 8em;
 	margin: 1%;
@@ -226,6 +238,14 @@ code {
 	height: 100%;
 	display: flex;
 }
+.group-overlay{
+	position: fixed;
+	width:100vw;
+	height:100vh;
+	background-color:rgba(0,0,0,0.2);
+	top:0;
+	z-index: 5;
+}
 
 .group-posts {
 	width: 68%;
@@ -258,6 +278,41 @@ code {
 	padding: .5em;
 }
 
+.comment-card:first-of-type{
+	margin-top: 0;
+}
+
+.comment-card:last-of-type{
+	margin-bottom:1em;
+}
+
+.group-newComment{
+	width:68%;
+	margin:0;
+}
+
+.comment-newComment{
+	background-color: rgb(240, 240, 240);
+	display: flex;
+	align-items: center;
+	margin: 1em;
+	margin-top: 0;
+	border:1px solid gray;
+	padding:0.5em;
+	height: 4em;
+}
+.comment-newComment>textarea{
+	resize: none;
+	width:68%;
+	height:100%;
+	box-sizing: border-box;
+}
+.comment-newComment>button{
+	height:100%;
+}
+.comment-newComment>*:not(:nth-child(1)){
+	margin-left: 1em;
+}
 .group-posts-and-comments {
 	display: flex;
 	flex-direction: column;
