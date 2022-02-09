@@ -161,9 +161,9 @@ class GroupPage extends React.Component {
 
 
 
-function ShowThread(threads, handleThreadClick, clickedThread, loggedInUser,fetchThreads) {
+function ShowThread(threads, handleThreadClick, clickedThread, loggedInUser, fetchThreads) {
 	if (clickedThread === 0) {
-		return <>{RenderThreads(threads, handleThreadClick, loggedInUser,fetchThreads)}</>;
+		return <>{RenderThreads(threads, handleThreadClick, loggedInUser, fetchThreads)}</>;
 	} else {
 		return <ThreadPage threadId={clickedThread} loggedInUser={loggedInUser} showCommentButton={true} fetchThreads={fetchThreads}/>;
 	}

@@ -170,6 +170,7 @@ code {
 	position:fixed;
 	left:30vw;
 	top:35vh;
+	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .new-thread-title {
@@ -205,19 +206,22 @@ code {
 	z-index: 1;
 	background-color: #f1f1f1;
 	width: 8vw;
+	box-shadow: 1px 1px 4px rgba(0,0,0,.3);
 }
 
-.user-drop-content a {
+.user-drop-content > button {
+	border: none;
+	width: 100%;
 	color: black;
 	text-decoration: none;
 	display: block;
 }
 
-.user-drop-content a:nth-last-of-type(2n + 1) {
+.user-drop-content button:nth-last-of-type(2n + 1) {
 	background-color: rgb(220, 220, 220);
 }
 
-.user-drop-content a:hover {
+.user-drop-content button:hover {
 	background-color: rgb(200, 200, 200);
 }
 

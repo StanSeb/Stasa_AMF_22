@@ -75,13 +75,13 @@ class UserDropdown extends React.Component {
 
 function CheckUser(props) {
 	let button;
-	if (props.privilege === "GROUPADMIN") {
+	if (props.role === "GROUPADMIN") {
 		button = (
 			<button className="user-drop-button" id="group-admin">
 				{props.username}
 			</button>
 		);
-	} else if (props.privilege === "GROUPMODERATOR") {
+	} else if (props.role === "MODERATOR") {
 		button = (
 			<button className="user-drop-button" id="group-moderator">
 				{props.username}
@@ -96,9 +96,9 @@ function CheckUser(props) {
 function CheckYourPrivilege(user, loggedInUser, updateMemberRole,handleClick,deleteMember) {
 	let dropdownOptions;
 	if (
+		loggedInUser.privilege !== "ADMIN" &&
 		loggedInUser.privilege === "GROUPADMIN" &&
-		user.privilege !== "GROUPMODERATOR" &&
-		user.privilege !== "GROUPADMIN"
+		loggedInUser.privilege !== "MODERATOR"
 	) {
 		dropdownOptions = (
 			<>
@@ -125,7 +125,7 @@ function CheckYourPrivilege(user, loggedInUser, updateMemberRole,handleClick,del
 		);
 	} else if (
 		loggedInUser.privilege === "GROUPADMIN" &&
-		user.privilege === "GROUPMODERATOR"
+		loggedInUser.privilege !== "MODERATOR"
 	) {
 		dropdownOptions = (
 			<>
@@ -151,9 +151,9 @@ function CheckYourPrivilege(user, loggedInUser, updateMemberRole,handleClick,del
 			</>
 		);
 	} else if (
-		loggedInUser.privilege === "GROUPMODERATOR" &&
-		user.privilege !== "GROUPADMIN" &&
-		user.privilege !== "GROUPMODERATOR"
+		loggedInUser.privilege === "MODERATOR" &&
+		loggedInUser.privilege !== "GROUPADMIN" &&
+		loggedInUser.privilege !== "ADMIN"
 	) {
 		dropdownOptions = (
 			<>

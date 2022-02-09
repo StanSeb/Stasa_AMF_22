@@ -51,7 +51,7 @@ class ThreadPage extends React.Component {
 			<>
 				<div className="group-posts-and-comments">
 					<div className="group-posts">
-						{RenderThreads(this.state.thread, this.toggleComment)}
+						{RenderThreads(this.state.thread, this.toggleComment, this.props.loggedInUser, this.props.fetchThreads)}
 					</div>
 					<div className="group-newComment" style={{ display: this.state.showNewComment ? 'block' : 'none' }}><NewComment fetchComments={this.fetchComments} toggleComment={this.toggleComment} threadId={this.props.threadId} userId={this.props.loggedInUser.id} /></div>
 					<div className="group-comments">
@@ -63,9 +63,9 @@ class ThreadPage extends React.Component {
 	}
 }
 
-function RenderThreads(props, toggleComment) {
+function RenderThreads(props, toggleComment, loggedInUser, fetchThreads) {
 	if (Object.keys(props).length > 0) {
-		return <ThreadCard thread={props} loggedInUser={props} showCommentButton={props} toggleComment={toggleComment} />;
+		return <ThreadCard thread={props} loggedInUser={loggedInUser} fetchThreads={fetchThreads}showCommentButton={props} toggleComment={toggleComment} />;
 	} else return null;
 }
 
