@@ -23,16 +23,15 @@ class UserDropdown extends React.Component {
 
 	updateMemberRole(){
 		let moderator;
-
 		if(this.props.user.privilege == "MEMBER"){
 			moderator= {
-				user: {id: this.props.user.id}, 
+				user: {id: this.state.user.userId}, 
 				memberRole:{id: 3}, // id av "moderator" i Tabellen member_roles i Databasen.
 				group:{id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}, 
 			};
 		}else if(this.props.user.privilege == "GROUPMODERATOR"){
 			moderator= {
-				user: {id: this.props.user.id}, 
+				user: {id: this.state.user.userId}, 
 				memberRole:{id: 4}, // id av "member" i Tabellen member_roles i Databasen.
 				group:{id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}, 
 			};

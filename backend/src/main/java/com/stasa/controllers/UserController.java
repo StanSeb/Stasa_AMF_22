@@ -9,6 +9,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -52,6 +53,9 @@ public class UserController {
 
     @GetMapping("/rest/userToBlacklist/{userId}/{groupId}")
     public String sendToBlacklist(@PathVariable long userId, @PathVariable long groupId){ ;return userService.sendToBlacklist(userId, groupId); }
+
+    @GetMapping("/rest/balcklistByGroupId/{groupId}")
+    public List<Map> getBlacklistMembers(@PathVariable long groupId) { return userService.getBlacklistMembers(groupId); }
 
     @GetMapping("/rest/username/{username}")
     public String getByUserName(@PathVariable String username) { return userService.findByUserName(username); }

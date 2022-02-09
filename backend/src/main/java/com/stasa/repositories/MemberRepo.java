@@ -15,7 +15,7 @@ public interface MemberRepo extends JpaRepository<Member, Integer> {
     List<Member> getByUserId(long userId);
 
     //Hämtar alla member från en group UTOM members som finns i Blacklist
-    @Query(value= "SELECT m.user_id AS userId, u.username, m.group_id AS groupId, g.title, r.title AS role \n" +
+    @Query(value= "SELECT m.user_id AS userId, u.username, m.group_id AS groupId, g.title, r.title AS privilege \n" +
             "FROM members m\n" +
             "INNER JOIN users u on u.id = m.user_id\n" +
             "INNER JOIN `groups` g on g.id = m.group_id\n" +

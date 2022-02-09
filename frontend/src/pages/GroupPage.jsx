@@ -17,6 +17,7 @@ class GroupPage extends React.Component {
 			loggedInUser: this.props.loggedInUser,
 			threads: {},
 			users: {},
+			usersBlacklist: [],
 			clickedThread: 0,
 		};
 		this.handleThreadClick = this.handleThreadClick.bind(this);
@@ -45,7 +46,7 @@ class GroupPage extends React.Component {
 		let privilege;
 		let loggedInUser;
 		 axios
-		 	.get("/rest/groups/getUserRole/" + groupId + "/" +this.state.loggedInUser.id)
+		 	.get("/rest/groups/getUserRole/" + groupId + "/" + this.state.loggedInUser.id)
 		 	.then((response) => {
 		 		privilege = response.data;
 
@@ -75,6 +76,15 @@ class GroupPage extends React.Component {
 			.then((data) =>{
 				users = data;
 		 		this.setState({users});
+	 		}
+		);	
+
+		let usersBlacklist;
+		axios.get("/rest/balcklistByGroupId/" + groupId) 
+			.then((response) => response.data)
+			.then((data) =>{
+				usersBlacklist = data;
+		 		this.setState({usersBlacklist});
 	 		}
 		);	
 
@@ -116,8 +126,21 @@ class GroupPage extends React.Component {
 						</div>
 						<div className="group-members">
 							{RenderUsers(this.state.users, this.state.loggedInUser)}
-							
 						</div>
+						<div className="group-members blacklist">
+                            <h6 className="blocked-users">Blockerade användare i den här gruppen:</h6> 
+                         {/*     {RenderUsersBlacklist(this.state.usersBlacklist, this.state.loggedInUser)}  */}
+
+						 <div className="blacklist-list">{this.state.usersBlacklist.map((blacklist) => (
+							<ul className="blacklist-ul" key={blacklist.id}>
+								<li className="blacklist-members"> 
+									<button>Aktivera</button>
+									<span className="blacklist-user">{blacklist.username}</span> -
+									<span className="blacklist-date">( {blacklist.to_date})</span> 
+								</li>
+							</ul>
+						))}</div>
+                        </div>
 					</div>
 				</div>
 			</>
@@ -162,5 +185,18 @@ function RenderUsers(props, loggedInUser) {
 	}
 	return usersList;
 }
+
+/*
+function RenderUsersBlacklist(props, loggedInUser) {
+	let usersBlacklist = Object.values(props);
+	let usersList = [];
+	for (let i = 0; i < usersBlacklist.length; i++) {
+		usersList.push(
+			<UserDropdown user={usersBlacklist[i]} key={i} loggedInUser={loggedInUser} />
+		);
+	}
+	return usersList;
+}
+*/
 
 export default GroupPage;

@@ -202,4 +202,8 @@ public class UserService {
        }
        return response;
     }
+
+    public List<Map> getBlacklistMembers(long groupId) {
+        return userRepo.getBlacklistMembers(groupId);
+    }
 }

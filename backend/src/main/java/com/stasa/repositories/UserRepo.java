@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface UserRepo extends JpaRepository<User, Long> {
@@ -38,4 +39,7 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
     @Query(value = "DELETE FROM members WHERE user_id = ?1 AND group_id = ?2", nativeQuery = true)
     void userBlockedFromGroup(long userId, long groupId);
+
+    @Query(value = "SELECT b.user_id AS id, b.to_date, u.username FROM blacklist b INNER JOIN users u ON b.user_id = u.id WHERE b.group_id = ?1", nativeQuery = true)
+    List<Map> getBlacklistMembers(long groupId);
 }
