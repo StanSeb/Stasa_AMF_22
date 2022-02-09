@@ -111,11 +111,12 @@ class GroupPage extends React.Component {
 	fetchThreads() {
 		let threads;
 		axios
-		    .get("/rest/threads/byGroup/"+this.state.group.id)
-			.then((response) => response.data)
-			.then((data) => {
-				threads = data;
-				this.setState({ threads });
+		.get("/rest/threads/byGroup/"+this.state.group.id)
+		.then((response) => response.data)
+		.then((data) => {
+			threads = data;
+			this.setState({ threads });
+			console.log(threads)
 			}
 		);		
 	}
@@ -134,7 +135,8 @@ class GroupPage extends React.Component {
 								this.state.threads,
 								this.handleThreadClick,
 								this.state.clickedThread,
-								this.props.loggedInUser
+								this.props.loggedInUser,
+								this.fetchThreads
 							)}
 						</div>
 					</>
@@ -159,15 +161,15 @@ class GroupPage extends React.Component {
 
 
 
-function ShowThread(threads, handleThreadClick, clickedThread, loggedInUser) {
+function ShowThread(threads, handleThreadClick, clickedThread, loggedInUser,fetchThreads) {
 	if (clickedThread === 0) {
-		return <>{RenderThreads(threads, handleThreadClick, loggedInUser)}</>;
+		return <>{RenderThreads(threads, handleThreadClick, loggedInUser,fetchThreads)}</>;
 	} else {
-		return <ThreadPage threadId={clickedThread} loggedInUser={loggedInUser} showCommentButton={true} />;
+		return <ThreadPage threadId={clickedThread} loggedInUser={loggedInUser} showCommentButton={true} fetchThreads={fetchThreads}/>;
 	}
 }
 
-function RenderThreads(props, handleThreadClick, loggedInUser) {
+function RenderThreads(props, handleThreadClick, loggedInUser,fetchThreads) {
 	if (props !== null) {
 		let threads = Object.values(props);
 		let threadList = [];
@@ -179,6 +181,7 @@ function RenderThreads(props, handleThreadClick, loggedInUser) {
 					handleThreadClick={(e) => handleThreadClick(e)}
 					loggedInUser={loggedInUser}
 					showCommentButton={false}
+					fetchThreads={fetchThreads}
 				/>
 			);
 		}

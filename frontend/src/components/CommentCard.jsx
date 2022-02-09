@@ -41,7 +41,7 @@ class CommentCard extends React.Component {
 					this.props.loggedInUser,
 					this.props.fetchComments
 				)}
-				{EditButton(this, this.state.comment, this.props.loggedInUser)}
+				{EditButton(this, this.state.comment, this.props.loggedInUser,this.props.fetchComments)}
 				<div className="comment-social-buttons"></div>
 			</div>
 		);
@@ -68,7 +68,7 @@ function returnComments(comment, isEditable,updateContent) {
 }
 
 
-function EditButton(parent, comment, loggedInUser) {
+function EditButton(parent, comment, loggedInUser,fetchComments) {
 	if (comment.creatorId === loggedInUser.id) {
 		if (parent.state.isEditable) {
 			function abortEdit() {
@@ -94,6 +94,7 @@ function EditButton(parent, comment, loggedInUser) {
 					.then((response) => {
 						console.log(response);
 						parent.setState({ isEditable: !parent.state.isEditable });
+						fetchComments()
 					})
 					.catch((error) => {
 						console.log(error);

@@ -27,7 +27,7 @@ class ThreadCard extends React.Component {
 			<div className="thread">
 				<div className="thread-header">
 					<div className="thread-thread-header-buttons">
-						{EditButton(this, this.props.thread, this.props.loggedInUser)}
+						{EditButton(this, this.props.thread, this.props.loggedInUser,this.props.fetchThreads)}
 						{DeleteButton(this.props.thread, this.props.loggedInUser)}
 					</div>
 					<div className="thread-title">
@@ -85,7 +85,7 @@ class ThreadCard extends React.Component {
 	}
 }
 
-function EditButton(parent, threadProp, loggedInUser) {
+function EditButton(parent, threadProp, loggedInUser,fetchThreads) {
 	if (threadProp.creatorId === loggedInUser.id) {
 		if (parent.state.isEditable) {
 			function abortEdit() {
@@ -105,7 +105,8 @@ function EditButton(parent, threadProp, loggedInUser) {
 				axios
 					.put("http://localhost:8080/rest/threads/editThread/", thread)
 					.then((response) => {
-						console.log(response);
+						
+						fetchThreads()
 						parent.setState({ isEditable: !parent.state.isEditable });
 					})
 					.catch((error) => {
