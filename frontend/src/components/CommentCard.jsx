@@ -39,7 +39,8 @@ class CommentCard extends React.Component {
 				{DeleteButton(
 					this.state.comment,
 					this.props.loggedInUser,
-					this.props.fetchComments
+					this.props.fetchComments,
+					this.props.isAdmin
 				)}
 				{EditButton(this, this.state.comment, this.props.loggedInUser,this.props.fetchComments)}
 				<div className="comment-social-buttons"></div>
@@ -126,11 +127,12 @@ function EditButton(parent, comment, loggedInUser,fetchComments) {
 	}
 }
 
-function DeleteButton(comment, loggedInUser, fetchComments) {
+function DeleteButton(comment, loggedInUser, fetchComments,isAdmin) {
 	if (
 		comment.creatorId === loggedInUser.id ||
 		loggedInUser.privilege === "admin" ||
-		loggedInUser.privilege === "moderator"
+		loggedInUser.privilege === "moderator"||
+		isAdmin
 	) {
 		function handleClick() {
 			if (window.confirm("Are you sure you want to delete this")) {

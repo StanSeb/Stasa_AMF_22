@@ -2,6 +2,7 @@ import React from "react";
 import axios from 'axios';
 import { ReportContext } from "../contexts/ReportContext";
 import { AuthContext } from "../contexts/AuthContext";
+import { Navigate } from "react-router-dom";
 
 const reportType = 1; // user report type (in database)
 
@@ -18,6 +19,7 @@ class UserDropdown extends React.Component {
 			},
 			user: this.props.user, // <- member, inte user
 			loggedInUser: this.props.loggedInUser,
+			clickedProfile:false,
 		};
 
 		this.updateMemberRole = this.updateMemberRole.bind(this);
@@ -29,7 +31,9 @@ class UserDropdown extends React.Component {
 	handleClick(event) {
 		let buttonClicked = event.target.innerText;
 		console.log(buttonClicked + ", " + this.state.user.username);
-		console.log(this.state.user.id)
+		console.log(this.state.user.user_id)
+		this.setState({clickedProfile:true})
+		
 	}
 
 	updateMemberRole() {
@@ -73,22 +77,28 @@ class UserDropdown extends React.Component {
 	}
 
 	render() {
-		return (
-			<ReportContext.Consumer>{(context => {
-				const { showReportPopup } = context;
-				const loggedInUser = this.context.loggedInUser;
-				return (
-					<div className="user-drop">
-						{CheckUser(this.state.user)}
+		if(this.state.clickedProfile){
 
-						<div className="user-drop-content">
-							{CheckYourrole(this.state.user, this.state.loggedInUser, this.updateMemberRole, this.deleteMember, this.handleReport, this.handleClick, showReportPopup, this.context.loggedInUser)}
-						</div>
-					</div>
-				);
-			})}
-			</ReportContext.Consumer>
+			return <Navigate to={"/profile/" + this.state.user.user_id}/>	
+		}else{
+
+			
+			return (
+				<ReportContext.Consumer>{(context => {
+					const { showReportPopup } = context;
+					const loggedInUser = this.context.loggedInUser;
+						return (
+							<div className="user-drop">
+								{CheckUser(this.state.user)}
+								<div className="user-drop-content">
+									{CheckYourPrivilege(this.state.user, this.state.loggedInUser, this.updateMemberRole,this.deleteMember, this.handleReport, this.handleClick, showReportPopup, this.context.loggedInUser)}
+								</div>
+							</div>
+						);
+					})}
+				</ReportContext.Consumer>
 		);
+	}//test bracket
 	}
 }
 
@@ -116,9 +126,9 @@ function CheckUser(props) {
 function CheckYourrole(user, loggedInUser /*<- detta är en member, inte en user.*/, updateMemberRole, deleteMember, handleReport, handleClick, showReportPopup, realLoggedInUser) {
 	let dropdownOptions;
 	if (
-		loggedInUser.role === "GROUPADMIN" &&
-		user.role !== "GROUPMODERATOR" &&
-		user.role !== "GROUPADMIN"
+		loggedInUser.privilege === "ADMIN" &&
+		loggedInUser.privilege !== "MODERATOR" &&
+		loggedInUser.privilege !== "GROUPADMIN"
 	) {
 		console.log(user.id)
 		dropdownOptions = (
@@ -146,8 +156,8 @@ function CheckYourrole(user, loggedInUser /*<- detta är en member, inte en user
 			</>
 		);
 	} else if (
-		loggedInUser.role === "GROUPADMIN" &&
-		user.role === "GROUPMODERATOR"
+		loggedInUser.privilege === "GROUPADMIN" &&
+		loggedInUser.privilege !== "MODERATOR"
 	) {
 		dropdownOptions = (
 			<>
@@ -174,9 +184,7 @@ function CheckYourrole(user, loggedInUser /*<- detta är en member, inte en user
 			</>
 		);
 	} else if (
-		loggedInUser.role === "GROUPMODERATOR" &&
-		user.role !== "GROUPADMIN" &&
-		user.role !== "GROUPMODERATOR"
+		loggedInUser.privilege === "MODERATOR"
 	) {
 		dropdownOptions = (
 			<>

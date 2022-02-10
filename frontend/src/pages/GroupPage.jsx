@@ -5,6 +5,7 @@ import ThreadPage from "../pages/ThreadPage";
 import UserDropdown from "../components/UserDropdown";
 import InviteMemberPopup from "../components/InviteMemberPopup";
 import NewThread from "../components/NewThread";
+import {Navigate} from "react-router-dom"
 
 class GroupPage extends React.Component {
 	constructor(props) {
@@ -18,11 +19,23 @@ class GroupPage extends React.Component {
 			clickedThread: 0,
 			invitePopup: false,
 			toggleNewThread: false,
+			isAdmin: false,
+			reload:false,
 		};
 		this.handleThreadClick = this.handleThreadClick.bind(this);
 		this.toggleNewThread = this.toggleNewThread.bind(this);
 		this.fetchThreads = this.fetchThreads.bind(this);
+		this.reloadPage= this.reloadPage.bind(this);
 		this.toggleInviteMember = this.toggleInviteMember.bind(this);
+	}
+
+	checkIfAdmin() {
+		if (typeof (this.props.loggedInUser.id) != "undefined") {
+			axios.get("/rest/isAdmin/" + this.props.loggedInUser.id)
+				.then(response => {
+					this.setState({ isAdmin: response.data });
+				})
+		}
 	}
 
 	createMember() {
@@ -47,8 +60,9 @@ class GroupPage extends React.Component {
 	toggleInviteMember() {
 		this.setState({ invitePopup: !this.state.invitePopup });
 	}
+	componentDidMount() {
+		this.checkIfAdmin()
 
-	async componentDidMount() {
 		let groupId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
 
 		//Kör dessa först för att få rätt memberId när en bjuder in till gruppen
@@ -101,12 +115,17 @@ class GroupPage extends React.Component {
 				.then((data) => {
 					threads = data;
 					this.setState({ threads });
-					console.log(threads);
 				});
 		}
 	}
+	reloadPage(){
+		this.setState({reload:true})
+	}
 
 	render() {
+		if(this.state.reload){
+			return <Navigate to="/home" />
+		}else{
 		return (
 			<div className="group-page">
 				
@@ -161,18 +180,40 @@ class GroupPage extends React.Component {
 			</div>)
 	}
 }
+}
+function RemoveGroupButton(isAdmin, role,group,reloadPage) {
+	console.log(group)
+	if (isAdmin || role === 'GROUPADMIN') {
+		function removeGroup() {
+			
+			if (window.confirm('Är du säker på att du vill ta bort denna gruppen: ' + group.title))
+				axios
+					.put("/rest/groups/deleteGroup/" +group.id)
+					.then((response) => {
+						alert("Grupp med namnet: " + group.title + " har tagits bort")
+						reloadPage()
+					})
+		}
+		return <button className="group-delete" onClick={removeGroup}>Ta bort grupp</button>
+	}
+	else {
+		return <>testar else</>
+	}
+
+}
 
 function ShowThread(
 	threads,
 	handleThreadClick,
 	clickedThread,
 	loggedInUser,
-	fetchThreads
+	fetchThreads,
+	isAdmin
 ) {
 	if (clickedThread === 0) {
 		return (
 			<>
-				{RenderThreads(threads, handleThreadClick, loggedInUser, fetchThreads)}
+				{RenderThreads(threads, handleThreadClick, loggedInUser, fetchThreads, isAdmin)}
 			</>
 		);
 	} else {
@@ -182,12 +223,13 @@ function ShowThread(
 				loggedInUser={loggedInUser}
 				showCommentButton={true}
 				fetchThreads={fetchThreads}
+				isAdmin={isAdmin}
 			/>
 		);
 	}
 }
 
-function RenderThreads(props, handleThreadClick, loggedInUser, fetchThreads) {
+function RenderThreads(props, handleThreadClick, loggedInUser, fetchThreads, isAdmin) {
 	if (props !== null) {
 		let threads = Object.values(props);
 		let threadList = [];
@@ -200,6 +242,7 @@ function RenderThreads(props, handleThreadClick, loggedInUser, fetchThreads) {
 					loggedInUser={loggedInUser}
 					showCommentButton={false}
 					fetchThreads={fetchThreads}
+					isAdmin={isAdmin}
 				/>
 			);
 		}
