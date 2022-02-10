@@ -1,7 +1,6 @@
 package com.stasa.services;
 
 import com.stasa.entities.Member;
-import com.stasa.entities.User;
 import com.stasa.repositories.MemberRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,6 +49,10 @@ public class MemberService {
 
     public Member register(Member member) {
         return memberRepo.save(member);
+    }
+
+    public ArrayList<Map> getMemberIdByUserId(Long userId, Long groupId) {
+        return memberRepo.getMemberIdByUserId(userId, groupId);
     }
 
     //Update från user till moderator och vice-versa

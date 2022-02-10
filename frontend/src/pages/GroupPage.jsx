@@ -1,8 +1,9 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React from "react";
 import ThreadCard from "../components/ThreadCard";
 import ThreadPage from "../pages/ThreadPage";
 import UserDropdown from "../components/UserDropdown";
+import InviteMemberPopup from "../components/InviteMemberPopup";
 import NewThread from "../components/NewThread";
 
 class GroupPage extends React.Component {
@@ -16,14 +17,17 @@ class GroupPage extends React.Component {
 			},
 			group: { name: "", info: "" },
 			loggedInUser: this.props.loggedInUser,
+			loggedInMember: "",
 			threads: {},
 			users: {},
 			clickedThread: 0,
+			invitePopup: false,
 			toggleNewThread: false,
 		};
 		this.handleThreadClick = this.handleThreadClick.bind(this);
 		this.toggleNewThread = this.toggleNewThread.bind(this);
 		this.fetchThreads = this.fetchThreads.bind(this);
+		this.toggleInviteMember = this.toggleInviteMember.bind(this);
 	}
 
 	createMember() {
@@ -56,16 +60,28 @@ class GroupPage extends React.Component {
 			);
 			return { group };
 		});
+	toggleInviteMember() {
+		this.setState({ invitePopup: !this.state.invitePopup });
+	}
 
-		let privilege;
-		let loggedInUser;
-		axios
-			.get(
-				"/rest/groups/getUserRole/" + groupId + "/" + this.state.loggedInUser.id
-			)
-			.then((response) => {
-				privilege = response.data;
+	async componentDidMount() {
+		let groupId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
 
+		//Kör dessa först för att få rätt memberId när en bjuder in till gruppen
+		const [firstResponse, secondResponse, thirdResponse] = await Promise.all([
+			axios.get("/rest/groups/getGroupBy/" + groupId),
+			axios.get("/rest/member/memberByGroupId/" + groupId),
+			axios.get("/rest/threads/byGroup/" + groupId)
+		]);
+
+		const fourthResponse = await axios.get("/rest/member/getMemberByIdUserId/" + this.state.loggedInUser + "/" + firstResponse.data.id);
+		
+		this.setState({
+			group: firstResponse.data,
+			users: secondResponse.data[0],
+			threads: thirdResponse.data,
+			loggedInMember: fourthResponse.data
+		})	
 				this.setState(
 					{
 						loggedInUser: {
@@ -185,9 +201,15 @@ class GroupPage extends React.Component {
 						>
 							Skapa nytt inlägg
 						</button>
+				{this.state.invitePopup ? <InviteMemberPopup toggleProps={this.toggleInviteMember} loggedInUser={this.state.loggedInUser} groupId={this.state.group.id} memberId={this.state.users.id} /> : null}
+						<button onClick={() => this.toggleInviteMember()}>Bjud in medlem</button>
+					</div>
+					<div className="group-members">
+						{RenderUsers(this.state.users, this.state.loggedInUser)}
+
 					</div>
 				</div>
-			</>
+			</div>
 		);
 	}
 }

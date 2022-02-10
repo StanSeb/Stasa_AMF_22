@@ -542,3 +542,41 @@ footer::before {
 }
 /*#endregion*/
 
+/*#region invitation-container*/
+.greyBackground{
+	background-color: rgba(128, 128, 128, 0.5);
+	height: 100vh;
+	width: 100vw;
+	position: absolute;
+	top:0;
+	z-index: 5;
+}
+
+.invitation-container{
+	position: fixed;
+    background-color:white;
+	border: 1px solid black;
+    top:25%;
+	left: 25%;
+    z-index: 5;
+}
+
+.btnRemovePopup{
+	background-color: white;
+	border: none;
+	font-size: 17px;
+	position: fixed;
+	text-align: left;
+	font-weight: bold;
+}
+
+.btnRemovePopup:hover{
+	cursor: pointer;
+}
+
+.sendInvite{
+	padding: 15px;
+}
+/*#endregion*/
+
+

@@ -8,10 +8,37 @@ class Profile extends React.Component {
 		this.state = {
 			userObj: props.userObj,
 			userId: props.userObj.id,
-			groups: []
+			groups: [],
+			invitations: [],
 		};
 	}
 
+	async accept(groupId, invitationId){
+
+		const memberObject = {
+			user: { id: this.state.userId, },
+			memberRole: { id: 4 },
+			group: { id: groupId },
+		}
+
+		await axios.post("/rest/member/join",  memberObject)
+
+		//DELETE: Ta bort invitation
+		await axios.delete("/rest/deleteInvitation/"+ invitationId)
+		.then((response) => console.log(response.data))
+
+		this.componentDidMount();
+	}
+
+	async deny(invitationId){
+		//DELETE: Ta bort invitation
+		await axios.delete("/rest/deleteInvitation/"+ invitationId)
+		.then((response) => console.log(response.data))
+
+		this.componentDidMount();
+	}
+
+	checkIfSignedId(id) {
 	 checkIfSignedId(id) {
 		
 		const profileID = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
@@ -31,7 +58,7 @@ class Profile extends React.Component {
 		return <></>;
 	}
 
-	logOut() { 
+	logOut() {
 		fetch("/logout", {
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded",
@@ -42,12 +69,19 @@ class Profile extends React.Component {
 	}
 
 	async componentDidMount() {
-		axios
-		.get("/rest/member/getActiveDataByUserId/" + this.state.userId)
+		await axios
+			.get("/rest/member/getMembersByUserId/" + this.state.userId)
 			.then((response) => response.data)
 			.then((data) => {
 				this.setState({ groups: data });
 			});
+		
+		await axios.get("/rest/invitations/" + this.state.userId)
+		.then((response) => {
+				this.setState({invitations: response.data})
+				console.log(response.data)
+			}
+		);
 	}
 
 	deleteGroup(id){
@@ -69,6 +103,17 @@ class Profile extends React.Component {
 	}
 
 	render() {
+
+		const data = this.state.invitations
+		const listItems = data.map((d) => <li key={d.id}>
+			<h4>Inbjuden av: {d.username} </h4>
+			<p>Grupp: {d.title} 
+		
+			<button onClick={() => this.accept(d.groupId, d.id)}>Godkänn</button>
+			<button onClick={() => this.deny(d.id)}>Neka</button>
+			</p>
+		</li>);
+
 		return (
 			<div className="profileContainer">
 				<div> Welcome to profile </div>
@@ -77,6 +122,11 @@ class Profile extends React.Component {
 				</Link>
 				{this.checkIfSignedId(this.state.userId)}
 				<button onClick={this.logOut}>Logga ut</button>
+
+				
+				<div>
+					{listItems}
+				</div>
 
 				{RenderGroups(this.state.groupsList, this.state.userObj.id)}
 
@@ -94,8 +144,6 @@ class Profile extends React.Component {
 	}
 }
 
-
-
 function RenderGroups(props, user_id) {
 	console.log(props)
 	if (typeof props !== "undefined") {
@@ -108,7 +156,7 @@ function RenderGroups(props, user_id) {
 			})
 		}
 		let groups = Object.values(props);
-		
+
 		let groupList = [];
 		for (let i = 0; i < groups.length; i++) {
 			groupList.push(
