@@ -53,7 +53,6 @@ public class GroupController {
         return groupService.deleteGroup(id);
     }
 
-
     //@GetMapping to get all activeGroups
     @GetMapping("getAllActiveGroups")
     public List <Group> getAllActiveGroups(){

@@ -4,6 +4,9 @@ import ThreadCard from "../components/ThreadCard";
 import ThreadPage from "../pages/ThreadPage";
 import UserDropdown from "../components/UserDropdown";
 import NewThread from "../components/NewThread";
+import ReportButton from "../components/ReportButton";
+
+const targetType = 3;
 
 class GroupPage extends React.Component {
 	constructor(props) {
@@ -154,7 +157,7 @@ class GroupPage extends React.Component {
 						/>
 					</div>
 					<>
-						<div className="group-posts">
+						<div className="group-posts">´
 							{ShowThread(
 								this.state.threads,
 								this.handleThreadClick,
@@ -185,6 +188,7 @@ class GroupPage extends React.Component {
 						>
 							Skapa nytt inlägg
 						</button>
+						<ReportButton customText="Report this group" targetType={ targetType } targetId={window.location.href.substring(window.location.href.lastIndexOf("/") + 1) } />
 					</div>
 				</div>
 			</>

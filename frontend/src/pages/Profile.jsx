@@ -1,6 +1,8 @@
 import axios from "axios";
 import React from "react";
 import { Link } from "react-router-dom";
+import '../components/ReportPopup.scss';
+import ReportList from '../components/ReportList';
 
 class Profile extends React.Component {
 	constructor(props) {
@@ -69,6 +71,7 @@ class Profile extends React.Component {
 	}
 
 	render() {
+
 		return (
 			<div className="profileContainer">
 				<div> Welcome to profile </div>
@@ -89,6 +92,8 @@ class Profile extends React.Component {
 						</li>
 					</ul>
 				))}</div>
+
+				<ReportList />
 			</div>
 		);
 	}

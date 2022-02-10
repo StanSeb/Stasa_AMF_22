@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { createContext, Component } from 'react';
 
 export const ReportContext = createContext();
@@ -6,7 +7,12 @@ class ReportContextProvider extends Component {
     state = { 
         targetType: null,
         targetId: null,
-        popupVisible: false
+        popupVisible: false,
+        reports: null,
+    }
+
+    componentDidMount() {
+        this.fetchReports();
     }
 
     showReportPopup = (reportInfo) => {
@@ -23,6 +29,16 @@ class ReportContextProvider extends Component {
             targetId: null,
             popupVisible: false
         });
+        // För att om det skapats en ny reports så behöver den hämtas
+        this.fetchReports();
+    }
+
+    fetchReports() {
+        axios.get("/reports")
+            .then((response) => {
+                this.setState({ reports: response.data});
+                console.log(this.state.reports);
+            } );
     }
     
     render() { 
@@ -30,7 +46,8 @@ class ReportContextProvider extends Component {
             <ReportContext.Provider value={{
                     ...this.state, 
                     showReportPopup: this.showReportPopup, 
-                    hideReportPopup: this.hideReportPopup
+                    hideReportPopup: this.hideReportPopup,
+                    fetchReports: this.fetchReports,
                 }}>
                 {this.props.children}
             </ReportContext.Provider>

@@ -77,7 +77,7 @@ public class UserController {
         if(user.isPresent()) {
             return user.get();
         } else {
-            throw new Exception("You are not logged in.");
+            return null;
         }
     }
     @GetMapping("/rest/isAdmin/{id}")

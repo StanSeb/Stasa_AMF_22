@@ -107,4 +107,13 @@ public class ReportService {
     public List<ReportType> getReportTypes() {
         return reportTypeRepo.findAll();
     }
+
+    /**
+     * @return if the report could be deleted
+     */
+    public boolean deleteReport(Report report) {
+        reportRepository.delete(report);
+        var deletedReport = reportRepository.findById(report.getId());
+        return deletedReport.isEmpty();
+    }
 }

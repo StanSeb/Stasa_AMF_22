@@ -1,6 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import ReportButton from "./ReportButton";
+
+const targetType = 2;
 
 class CommentCard extends React.Component {
 	constructor(props) {
@@ -42,6 +45,7 @@ class CommentCard extends React.Component {
 					this.props.fetchComments
 				)}
 				{EditButton(this, this.state.comment, this.props.loggedInUser,this.props.fetchComments)}
+				<ReportButton targetType={ targetType } targetId={ this.state.comment.id } />
 				<div className="comment-social-buttons"></div>
 			</div>
 		);

@@ -20,6 +20,11 @@ public class ReportController {
         return reportService.makeReport(report, user_id);
     }
 
+    @DeleteMapping("/report")
+    public boolean deleteReport(@RequestBody Report report) {
+        return reportService.deleteReport(report);
+    }
+
     @GetMapping("/reports")
     public List<Report> getAllReports() {
         return reportService.getAllReports();
