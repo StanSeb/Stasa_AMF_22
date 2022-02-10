@@ -68,7 +68,6 @@ class GroupPage extends React.Component {
 		})
 	}
 	RenderMembers(props, loggedInUser) {
-		console.log(this.state.members)
 		let members = Object.values(props);
 		let membersList = [];
 		for (let i = 0; i < members.length; i++) {

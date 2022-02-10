@@ -44,7 +44,6 @@ class Profile extends React.Component {
 
 		if (id == profileID || this.checkIfAdmin(id)) {
 			function terminateUserById() {
-				console.log(id)
 				axios.put("/auth/terminateUser/" + id)
 					.then(response => {
 						alert(response.data)
@@ -78,7 +77,6 @@ class Profile extends React.Component {
 		await axios.get("/rest/invitations/" + this.state.userId)
 		.then((response) => {
 				this.setState({invitations: response.data})
-				console.log(response.data)
 			}
 		);
 	}
@@ -144,7 +142,7 @@ class Profile extends React.Component {
 }
 
 function RenderGroups(props, user_id) {
-	console.log(props)
+
 	if (typeof props !== "undefined") {
 		function leaveGroup(key) {
 			axios.delete(
