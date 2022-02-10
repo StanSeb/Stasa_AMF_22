@@ -68,7 +68,7 @@ class GroupPage extends React.Component {
 				}, () => {console.log(this.state.loggedInUser)})
 		 	})
 
-		axios.get("/rest/groups/getGroupBy/" + groupId) // hämta grupp
+		axios.get("/rest/groups/getById/" + groupId) // hämta grupp
 			.then((response)=> {
 				// console.log(response.data)
 				this.setState({group:response.data})

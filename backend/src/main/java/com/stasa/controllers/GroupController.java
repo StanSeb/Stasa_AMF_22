@@ -44,7 +44,7 @@ public class GroupController {
         return groupService.findById(id);
     }
 
-    @GetMapping("/rest/getGroupById/{groupId}")
+    @GetMapping("/getGroupBy/{groupId}")
     public List<Map> getGroupById(@PathVariable long groupId) { return groupService.getGroupById(groupId); }
 
 
