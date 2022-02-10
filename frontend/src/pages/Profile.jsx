@@ -64,7 +64,7 @@ class Profile extends React.Component {
 			},
 			mode: "no-cors",
 		});
-		window.location.assign("http://localhost:3000/home");
+		window.location.assign("http://localhost:3000/");
 	}
 
 	async componentDidMount() {
