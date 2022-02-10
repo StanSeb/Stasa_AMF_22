@@ -25,4 +25,8 @@ public class InvitationService {
     public void deleteInvitation(Long id) {
         invitationRepo.deleteById(id);
     }
+
+    public boolean isUserInvited(long groupId, long userId) {
+        return invitationRepo.getIsUserInvited(groupId, userId);
+    }
 }

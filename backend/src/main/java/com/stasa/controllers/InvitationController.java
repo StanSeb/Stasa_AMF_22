@@ -15,14 +15,19 @@ public class InvitationController {
     private InvitationService invitationService;
 
     @PostMapping("/rest/invite")
-    public String inviteUserToGroup(@RequestBody Invitation invitation){
+    public String inviteUserToGroup(@RequestBody Invitation invitation) {
         System.out.println(invitation.toString());
         return invitationService.inviteUserToGroup(invitation);
     }
 
     @GetMapping("/rest/invitations/{userId}")
-    public ArrayList<Map> getUserInvitations(@PathVariable long userId){
+    public ArrayList<Map> getUserInvitations(@PathVariable long userId) {
         return invitationService.getUserInvitations(userId);
+    }
+
+    @GetMapping("/rest/isInvited/{groupId}/{userId}")
+    public boolean getIsUserInvited(@PathVariable long groupId, @PathVariable long userId) {
+        return invitationService.isUserInvited(groupId, userId);
     }
 
     @DeleteMapping("/rest/deleteInvitation/{id}")
