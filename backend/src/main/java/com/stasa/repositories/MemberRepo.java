@@ -45,4 +45,11 @@ public interface MemberRepo extends JpaRepository<Member, Integer> {
 
     @Query(value = "DELETE FROM blacklist WHERE user_id = ?1 AND group_id = ?2", nativeQuery = true)
     void deleteUserBlacklist(long userId, long groupId);
+
+    @Query(value = "SELECT b.user_id As userId, b.group_id AS groupId, u.username, g.title, b.from_date, b.to_date \n" +
+            "FROM blacklist b \n" +
+            "INNER JOIN users u ON b.user_id = u.id\n" +
+            "INNER JOIN `groups` g ON g.id = b.group_id \n" +
+            "WHERE b.user_id = ?1", nativeQuery = true)
+    List<Map> getblockedGroups(long userId);
 }

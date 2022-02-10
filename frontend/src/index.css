@@ -252,12 +252,20 @@ code {
 	justify-content:left !important;
 }
 
+.blacklist-groups {
+	list-style:none;
+	font-size:15px;
+	padding:1px!important;
+	text-align:left !important;
+}
+
 
 .group-members-blacklist {
 	border: 1px solid gray;
 	background-color: rgba(100, 100, 100, 0.1);
 	width: 90%;
 	margin: 2px;
+	margin-bottom: 15px;
 	padding: 1em;
 	position: relative;
 }

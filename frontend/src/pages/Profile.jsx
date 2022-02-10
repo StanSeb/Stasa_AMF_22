@@ -8,11 +8,12 @@ class Profile extends React.Component {
 		this.state = {
 			userObj: props.userObj,
 			userId: props.userObj.id,
-			groups: []
+			groups: [],
+			blockedGroups: [],
 		};
 	}
 
-	 checkIfSignedId(id) {
+	checkIfSignedId(id) {
 		const profileID = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
 
 		if (id == profileID || this.checkIfAdmin(id)) {
@@ -47,6 +48,17 @@ class Profile extends React.Component {
 			.then((data) => {
 				this.setState({ groups: data });
 			});
+		
+		let blockedGroups;
+		axios
+			.get("/rest/member/blockedGroups/" + this.state.userId)
+			.then((response) => response.data)
+			.then((data) => {
+				blockedGroups = data;
+				this.setState({ blockedGroups });
+			}
+		);
+
 	}
 
 
@@ -62,7 +74,10 @@ class Profile extends React.Component {
 	render() {
 		return (
 			<div className="profileContainer">
-				<div> Welcome to profile </div>
+				<h2> Welcome to profile </h2>
+				<div>
+					{CheckBlockedGroupsList( this.state.blockedGroups)}
+				</div>
 				<Link to="/registerGroup">
 					<button>Skapa grupp</button>
 				</Link>
@@ -84,7 +99,28 @@ class Profile extends React.Component {
 	}
 }
 
-
+function CheckBlockedGroupsList(blockedGroups){
+	let div;
+	if (blockedGroups.length > 0) {
+		div = (
+			<div className="group-members-blacklist">
+                <h4 className="blocked-users">Du har blivit blockerad i följande grupp:</h4> 
+				 <div className="blacklist-list">{blockedGroups.map((blockedGroups) => (
+					<ul className="blacklist-ul" key={blockedGroups.id}>
+						<li className="blacklist-groups"> 
+							<span className="blacklist-user"> Grupp: {blockedGroups.title} </span>
+							<span className="blacklist-date">(Från: {blockedGroups.to_date} -</span> 
+							<span className="blacklist-date">Till: {blockedGroups.from_date})</span> 
+						</li>
+					</ul>
+				))}</div>
+			</div>	
+		);
+	} else{
+		div = (<di></di>);
+	}
+	return div;
+}
 
 function RenderGroups(props, user_id) {
 	if (typeof props !== "undefined") {

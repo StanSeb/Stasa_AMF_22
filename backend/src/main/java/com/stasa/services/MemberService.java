@@ -108,4 +108,8 @@ public class MemberService {
         memberRepo.deleteUserBlacklist(userId, groupId);
         return "Användaren har tillgång till gruppen igen!";
     }
+
+    public List<Map> getblockedGroups(long userId) {
+        return memberRepo.getblockedGroups(userId);
+    }
 }

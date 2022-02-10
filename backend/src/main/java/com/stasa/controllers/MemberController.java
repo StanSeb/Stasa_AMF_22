@@ -35,6 +35,11 @@ public class MemberController {
         @DeleteMapping("/deleteUserBlacklist/{userId}/{groupId}")
         public String deleteUserBlacklist(@PathVariable long userId, @PathVariable long groupId){ return memberService.deleteUserBlacklist(userId, groupId); }
 
+        //Get grupper där jag har blivit blockerad
+        @GetMapping("/blockedGroups/{userId}")
+        public List<Map> getblockedGroups(@PathVariable long userId){ return memberService.getblockedGroups(userId);
+        }
+
         @GetMapping("/getAllMembers")
         public List<Member> getallMembers() {
         return memberService.getAll();
