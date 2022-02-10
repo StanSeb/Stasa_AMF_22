@@ -5,7 +5,7 @@ function InviteMemberPopup(props) {
 
     const [getUserName, setUserName] = useState("");
     const [getUserId, setUserId] = useState("");
- 
+
 
     /* async function checkUserExists() {
         axios.get("/rest/username/" + getUserName)
@@ -19,28 +19,45 @@ function InviteMemberPopup(props) {
     } */
 
     async function sendInvite() {
-        await axios.get("/rest/username/" + getUserName)
-            .then((response) => {
-                if(response.data !== ''){
-              
-                    const inviteObj = {
-                        id: "",
-                        fromMemberId: props.memberId,
-                        toUserId: response.data.id,
-                        groupId: props.groupId
-                    }
+        if (props.loggedInUser) {
+            // om man är inloggad som en användare körs detta
+            await axios.get("/rest/username/" + getUserName)
+                .then((response) => {
+                    if (response.data !== '') {
+                        //TODO: kolla om användaren redan har en invite
+                        axios.get("/rest/isInvited/" + props.groupId + "/" + response.data.id)
+                            .then((res) => {
+                                console.log(res.data)
 
-                    if(response.data.id !== "") {
-                        axios.post("/rest/invite", inviteObj)
-                        .then((response) => {
-                            console.log(response.data)
-                        })
-                        setUserId(response.data.id)
+                                //true
+                                if (res.data) {
+                                    alert("Användaren är redan inbjuden.")
+                                }
+                                // false
+                                else {
+                                    const inviteObj = {
+                                        fromMemberId: props.memberId,
+                                        toUserId: response.data.id,
+                                        groupId: props.groupId
+                                    }
+
+                                    if (response.data.id !== "") {
+                                        axios.post("/rest/invite", inviteObj)
+                                            .then((response) => {
+                                                console.log(response.data)
+                                            })
+                                        setUserId(response.data.id)
+                                    }
+                                }
+                            })
+                    } else {
+                        alert("Användaren finns inte.")
                     }
-                } else {
-                    alert("Användaren finns inte.")
-                }           
-            });
+                });
+        }
+        else{
+            alert("Du måste vara inloggad för att kunna skicka inbjudningar.")
+        }
     }
 
     return (
@@ -52,7 +69,7 @@ function InviteMemberPopup(props) {
             <div>
                 {getUserId ? <label>Injudan har skickats</label> : null}
             </div>
-            
+
         </div>
     )
 }
