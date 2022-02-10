@@ -23,6 +23,7 @@ class GroupPage extends React.Component {
 			invitePopup: false,
 		};
 		this.handleThreadClick = this.handleThreadClick.bind(this);
+		this.toggleInviteMember = this.toggleInviteMember.bind(this);
 	}
 
 	createMember() {
@@ -75,7 +76,7 @@ class GroupPage extends React.Component {
 	render() {
 		return (
 			<div className="group-page">
-				{this.state.invitePopup ? <InviteMemberPopup loggedInUser={this.state.loggedInUser} groupId={this.state.group.id} memberId={this.state.users.id} /> : null}
+				{this.state.invitePopup ? <InviteMemberPopup toggleProps={this.toggleInviteMember} loggedInUser={this.state.loggedInUser} groupId={this.state.group.id} memberId={this.state.users.id} /> : null}
 				<div className="group-posts">
 					{ShowThread(
 						this.state.threads,

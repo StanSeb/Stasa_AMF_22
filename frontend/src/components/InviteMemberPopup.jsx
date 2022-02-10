@@ -18,6 +18,10 @@ function InviteMemberPopup(props) {
             });         
     } */
 
+    function handleClick() {
+
+    }
+
     async function sendInvite() {
         if (props.loggedInUser) {
             // om man är inloggad som en användare körs detta
@@ -27,7 +31,6 @@ function InviteMemberPopup(props) {
                         //TODO: kolla om användaren redan har en invite
                         axios.get("/rest/isInvited/" + props.groupId + "/" + response.data.id)
                             .then((res) => {
-                                console.log(res.data)
 
                                 //true
                                 if (res.data) {
@@ -55,21 +58,27 @@ function InviteMemberPopup(props) {
                     }
                 });
         }
-        else{
+        else {
             alert("Du måste vara inloggad för att kunna skicka inbjudningar.")
         }
     }
 
     return (
-        <div className="popup-container">
-            <h3>Ange användarnam att skicka inbjudan till.</h3>
-            <input type="text" value={getUserName} onChange={(e) => setUserName(e.target.value)}
-                placeholder='Ange användarnamn'></input>
-            <button onClick={() => sendInvite()}>Skicka inbjudan</button>
-            <div>
-                {getUserId ? <label>Injudan har skickats</label> : null}
-            </div>
+        <div className="greyBackground">
+            <div className="invitation-container">
+                <button className='btnRemovePopup' onClick={props.toggleProps}>X</button>
 
+                <div className='sendInvite'>
+                    <h3>Ange användarnam att skicka inbjudan till.</h3>
+                    <input type="text" value={getUserName} onChange={(e) => setUserName(e.target.value)}
+                        placeholder='Ange användarnamn'></input>
+                    <button onClick={() => sendInvite()}>Skicka inbjudan</button>
+                    <div>
+                        {getUserId ? <label>Injudan har skickats</label> : null}
+                    </div>
+                </div>
+
+            </div>
         </div>
     )
 }
