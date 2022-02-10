@@ -64,22 +64,22 @@ function InviteMemberPopup(props) {
     }
 
     return (
-        <div className="greyBackground">
-            <div className="invitation-container">
-                <button className='btnRemovePopup' onClick={props.toggleProps}>X</button>
 
-                <div className='sendInvite'>
-                    <h3>Ange användarnam att skicka inbjudan till.</h3>
-                    <input type="text" value={getUserName} onChange={(e) => setUserName(e.target.value)}
-                        placeholder='Ange användarnamn'></input>
-                    <button onClick={() => sendInvite()}>Skicka inbjudan</button>
-                    <div>
-                        {getUserId ? <label>Injudan har skickats</label> : null}
-                    </div>
+        <div className="invitation-container">
+            <button className='btnRemovePopup' onClick={props.toggleProps}>X</button>
+
+            <div className='sendInvite'>
+                <h3>Ange användarnam att skicka inbjudan till.</h3>
+                <input type="text" value={getUserName} onChange={(e) => setUserName(e.target.value)}
+                    placeholder='Ange användarnamn'></input>
+                <button onClick={() => sendInvite()}>Skicka inbjudan</button>
+                <div>
+                    {getUserId ? <label>Injudan har skickats</label> : null}
                 </div>
-
             </div>
+
         </div>
+
     )
 }
 

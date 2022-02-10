@@ -39,7 +39,6 @@ class Profile extends React.Component {
 	}
 
 	checkIfSignedId(id) {
-	 checkIfSignedId(id) {
 		
 		const profileID = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
 

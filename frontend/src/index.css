@@ -543,14 +543,6 @@ footer::before {
 /*#endregion*/
 
 /*#region invitation-container*/
-.greyBackground{
-	background-color: rgba(128, 128, 128, 0.5);
-	height: 100vh;
-	width: 100vw;
-	position: absolute;
-	top:0;
-	z-index: 5;
-}
 
 .invitation-container{
 	position: fixed;
