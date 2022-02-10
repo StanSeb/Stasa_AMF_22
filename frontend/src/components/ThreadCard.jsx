@@ -17,7 +17,7 @@ class ThreadCard extends React.Component {
 			content: props.thread.content,
 			title: props.thread.title,
 			isEditable: false,
-			showCommentButton: this.props.showCommentButton
+			showCommentButton: this.props.showCommentButton,
 		};
 	}
 
@@ -43,7 +43,7 @@ class ThreadCard extends React.Component {
 						<div className="thread-header">
 							<div className="thread-thread-header-buttons">
 								{EditButton(this, this.props.thread, this.props.loggedInUser,this.props.fetchThreads)}
-								{DeleteButton(this.props.thread, this.props.loggedInUser)}
+								{DeleteButton(this.props.thread, this.props.loggedInUser,this.props.isAdmin)}
 							</div>
 							<div className="thread-title">
 								<ThreadTitle
@@ -163,11 +163,12 @@ function EditButton(parent, threadProp, loggedInUser,fetchThreads) {
 	}
 }
 
-function DeleteButton(threadProp, loggedInUser) {
+function DeleteButton(threadProp, loggedInUser,isAdmin) {
 	if (
 		threadProp.creatorId === loggedInUser.id ||
 		loggedInUser.privilege === "GROUPADMIN" ||
-		loggedInUser.privilege === "GROUPMODERATOR"
+		loggedInUser.privilege === "GROUPMODERATOR"||
+		isAdmin
 	) {
 		function handleClick() {
 			if (window.confirm("Are you sure you want to delete this")) {

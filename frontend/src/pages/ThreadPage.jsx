@@ -51,11 +51,11 @@ class ThreadPage extends React.Component {
 			<>
 				<div className="group-posts-and-comments">
 					<div className="group-posts">
-						{RenderThreads(this.state.thread, this.toggleComment)}
+						{RenderThreads(this.state.thread, this.toggleComment, this.props.isAdmin)}
 					</div>
 					<div className="group-newComment" style={{ display: this.state.showNewComment ? 'block' : 'none' }}><NewComment fetchComments={this.fetchComments} toggleComment={this.toggleComment} threadId={this.props.threadId} userId={this.props.loggedInUser.id} /></div>
 					<div className="group-comments">
-						{RenderComments(this.state.comments,this.props.loggedInUser,this.fetchComments)}
+						{RenderComments(this.state.comments,this.props.loggedInUser,this.fetchComments, this.props.isAdmin)}
 					</div>
 				</div>
 			</>
@@ -63,18 +63,18 @@ class ThreadPage extends React.Component {
 	}
 }
 
-function RenderThreads(props, toggleComment) {
+function RenderThreads(props, toggleComment,isAdmin) {
 	if (Object.keys(props).length > 0) {
-		return <ThreadCard thread={props} loggedInUser={props} showCommentButton={props} toggleComment={toggleComment} />;
+		return <ThreadCard thread={props} loggedInUser={props} showCommentButton={props} toggleComment={toggleComment} isAdmin={isAdmin} />;
 	} else return null;
 }
 
-function RenderComments(props, loggedInUser, fetchComments) {
+function RenderComments(props, loggedInUser, fetchComments,isAdmin) {
 	let comments = Object.values(props);
 	let commentList = [];
 	for (let i = 0; i < comments.length; i++) {
 		commentList.push(
-			<CommentCard comment={comments[i]} key={i} loggedInUser={loggedInUser} fetchComments={fetchComments} />
+			<CommentCard comment={comments[i]} key={i} loggedInUser={loggedInUser} fetchComments={fetchComments} isAdmin={isAdmin} />
 		);
 	}
 	return commentList.reverse();

@@ -2,6 +2,7 @@ import React from "react";
 import axios from 'axios';
 import { ReportContext } from "../contexts/ReportContext";
 import { AuthContext } from "../contexts/AuthContext";
+import { Navigate } from "react-router-dom";
 
 const reportType = 1; // user report type (in database)
 
@@ -18,6 +19,7 @@ class UserDropdown extends React.Component {
 				}, 
 			user: this.props.user, // <- member, inte user
 			loggedInUser: this.props.loggedInUser,
+			clickedProfile:false,
 		};
 		this.updateMemberRole= this.updateMemberRole.bind(this);
 		this.deleteMember=this.deleteMember.bind(this);
@@ -28,7 +30,9 @@ class UserDropdown extends React.Component {
 	handleClick(event) {
 		let buttonClicked = event.target.innerText;
 		console.log(buttonClicked + ", " + this.state.user.username);
-		console.log(this.state.user.id)
+		console.log(this.state.user.user_id)
+		this.setState({clickedProfile:true})
+		
 	}
 
 	updateMemberRole(){
@@ -40,7 +44,7 @@ class UserDropdown extends React.Component {
 				memberRole:{id: 3}, // id av "moderator" i Tabellen member_roles i Databasen.
 				group:{id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}, 
 			};
-		}else if(this.props.user.privilege == "GROUPMODERATOR"){
+		}else if(this.props.user.privilege == "MODERATOR"){
 			moderator= {
 				user: {id: this.props.user.id}, 
 				memberRole:{id: 4}, // id av "member" i Tabellen member_roles i Databasen.
@@ -71,7 +75,13 @@ class UserDropdown extends React.Component {
 	}
 
 	render() {
-		return (
+		if(this.state.clickedProfile){
+
+			return <Navigate to={"/profile/" + this.state.user.user_id}/>	
+		}else{
+
+			
+			return (
 				<ReportContext.Consumer>{(context => {
 					const { showReportPopup } = context;
 					const loggedInUser = this.context.loggedInUser;
@@ -83,21 +93,22 @@ class UserDropdown extends React.Component {
 								</div>
 							</div>
 						);
-				})}
+					})}
 				</ReportContext.Consumer>
 		);
+	}//test bracket
 	}
 }
 
 function CheckUser(props) {
 	let button;
-	if (props.privilege === "GROUPADMIN") {
+	if (props.role === "GROUPADMIN") {
 		button = (
 			<button className="user-drop-button" id="group-admin">
 				{props.username}
 			</button>
 		);
-	} else if (props.privilege === "GROUPMODERATOR") {
+	} else if (props.role === "MODERATOR") {
 		button = (
 			<button className="user-drop-button" id="group-moderator">
 				{props.username}
@@ -112,9 +123,9 @@ function CheckUser(props) {
 function CheckYourPrivilege(user, loggedInUser /*<- detta är en member, inte en user.*/, updateMemberRole, deleteMember, handleReport, handleClick, showReportPopup, realLoggedInUser) {
 	let dropdownOptions;
 	if (
-		loggedInUser.privilege === "GROUPADMIN" &&
-		user.privilege !== "GROUPMODERATOR" &&
-		user.privilege !== "GROUPADMIN"
+		loggedInUser.privilege === "ADMIN" &&
+		loggedInUser.privilege !== "MODERATOR" &&
+		loggedInUser.privilege !== "GROUPADMIN"
 	) {
 		dropdownOptions = (
 			<>
@@ -142,7 +153,7 @@ function CheckYourPrivilege(user, loggedInUser /*<- detta är en member, inte en
 		);
 	} else if (
 		loggedInUser.privilege === "GROUPADMIN" &&
-		user.privilege === "GROUPMODERATOR"
+		loggedInUser.privilege !== "MODERATOR"
 	) {
 		dropdownOptions = (
 			<>
@@ -169,9 +180,7 @@ function CheckYourPrivilege(user, loggedInUser /*<- detta är en member, inte en
 			</>
 		);
 	} else if (
-		loggedInUser.privilege === "GROUPMODERATOR" &&
-		user.privilege !== "GROUPADMIN" &&
-		user.privilege !== "GROUPMODERATOR"
+		loggedInUser.privilege === "MODERATOR"
 	) {
 		dropdownOptions = (
 			<>

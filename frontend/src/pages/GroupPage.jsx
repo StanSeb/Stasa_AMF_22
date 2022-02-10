@@ -4,6 +4,7 @@ import ThreadCard from "../components/ThreadCard";
 import ThreadPage from "../pages/ThreadPage";
 import UserDropdown from "../components/UserDropdown";
 import NewThread from "../components/NewThread";
+import {Navigate} from "react-router-dom"
 
 class GroupPage extends React.Component {
 	constructor(props) {
@@ -20,10 +21,22 @@ class GroupPage extends React.Component {
 			users: {},
 			clickedThread: 0,
 			toggleNewThread: false,
+			isAdmin: false,
+			reload:false,
 		};
 		this.handleThreadClick = this.handleThreadClick.bind(this);
 		this.toggleNewThread = this.toggleNewThread.bind(this);
 		this.fetchThreads = this.fetchThreads.bind(this);
+		this.reloadPage= this.reloadPage.bind(this);
+	}
+
+	checkIfAdmin() {
+		if (typeof (this.props.loggedInUser.id) != "undefined") {
+			axios.get("/rest/isAdmin/" + this.props.loggedInUser.id)
+				.then(response => {
+					this.setState({ isAdmin: response.data });
+				})
+		}
 	}
 
 	createMember() {
@@ -46,6 +59,7 @@ class GroupPage extends React.Component {
 	}
 
 	componentDidMount() {
+		this.checkIfAdmin()
 		let groupId = window.location.href.substring(
 			window.location.href.lastIndexOf("/") + 1
 		);
@@ -57,21 +71,21 @@ class GroupPage extends React.Component {
 			return { group };
 		});
 
-		let privilege;
+		let role;
 		let loggedInUser;
 		axios
 			.get(
 				"/rest/groups/getUserRole/" + groupId + "/" + this.state.loggedInUser.id
 			)
 			.then((response) => {
-				privilege = response.data;
+				role = response.data;
 
 				this.setState(
 					{
 						loggedInUser: {
 							username: this.state.loggedInUser.username,
 							id: this.state.loggedInUser.id,
-							privilege: privilege,
+							role: role,
 						},
 					},
 					() => {
@@ -81,25 +95,25 @@ class GroupPage extends React.Component {
 			});
 
 		axios.get("/rest/groups/getById/" + groupId) // hämta grupp
-			.then((response)=> {
+			.then((response) => {
 				// console.log(response.data)
-				this.setState({group:response.data})
+				this.setState({ group: response.data })
 			});
 
-        // axios.get("/rest/member/memberByGroupId/" + groupId)  // hämta gruppmedlem
+		// axios.get("/rest/member/memberByGroupId/" + groupId)  // hämta gruppmedlem
 		// 	.then((response) => response.data)
 		// 	.then((data) => {
 		// 		this.setState({users: data});
-     	// 	});
+		// 	});
 
 		let users;
-		axios.get("/rest/member/memberByGroupId/" + groupId) 
+		axios.get("/rest/member/memberByGroupId/" + groupId)
 			.then((response) => response.data)
-			.then((data) =>{
+			.then((data) => {
 				users = data;
-		 		this.setState({users});
-	 		}
-		);	
+				this.setState({ users });
+			}
+			);
 
 		let threads;
 		axios
@@ -125,7 +139,7 @@ class GroupPage extends React.Component {
 	}
 
 	fetchThreads() {
-		if (typeof this.state.loggedInUser.privilege !== "undefined" && this.state.loggedInUser.privilege !== '') {
+		if (typeof this.state.loggedInUser.privilege !== "undefined" && this.state.loggedInUser.privilege !== '' || this.state.isAdmin) {
 			let threads;
 			axios
 				.get("/rest/threads/byGroup/" + this.state.group.id)
@@ -133,25 +147,31 @@ class GroupPage extends React.Component {
 				.then((data) => {
 					threads = data;
 					this.setState({ threads });
-					console.log(threads);
 				});
 		}
 	}
+	reloadPage(){
+		this.setState({reload:true})
+	}
 
 	render() {
-		return (
-			<>
+		if(this.state.reload){
+			return <Navigate to="/home" />
+		}else{
+
+			return (
+				<>
 				<div className="group-page">
 					<div
 						className="group-overlay"
 						style={{ display: this.state.toggleNewThread ? "block" : "none" }}
-					>
+						>
 						<NewThread
 							cancelPost={this.toggleNewThread}
 							groupId={this.state.group.id}
 							loggedInUser={this.state.loggedInUser}
 							fetchThreads={this.fetchThreads}
-						/>
+							/>
 					</div>
 					<>
 						<div className="group-posts">
@@ -160,12 +180,15 @@ class GroupPage extends React.Component {
 								this.handleThreadClick,
 								this.state.clickedThread,
 								this.props.loggedInUser,
-								this.fetchThreads
-							)}
+								this.fetchThreads,
+								this.state.isAdmin
+								)}
 						</div>
 					</>
+					
 					<div className="group-side-panel">
 						<div className="group-info">
+							{RemoveGroupButton(this.state.isAdmin,this.state.loggedInUser.role,this.state.group,this.reloadPage)}
 							<h3>{this.state.group.title}</h3>
 							<p>{this.state.group.description}</p>
 							<button onClick={() => this.createMember()}>Bli medlem</button>
@@ -177,12 +200,12 @@ class GroupPage extends React.Component {
 							className="group-new-thread"
 							style={{
 								display:
-									typeof this.state.loggedInUser.privilege === "undefined" ? "none" : this.state.loggedInUser.privilege === ''
-										? "none"
-										: "block",
+								typeof this.state.loggedInUser.privilege === "undefined" ? "none" : this.state.loggedInUser.privilege === ''
+								? "none"
+								: "block",
 							}}
 							onClick={() => this.toggleNewThread(true)}
-						>
+							>
 							Skapa nytt inlägg
 						</button>
 					</div>
@@ -191,18 +214,40 @@ class GroupPage extends React.Component {
 		);
 	}
 }
+}
+function RemoveGroupButton(isAdmin, role,group,reloadPage) {
+	console.log(group)
+	if (isAdmin || role === 'GROUPADMIN') {
+		function removeGroup() {
+			
+			if (window.confirm('Är du säker på att du vill ta bort denna gruppen: ' + group.title))
+				axios
+					.put("/rest/groups/deleteGroup/" +group.id)
+					.then((response) => {
+						alert("Grupp med namnet: " + group.title + " har tagits bort")
+						reloadPage()
+					})
+		}
+		return <button className="group-delete" onClick={removeGroup}>Ta bort grupp</button>
+	}
+	else {
+		return <>testar else</>
+	}
+
+}
 
 function ShowThread(
 	threads,
 	handleThreadClick,
 	clickedThread,
 	loggedInUser,
-	fetchThreads
+	fetchThreads,
+	isAdmin
 ) {
 	if (clickedThread === 0) {
 		return (
 			<>
-				{RenderThreads(threads, handleThreadClick, loggedInUser, fetchThreads)}
+				{RenderThreads(threads, handleThreadClick, loggedInUser, fetchThreads, isAdmin)}
 			</>
 		);
 	} else {
@@ -212,12 +257,13 @@ function ShowThread(
 				loggedInUser={loggedInUser}
 				showCommentButton={true}
 				fetchThreads={fetchThreads}
+				isAdmin={isAdmin}
 			/>
 		);
 	}
 }
 
-function RenderThreads(props, handleThreadClick, loggedInUser, fetchThreads) {
+function RenderThreads(props, handleThreadClick, loggedInUser, fetchThreads, isAdmin) {
 	if (props !== null) {
 		let threads = Object.values(props);
 		let threadList = [];
@@ -230,6 +276,7 @@ function RenderThreads(props, handleThreadClick, loggedInUser, fetchThreads) {
 					loggedInUser={loggedInUser}
 					showCommentButton={false}
 					fetchThreads={fetchThreads}
+					isAdmin={isAdmin}
 				/>
 			);
 		}

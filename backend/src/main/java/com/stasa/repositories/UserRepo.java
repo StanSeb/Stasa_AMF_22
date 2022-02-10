@@ -26,6 +26,6 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
 
-    @Query(value = "SELECT CASE WHEN EXISTS (SELECT * FROM priviledge WHERE priviledge.user_id = ?) THEN 'TRUE' ELSE 'FALSE' END", nativeQuery = true)
+    @Query(value = "SELECT CASE WHEN EXISTS (SELECT * FROM privilage WHERE privilage.user_id = ?) THEN 'TRUE' ELSE 'FALSE' END", nativeQuery = true)
     boolean findAdminById(long id);
 }
