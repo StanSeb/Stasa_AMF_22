@@ -43,12 +43,20 @@ class Profile extends React.Component {
 
 	async componentDidMount() {
 		axios
-			.get("/rest/member/getMembersByUserId/" + this.state.userId)
+		.get("/rest/member/getActiveDataByUserId/" + this.state.userId)
 			.then((response) => response.data)
 			.then((data) => {
 				this.setState({ groups: data });
 			});
 	}
+
+	deleteGroup(id){
+        let groupId = id;
+        axios
+        .put("/rest/groups/deleteGroup/" + id)
+        console.log("Group with id",id ,"has been deleted")
+
+    }
 
 
 	checkIfAdmin(id) {
@@ -70,7 +78,17 @@ class Profile extends React.Component {
 				{this.checkIfSignedId(this.state.userId)}
 				<button onClick={this.logOut}>Logga ut</button>
 
-				{RenderGroups(this.state.groups, this.state.userObj.id)}
+				{RenderGroups(this.state.groupsList, this.state.userObj.id)}
+
+				<div>{this.state.groups.map((group) => (
+					<ul key={group.id}>
+						<li> Title: <span>{group.group.title}</span> <br />
+							Description: <span>{group.group.description}</span> <br />
+							Role: <span>{group.memberRole.title}</span> <br />
+							<button onClick={() => this.deleteGroup(group.group.id)}>Radera grupp</button>
+						</li>
+					</ul>
+				))}</div>
 			</div>
 		);
 	}

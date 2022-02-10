@@ -1,5 +1,6 @@
 package com.stasa.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
@@ -23,4 +24,15 @@ public class Group {
 
     @Column(name ="user_id")
     private long userId;
+
+    @Column(name="deletion_timestamp")
+    private String deletionTimestamp;
+
+    @JsonProperty
+    public String getTitle() {
+        if(getDeletionTimestamp() != null) {
+            return "DeletedGroup";
+        }
+        return title;
+    }
 }

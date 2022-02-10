@@ -14,7 +14,7 @@ export default class Homepage extends Component {
 
   componentDidMount() {
     axios
-      .get("http://localhost:8080/rest/groups/getAllGroups")
+    .get("http://localhost:8080/rest/groups/getAllActiveGroups")
       .then((response) => response.data)
       .then((data) => {
         this.setState({ groups: data });
