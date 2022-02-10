@@ -1,5 +1,6 @@
 package com.stasa.controllers;
 
+import com.stasa.entities.Member;
 import com.stasa.entities.User;
 import com.stasa.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +51,6 @@ public class UserController {
     public User getById(@PathVariable long id) throws Exception {
         return userService.findById(id).orElseThrow(() -> new Exception("User not found!"));
     }
-
-    @GetMapping("/rest/userToBlacklist/{userId}/{groupId}")
-    public String sendToBlacklist(@PathVariable long userId, @PathVariable long groupId){ ;return userService.sendToBlacklist(userId, groupId); }
 
     @GetMapping("/rest/balcklistByGroupId/{groupId}")
     public List<Map> getBlacklistMembers(@PathVariable long groupId) { return userService.getBlacklistMembers(groupId); }

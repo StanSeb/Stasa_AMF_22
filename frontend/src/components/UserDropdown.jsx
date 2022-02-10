@@ -5,7 +5,7 @@ class UserDropdown extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			moderator: {
+			member: {
 				user: {id:""},
 				memberRole:{id:""},
 				group:{id:""},
@@ -14,6 +14,7 @@ class UserDropdown extends React.Component {
 			loggedInUser: this.props.loggedInUser,
 		};
 		this.updateMemberRole= this.updateMemberRole.bind(this);
+		this.sendMemberToBlacklist= this.sendMemberToBlacklist.bind(this);
 	}
 
 	handleClick(event) {
@@ -22,24 +23,40 @@ class UserDropdown extends React.Component {
 	}
 
 	updateMemberRole(){
-		let moderator;
-		if(this.props.user.privilege == "MEMBER"){
-			moderator= {
+		let member;
+		if(this.props.user.privilege === "MEMBER"){
+			member= {
 				user: {id: this.state.user.userId}, 
 				memberRole:{id: 3}, // id av "moderator" i Tabellen member_roles i Databasen.
 				group:{id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}, 
 			};
-		}else if(this.props.user.privilege == "GROUPMODERATOR"){
-			moderator= {
+		}else if(this.props.user.privilege === "GROUPMODERATOR"){
+			member= {
 				user: {id: this.state.user.userId}, 
 				memberRole:{id: 4}, // id av "member" i Tabellen member_roles i Databasen.
 				group:{id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}, 
 			};
 		}
 		
-		this.setState({ moderator }, () => {
+		this.setState({ member }, () => {
 			axios
-				.put("/rest/member/updateMemberRole", this.state.moderator)
+				.put("/rest/member/updateMemberRole", this.state.member)
+				.then((response) =>{
+				alert(response.data);
+				window.location.reload();
+			})
+		});
+	}
+
+	sendMemberToBlacklist(){
+		let member= {
+			user: {id: this.state.user.userId}, 
+			memberRole:{id: 4}, 
+			group:{id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1)}, 
+		};
+		this.setState({ member }, () => {
+			axios
+				.post("/rest/member/userToBlacklist", this.state.member)
 				.then((response) =>{
 				alert(response.data);
 				window.location.reload();
@@ -53,7 +70,7 @@ class UserDropdown extends React.Component {
 				<div className="user-drop">
 					{CheckUser(this.state.user)}
 					<div className="user-drop-content">
-						{CheckYourPrivilege(this.state.user, this.state.loggedInUser, this.updateMemberRole)}
+						{CheckYourPrivilege(this.state.user, this.state.loggedInUser, this.updateMemberRole, this.sendMemberToBlacklist)}
 					</div>
 				</div>
 			</>
@@ -81,7 +98,7 @@ function CheckUser(props) {
 	return button;
 }
 
-function CheckYourPrivilege(user, loggedInUser, updateMemberRole) {
+function CheckYourPrivilege(user, loggedInUser, updateMemberRole, sendMemberToBlacklist) {
 	let dropdownOptions;
 	if (
 		loggedInUser.privilege === "GROUPADMIN" &&
@@ -107,7 +124,7 @@ function CheckYourPrivilege(user, loggedInUser, updateMemberRole) {
 				>
 					Remove from group
 				</button>
-				<button href={"/group/ban/" + user.id} onClick={(e) => this.handleClick(e)}>
+				<button onClick={() => sendMemberToBlacklist()}>
 					Blacklist
 				</button>
 			</>
@@ -135,7 +152,7 @@ function CheckYourPrivilege(user, loggedInUser, updateMemberRole) {
 				>
 					Remove from group
 				</button>
-				<button href={"/group/ban/" + user.id} onClick={(e) => this.handleClick(e)}>
+				<button onClick={() => sendMemberToBlacklist()}>
 					Blacklist
 				</button>
 			</>
@@ -159,7 +176,7 @@ function CheckYourPrivilege(user, loggedInUser, updateMemberRole) {
 				>
 					Remove from group
 				</button>
-				<button href={"/group/ban/" + user.id} onClick={(e) => this.handleClick(e)}>
+				<button onClick={() => sendMemberToBlacklist()}>
 					Blacklist
 				</button>
 			</>

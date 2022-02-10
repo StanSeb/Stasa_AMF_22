@@ -1,6 +1,7 @@
 package com.stasa.services;
 
 import com.stasa.configurations.MyUserDetailsService;
+import com.stasa.entities.Member;
 import com.stasa.entities.User;
 import com.stasa.repositories.UserRepo;
 import net.bytebuddy.utility.RandomString;
@@ -173,34 +174,6 @@ public class UserService {
     public @Nullable User whoAmI() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepo.findByEmail(email);
-    }
-
-    public String sendToBlacklist(long userId, long groupId) {
-        String response = null;
-       int countBlockedTimes = userRepo.countBlockedTimes(userId);
-       if(countBlockedTimes <1){
-           int block = 1;
-           LocalDateTime today =  LocalDateTime.now();
-           LocalDateTime oneWeek = today.plusDays(7);
-           userRepo.insertInBlacklist(userId, block, oneWeek, groupId);
-           userRepo.userBlockedFromGroup(userId, groupId);
-           response = "Den här användaren har blockerats. Den kommer att förbli inaktiv i en vecka.";
-       }else if (countBlockedTimes > 1 && countBlockedTimes > 4 ) {
-           int block = 1;
-           LocalDateTime today =  LocalDateTime.now();
-           LocalDateTime twoWeek = today.plusDays(30);
-           userRepo.insertInBlacklist(userId, block, twoWeek, groupId);
-           userRepo.userBlockedFromGroup(userId, groupId);
-           response = "Den här användaren har blockerats: " + (countBlockedTimes +1 )+ " gånger. Därför kommer att förbli inaktiv i en månad.";
-       }else if (countBlockedTimes >= 5) {
-           int block = 1;
-           LocalDateTime today =  LocalDateTime.now();
-           LocalDateTime twoWeek = today.plusMonths(6);
-           userRepo.insertInBlacklist(userId, block, twoWeek, groupId);
-           userRepo.userBlockedFromGroup(userId, groupId);
-           response = "Den här användaren har blockerats: " + (countBlockedTimes +1 )+ " gånger. Därför kommer att förbli inaktiv i 6 månad.";
-       }
-       return response;
     }
 
     public List<Map> getBlacklistMembers(long groupId) {

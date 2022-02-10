@@ -4,6 +4,7 @@ import com.stasa.entities.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -32,4 +33,16 @@ public interface MemberRepo extends JpaRepository<Member, Integer> {
     void updateMemberRole(long roleId, long userId, long groupId);
 
     List<Member> getByUserId(int userId);
+
+    @Query(value = "SELECT COUNT(user_id) FROM blacklist WHERE user_id= ?1", nativeQuery = true)
+    int countBlockedTimes(long userId);
+
+    @Query(value = "insert into blacklist (user_id, amount_blocked, to_date, group_id) Values (?1, ?2, ?3, ?4)", nativeQuery = true)
+    void insertInBlacklist(long userId, int block, LocalDateTime oneWeek, long groupId);
+
+    @Query(value = "DELETE FROM members WHERE user_id = ?1 AND group_id = ?2", nativeQuery = true)
+    void userBlockedFromGroup(long userId, long groupId);
+
+    @Query(value = "DELETE FROM blacklist WHERE user_id = ?1 AND group_id = ?2", nativeQuery = true)
+    void deleteUserBlacklist(long userId, long groupId);
 }

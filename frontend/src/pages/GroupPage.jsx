@@ -21,6 +21,7 @@ class GroupPage extends React.Component {
 			clickedThread: 0,
 		};
 		this.handleThreadClick = this.handleThreadClick.bind(this);
+		this.unlockMember = this.unlockMember.bind(this);
 	}
 
 	createMember(){
@@ -38,6 +39,17 @@ class GroupPage extends React.Component {
 				window.location.reload();
 			})
 		});
+	}
+
+	unlockMember(userId){
+		if (window.confirm("Är du säker på att du vill avblockera den här användaren?")) {
+			axios
+				.delete("/rest/member/deleteUserBlacklist/"+ userId + "/"+window.location.href.substring(window.location.href.lastIndexOf('/') + 1))
+				.then((response) =>{
+					alert(response.data);
+					window.location.reload();
+				})	
+		}
 	}
 
 	componentDidMount() {
@@ -68,7 +80,7 @@ class GroupPage extends React.Component {
         .then((data) =>{
          this.setState({users: data});
          console.log(this.state.users);
-     });
+     	});
 
 		let users;
 		axios.get("/rest/member/memberByGroupId/" + groupId) 
@@ -127,25 +139,38 @@ class GroupPage extends React.Component {
 						<div className="group-members">
 							{RenderUsers(this.state.users, this.state.loggedInUser)}
 						</div>
-						<div className="group-members blacklist">
-                            <h6 className="blocked-users">Blockerade användare i den här gruppen:</h6> 
-                         {/*     {RenderUsersBlacklist(this.state.usersBlacklist, this.state.loggedInUser)}  */}
-
-						 <div className="blacklist-list">{this.state.usersBlacklist.map((blacklist) => (
-							<ul className="blacklist-ul" key={blacklist.id}>
-								<li className="blacklist-members"> 
-									<button>Aktivera</button>
-									<span className="blacklist-user">{blacklist.username}</span> -
-									<span className="blacklist-date">( {blacklist.to_date})</span> 
-								</li>
-							</ul>
-						))}</div>
-                        </div>
+						<div>
+						{CheckloggedInUserPrivilege( this.state.loggedInUser, this.state.usersBlacklist, this.unlockMember)}
+					    </div>
+                        
 					</div>
 				</div>
 			</>
 		);
 	}
+}
+
+function CheckloggedInUserPrivilege(loggedInUser, usersBlacklist, unlockMember){
+	let div;
+	if (loggedInUser.privilege === "GROUPADMIN" || loggedInUser.privilege === "GROUPMODERATOR") {
+		div = (
+			<div className="group-members-blacklist">
+                <h6 className="blocked-users">Blockerade användare i den här gruppen:</h6> 
+				 <div className="blacklist-list">{usersBlacklist.map((blacklist) => (
+					<ul className="blacklist-ul" key={blacklist.id}>
+						<li className="blacklist-members"> 
+							<button onClick={() => unlockMember(blacklist.id)}>Aktivera</button>
+							<span className="blacklist-user">{blacklist.username} - </span>
+							<span className="blacklist-date">{blacklist.to_date}</span> 
+						</li>
+					</ul>
+				))}</div>
+			</div>	
+		);
+	} else{
+		div = (<di></di>);
+	}
+	return div;
 }
 
 function ShowThread(threads, handleThreadClick, clickedThread, loggedInUser) {
@@ -185,18 +210,5 @@ function RenderUsers(props, loggedInUser) {
 	}
 	return usersList;
 }
-
-/*
-function RenderUsersBlacklist(props, loggedInUser) {
-	let usersBlacklist = Object.values(props);
-	let usersList = [];
-	for (let i = 0; i < usersBlacklist.length; i++) {
-		usersList.push(
-			<UserDropdown user={usersBlacklist[i]} key={i} loggedInUser={loggedInUser} />
-		);
-	}
-	return usersList;
-}
-*/
 
 export default GroupPage;

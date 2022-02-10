@@ -247,27 +247,24 @@ code {
 .blacklist-members {
 	list-style:none;
 	font-size:15px;
-	padding:0!important;
+	border:1px solid;
+	padding:5px!important;
 	justify-content:left !important;
 }
 
 
-.group-members.blacklist {
+.group-members-blacklist {
 	border: 1px solid gray;
 	background-color: rgba(100, 100, 100, 0.1);
 	width: 90%;
 	margin: 2px;
 	padding: 1em;
 	position: relative;
-	display: flex;
-	flex-wrap: wrap;
 }
 
 .group-members.blacklist > * {
 	margin: 0.1em;
-	display: flex;
-	float: left;
-	height: 3em;
+	height: auto;
 }
 
 .blacklist-user {
@@ -276,6 +273,7 @@ code {
 
 .blacklist-ul {
 	padding-left: 0;
+	text-align: center;
 }
 
 .group-comments {

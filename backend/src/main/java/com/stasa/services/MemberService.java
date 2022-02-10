@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -71,5 +72,40 @@ public class MemberService {
             response = "Användaren är inte längre moderator!";
         }
         return response;
+    }
+
+    public String sendToBlacklist(Member member) {
+        long userId = member.getUser().getId();
+        long groupId = member.getGroup().getId();
+        String response = null;
+        int countBlockedTimes = memberRepo.countBlockedTimes(userId);
+        if(countBlockedTimes <1){
+            int block = 1;
+            LocalDateTime today =  LocalDateTime.now();
+            LocalDateTime oneWeek = today.plusDays(7);
+            memberRepo.insertInBlacklist(userId, block, oneWeek, groupId);
+            memberRepo.userBlockedFromGroup(userId, groupId);
+            response = "Den här användaren har blockerats. Den kommer att förbli inaktiv i en vecka.";
+        }else if (countBlockedTimes >= 1 || countBlockedTimes >= 4 ) {
+            int block = 1;
+            LocalDateTime today =  LocalDateTime.now();
+            LocalDateTime twoWeek = today.plusDays(30);
+            memberRepo.insertInBlacklist(userId, block, twoWeek, groupId);
+            memberRepo.userBlockedFromGroup(userId, groupId);
+            response = "Den här användaren har blockerats: " + countBlockedTimes+ " gånger. Därför kommer att förbli inaktiv i en månad.";
+        }else if (countBlockedTimes >= 5) {
+            int block = 1;
+            LocalDateTime today =  LocalDateTime.now();
+            LocalDateTime months = today.plusMonths(6);
+           memberRepo.insertInBlacklist(userId, block, months, groupId);
+            memberRepo.userBlockedFromGroup(userId, groupId);
+            response = "Den här användaren har blockerats: " + countBlockedTimes+ " gånger. Därför kommer att förbli inaktiv i 6 månad.";
+        }
+        return response;
+    }
+
+    public String deleteUserBlacklist(long userId, long groupId) {
+        memberRepo.deleteUserBlacklist(userId, groupId);
+        return "Användaren har tillgång till gruppen igen!";
     }
 }
