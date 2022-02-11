@@ -1,6 +1,7 @@
 package com.stasa.services;
 
 import com.stasa.configurations.MyUserDetailsService;
+import com.stasa.entities.Member;
 import com.stasa.entities.User;
 import com.stasa.repositories.UserRepo;
 import net.bytebuddy.utility.RandomString;
@@ -18,9 +19,10 @@ import javax.mail.internet.MimeMessage;
 import javax.persistence.Id;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -175,4 +177,7 @@ public class UserService {
         return userRepo.findByEmail(email);
     }
 
+    public List<Map> getBlacklistMembers(long groupId) {
+        return userRepo.getBlacklistMembers(groupId);
+    }
 }

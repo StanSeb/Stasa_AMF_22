@@ -181,7 +181,6 @@ function EditButton(parent, threadProp, loggedInUser, fetchThreads) {
 }
 
 function DeleteButton(threadProp, loggedInUser, isAdmin) {
-	console.log(loggedInUser);
 	if (
 		threadProp.creatorId === loggedInUser.id ||
 		loggedInUser.role === "GROUPADMIN" ||

@@ -29,8 +29,21 @@ public class MemberController {
     @GetMapping("/memberByGroupId/{groupId}")
     public List<Map> getMembersByGroupId(@PathVariable long groupId) {return memberService.getMembersByGroupId(groupId); }
 
-    @GetMapping("/getAllMembers")
-    public List<Member> getallMembers() {
+        //Blockerar en member skickar en member till Blacklist-tabellen
+        @PostMapping("/userToBlacklist")
+        public String sendToBlacklist(@RequestBody Member member){ return memberService.sendToBlacklist(member); }
+
+        //Avblockerar en user (raderar user från blacklist och skickar den till members-tabellen
+        @DeleteMapping("/deleteUserBlacklist/{userId}/{groupId}")
+        public String deleteUserBlacklist(@PathVariable long userId, @PathVariable long groupId){ return memberService.deleteUserBlacklist(userId, groupId); }
+
+        //Get grupper där jag har blivit blockerad
+        @GetMapping("/blockedGroups/{userId}")
+        public List<Map> getblockedGroups(@PathVariable long userId){ return memberService.getblockedGroups(userId);
+        }
+
+        @GetMapping("/getAllMembers")
+        public List<Member> getallMembers() {
         return memberService.getAll();
         }
 
@@ -40,8 +53,8 @@ public class MemberController {
     return memberService.getByUserId(userId);
     }
 
-    @PostMapping("/register/member")
-    public Member registerMember(@RequestBody Member member) {
+        @PostMapping("/register/member")
+        public Member registerMember(@RequestBody Member member) {
         return memberService.register(member);
     }
 

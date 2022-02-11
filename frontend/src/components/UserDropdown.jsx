@@ -26,6 +26,7 @@ class UserDropdown extends React.Component {
 		this.deleteMember = this.deleteMember.bind(this);
 		this.handleReport = this.handleReport.bind(this);
 		this.handleClick = this.handleClick.bind(this);
+		this.sendMemberToBlacklist = this.sendMemberToBlacklist.bind(this);
 	}
 
 	handleClick(event) {
@@ -57,8 +58,26 @@ class UserDropdown extends React.Component {
 				.put("/rest/member/updateMemberRole", this.state.member)
 				.then((response) => {
 					alert(response.data)
-					
-						this.props.fetchMembers();
+
+					this.props.fetchMembers();
+				})
+		});
+	}
+
+	sendMemberToBlacklist() {
+	
+		let member = {
+			user: { id: this.state.user.userId },
+			memberRole: { id: 4 },
+			group: { id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1) },
+		};
+		this.setState({ member }, () => {
+			axios
+				.post("/rest/member/userToBlacklist", this.state.member)
+				.then((response) => {
+					alert(response.data);
+					this.props.fetchMembers()
+					this.props.fetchBlackList()
 				})
 		});
 	}
@@ -90,7 +109,9 @@ class UserDropdown extends React.Component {
 						<div className="user-drop">
 							{CheckUser(this.props.user)}
 							<div className="user-drop-content">
-								{CheckYourrole(this.props.user, this.props.loggedInMember, this.updateMemberRole, this.deleteMember, this.handleReport, this.handleClick, showReportPopup, this.context.loggedInUser,this.props.isAdmin)}
+								{CheckYourrole(this.props.user, this.props.loggedInMember, this.updateMemberRole,
+									this.deleteMember, this.handleReport, this.handleClick, showReportPopup,
+									this.context.loggedInUser, this.props.isAdmin, this.sendMemberToBlacklist)}
 							</div>
 						</div>
 					);
@@ -122,10 +143,11 @@ function CheckUser(props) {
 	return button;
 }
 
-function CheckYourrole(user, loggedInMember /*<- detta är en member, inte en user.*/, updateMemberRole, deleteMember, handleReport, handleClick, showReportPopup, realLoggedInUser,isAdmin) {
+function CheckYourrole(user, loggedInMember /*<- detta är en member, inte en user.*/, updateMemberRole,
+	deleteMember, handleReport, handleClick, showReportPopup, realLoggedInUser, isAdmin, sendMemberToBlacklist) {
 	let dropdownOptions;
 	if (
-		isAdmin || loggedInMember.role ==="GROUPADMIN" && user.role !=="GROUPADMIN" && user.role !=="GROUPMODERATOR"
+		isAdmin || loggedInMember.role === "GROUPADMIN" && user.role !== "GROUPADMIN" && user.role !== "GROUPMODERATOR"
 	) {
 		dropdownOptions = (
 			<>
@@ -144,15 +166,14 @@ function CheckYourrole(user, loggedInMember /*<- detta är en member, inte en us
 					onClick={() => deleteMember()}>
 					Remove from group
 				</button>
-
-				<button href={"/group/ban/" + user.id} onClick={(e) => handleClick(e)}>
+				<button onClick={() => sendMemberToBlacklist()}>
 					Blacklist
 				</button>
 				{ReportButton(realLoggedInUser, handleReport, showReportPopup, user)}
 			</>
 		);
 	} else if (
-		loggedInMember.role === "GROUPADMIN" && user.role==="GROUPMODERATOR"
+		loggedInMember.role === "GROUPADMIN" && user.role === "GROUPMODERATOR"
 	) {
 		dropdownOptions = (
 			<>
@@ -172,7 +193,7 @@ function CheckYourrole(user, loggedInMember /*<- detta är en member, inte en us
 				>
 					Remove from group
 				</button>
-				<button href={"/group/ban/" + user.id} onClick={(e) => handleClick(e)}>
+				<button onClick={() => sendMemberToBlacklist()}>
 					Blacklist
 				</button>
 				{ReportButton(realLoggedInUser, handleReport, showReportPopup, user)}
@@ -180,8 +201,8 @@ function CheckYourrole(user, loggedInMember /*<- detta är en member, inte en us
 		);
 	} else if (
 		loggedInMember.role === "GROUPMODERATOR" &&
-		user.role !== "GROUPADMIN"&&
-		user.role !=="GROUPMODERATOR"
+		user.role !== "GROUPADMIN" &&
+		user.role !== "GROUPMODERATOR"
 	) {
 		dropdownOptions = (
 			<>
@@ -197,7 +218,7 @@ function CheckYourrole(user, loggedInMember /*<- detta är en member, inte en us
 				>
 					Remove from group
 				</button>
-				<button href={"/group/ban/" + user.id} onClick={(e) => handleClick(e)}>
+				<button onClick={() => sendMemberToBlacklist()}>
 					Blacklist
 				</button>
 				{ReportButton(realLoggedInUser, handleReport, showReportPopup, user)}

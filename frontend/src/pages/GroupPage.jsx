@@ -17,6 +17,7 @@ class GroupPage extends React.Component {
 			loggedInUser: this.props.loggedInUser,
 			loggedInMember: { role: null },
 			threads: {},
+			usersBlacklist: [],
 			clickedThread: 0,
 			invitePopup: false,
 			toggleNewThread: false,
@@ -24,13 +25,15 @@ class GroupPage extends React.Component {
 			reload: false,
 		};
 		this.handleThreadClick = this.handleThreadClick.bind(this);
+		this.unlockMember = this.unlockMember.bind(this);
 		this.toggleNewThread = this.toggleNewThread.bind(this);
 		this.fetchThreads = this.fetchThreads.bind(this);
 		this.reloadPage = this.reloadPage.bind(this);
 		this.toggleInviteMember = this.toggleInviteMember.bind(this);
 		this.createMember = this.createMember.bind(this);
 		this.toggleInviteMember = this.toggleInviteMember.bind(this);
-		this.fetchMembers=this.fetchMembers.bind(this);
+		this.fetchMembers = this.fetchMembers.bind(this);
+		this.fetchBlackList=this.fetchBlackList.bind(this);
 	}
 
 	checkIfAdmin() {
@@ -43,7 +46,6 @@ class GroupPage extends React.Component {
 		}
 	}
 	fetchMembers() {
-		console.log(this.state.group.id)
 		axios
 			.get("/rest/member/memberByGroupId/" + this.state.group.id)
 			.then((response) => {
@@ -74,6 +76,17 @@ class GroupPage extends React.Component {
 	toggleInviteMember() {
 		this.setState({ invitePopup: !this.state.invitePopup });
 	}
+	unlockMember(userId) {
+		if (window.confirm("Är du säker på att du vill avblockera den här användaren?")) {
+			axios
+				.delete("/rest/member/deleteUserBlacklist/" + userId + "/" + window.location.href.substring(window.location.href.lastIndexOf('/') + 1))
+				.then((response) => {
+					alert(response.data);
+					this.fetchMembers()
+					this.fetchBlackList()
+				})
+		}
+	}
 	async componentDidMount() {
 		this.checkIfAdmin();
 
@@ -99,17 +112,35 @@ class GroupPage extends React.Component {
 			group: firstResponse.data[0],
 			members: secondResponse.data,
 			threads: thirdResponse.data,
-		});
+		}
+			, () => {
+				this.fetchBlackList()
+			});
 		this.setState((prevState) => {
 			let loggedInMember = prevState.loggedInMember;
 			if (typeof fourthResponse.data !== "undefined") {
 				loggedInMember = fourthResponse.data;
+				let usersBlacklist;
+
 			}
 			return { loggedInMember };
 		});
 	}
+	fetchBlackList(){
+		let groupId = window.location.href.substring(
+			window.location.href.lastIndexOf("/") + 1
+		);
+		let usersBlacklist;
+					axios.get("/rest/balcklistByGroupId/" + groupId)
+						.then((response) => response.data)
+						.then((data) => {
+							usersBlacklist = data;
+							this.setState({ usersBlacklist });
+						}
+						);
+	}
 
-	RenderMembers(props, loggedInMember, isAdmin,fetchMembers) {
+	RenderMembers(props, loggedInMember, isAdmin, fetchMembers) {
 		let members = Object.values(props);
 		let membersList = [];
 		for (let i = 0; i < members.length; i++) {
@@ -120,6 +151,7 @@ class GroupPage extends React.Component {
 					loggedInMember={loggedInMember}
 					isAdmin={isAdmin}
 					fetchMembers={fetchMembers}
+					fetchBlackList={this.fetchBlackList}
 				/>
 			);
 		}
@@ -183,7 +215,7 @@ class GroupPage extends React.Component {
 							this.state.threads,
 							this.handleThreadClick,
 							this.state.clickedThread,
-							this.state.loggedInMember,
+							this.state.loggedInUser,
 							this.fetchThreads
 						)}
 					</div>
@@ -222,6 +254,10 @@ class GroupPage extends React.Component {
 								this.fetchMembers
 							)}
 						</div>
+						<div>
+							{CheckLoggedInMemberRole(this.state.loggedInMember, this.state.usersBlacklist, this.unlockMember)}
+						</div>
+
 
 						<button
 							className="group-new-thread"
@@ -269,6 +305,29 @@ function RemoveGroupButton(isAdmin, role, group, reloadPage) {
 	} else {
 		return <></>;
 	}
+}
+
+function CheckLoggedInMemberRole(loggedinMember, usersBlacklist, unlockMember) {
+	let div;
+	if (loggedinMember.role === "GROUPADMIN" || loggedinMember.role === "GROUPMODERATOR") {
+		div = (
+			<div className="group-members-blacklist">
+				<h6 className="blocked-users">Blockerade användare i den här gruppen:</h6>
+				<div className="blacklist-list">{usersBlacklist.map((blacklist) => (
+					<ul className="blacklist-ul" key={blacklist.id}>
+						<li className="blacklist-members">
+							<button onClick={() => unlockMember(blacklist.id)}>Aktivera</button>
+							<span className="blacklist-user">{blacklist.username} - </span>
+							<span className="blacklist-date">{blacklist.to_date}</span>
+						</li>
+					</ul>
+				))}</div>
+			</div>
+		);
+	} else {
+		div = (<div></div>);
+	}
+	return div;
 }
 
 function ShowThread(

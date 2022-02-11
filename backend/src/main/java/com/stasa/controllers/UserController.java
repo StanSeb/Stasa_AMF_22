@@ -1,5 +1,6 @@
 package com.stasa.controllers;
 
+import com.stasa.entities.Member;
 import com.stasa.entities.User;
 import com.stasa.services.UserService;
 import lombok.SneakyThrows;
@@ -10,6 +11,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -50,6 +52,9 @@ public class UserController {
     public User getById(@PathVariable long id) throws Exception {
         return userService.findById(id).orElseThrow(() -> new Exception("User not found!"));
     }
+
+    @GetMapping("/rest/balcklistByGroupId/{groupId}")
+    public List<Map> getBlacklistMembers(@PathVariable long groupId) { return userService.getBlacklistMembers(groupId); }
 
     @GetMapping("/rest/username/{username}")
     public User getByUserName(@PathVariable String username) { return userService.findByUserName(username); }

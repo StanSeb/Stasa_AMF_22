@@ -5,7 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface UserRepo extends JpaRepository<User, Long> {
@@ -26,4 +28,7 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT CASE WHEN EXISTS (SELECT * FROM privilage WHERE privilage.user_id = ?) THEN 'TRUE' ELSE 'FALSE' END", nativeQuery = true)
     boolean findAdminById(long id);
+
+    @Query(value = "SELECT b.user_id AS id, b.to_date, u.username FROM blacklist b INNER JOIN users u ON b.user_id = u.id WHERE b.group_id = ?1", nativeQuery = true)
+    List<Map> getBlacklistMembers(long groupId);
 }

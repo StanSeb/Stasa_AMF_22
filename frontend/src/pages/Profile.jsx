@@ -128,81 +128,85 @@ class Profile extends React.Component {
 					{listItems}
 				</div>
 
-				{RenderGroups(this.state.groupsList, this.state.userObj.id)}
-
-				<div>{this.state.groups.map((group) => (
-					<ul key={group.id}>
-						<li> Title: <span>{group.group.title}</span> <br />
-							Description: <span>{group.group.description}</span> <br />
-							Role: <span>{group.memberRole.title}</span> <br />
-							<button onClick={() => this.deleteGroup(group.group.id)}>Radera grupp</button>
-						</li>
-					</ul>
-				))}</div>
+				{RenderGroups(this.state.groups, this.state.userObj.id, this.fetchGroups, this.state.profileId, this.state.isAdmin)}
 			</div>
 		);
 	}
 }
 
-function RenderGroups(props, user_id) {
+function RenderGroups(groups, user_id, fetchGroups, profileId, isAdmin) {
+	if (typeof groups !== "undefined") {
 
+		let groupsValues = Object.values(groups);
 
-	function RenderGroups(groups, user_id, fetchGroups, profileId, isAdmin) {
-		if (typeof groups !== "undefined") {
-
-			let groupsValues = Object.values(groups);
-
-			let groupList = [];
-			for (let i = 0; i < groupsValues.length; i++) {
-				groupList.push(
-					<div key={i} className="profile-groups-list">
-						<div><Link to={`/group/${groupsValues[i].group.id}`}><span>{groupsValues[i].group.title}</span></Link> <br />
-							Description: <span>{groupsValues[i].group.description}</span> <br />
-							Role: <span>{groupsValues[i].memberRole.title}</span> <br />
-						</div>
-						{checkIfAdmin(groupsValues[i].memberRole.title, groupsValues[i].group, user_id, fetchGroups, profileId, isAdmin)}
-						<div className="profile-group-buttons">
-						</div>
+		let groupList = [];
+		for (let i = 0; i < groupsValues.length; i++) {
+			groupList.push(
+				<div key={i} className="profile-groups-list">
+					<div><Link to={`/group/${groupsValues[i].group.id}`}><span>{groupsValues[i].group.title}</span></Link> <br />
+						Description: <span>{groupsValues[i].group.description}</span> <br />
+						Role: <span>{groupsValues[i].memberRole.title}</span> <br />
 					</div>
-				);
-			}
-			return groupList;
+					{checkIfAdmin(groupsValues[i].memberRole.title, groupsValues[i].group, user_id, fetchGroups, profileId, isAdmin)}
+					<div className="profile-group-buttons">
+					</div>
+				</div>
+			);
 		}
-	}
-	function checkIfAdmin(role, group, userId, fetchGroups, profileId, isAdmin) {
-		if (userId == profileId || isAdmin) {
-			function leaveGroup(key) {
-				if (window.confirm('Är du säker på att du vill lämna gruppen: ' + group.title))
-					axios.delete(
-						"/rest/member/delete/" + key + "/" + userId
-					).then((response) => {
-						console.log(response.data)
-						fetchGroups()
-					})
-			}
-			function deleteGroup(id) {
-
-				if (window.confirm('Är du säker på att du vill ta bort denna gruppen: ' + group.title))
-					axios
-						.put("/rest/groups/deleteGroup/" + id)
-						.then((response) => {
-							alert("Grupp med namnet: " + group.title + " har tagits bort")
-							fetchGroups()
-						})
-
-			}
-			if (role === 'GROUPADMIN' && isAdmin) {
-				return (
-					<button onClick={() => { deleteGroup(group.id) }}>Ta bort Grupp</button>
-				)
-			}
-			else if (!isAdmin) {
-				return (
-					<button onClick={() => { leaveGroup(group.id); }}>Lämna Grupp</button>)
-			}
-		} else {
-			return <></>;
-		}
+		return groupList;
 	}
 }
-	export default Profile
+function checkIfAdmin(role, group, userId, fetchGroups, profileId, isAdmin) {
+
+	if (userId == profileId || isAdmin) {
+		function leaveGroup(key) {
+			if (
+				window.confirm(
+					"Är du säker på att du vill lämna gruppen: " + group.title
+				)
+			)
+				axios
+					.delete("/rest/member/delete/" + key + "/" + userId)
+					.then((response) => {
+						console.log(response.data);
+						fetchGroups();
+					});
+		}
+		function deleteGroup(id) {
+			if (
+				window.confirm(
+					"Är du säker på att du vill ta bort denna gruppen: " + group.title
+				)
+			)
+				axios.put("/rest/groups/deleteGroup/" + id).then((response) => {
+					alert("Grupp med namnet: " + group.title + " har tagits bort");
+					fetchGroups();
+				});
+		}
+		if (role === "GROUPADMIN" || isAdmin) {
+			return (
+				<button
+					onClick={() => {
+						deleteGroup(group.id);
+					}}
+				>
+					Ta bort Grupp
+				</button>
+			);
+		} else if (!isAdmin) {
+			return (
+				<button
+					onClick={() => {
+						leaveGroup(group.id);
+					}}
+				>
+					Lämna Grupp
+				</button>
+			);
+		}
+	} else {
+		return <></>;
+	}
+}
+
+export default Profile
