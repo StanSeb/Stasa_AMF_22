@@ -50,13 +50,21 @@ class Profile extends React.Component {
 
 		if (id == profileID || this.state.isAdmin) {
 			function terminateUserById() {
+				if(window.confirm("e du heeeeeeelt säker?"))
 				axios.put("/auth/terminateUser/" + profileID)
 					.then(response => {
 						alert(response.data)
+						fetch("/logout", {
+							headers: {
+								"Content-Type": "application/x-www-form-urlencoded",
+							},
+							mode: "no-cors",
+						});
+						window.location.assign("http://localhost:3000/");
 					}).catch((error) => {
 						console.log(error)
 					})
-			}
+				}
 			return <button onClick={terminateUserById}>Stäng av kontot</button>;
 		}
 		return <></>;
