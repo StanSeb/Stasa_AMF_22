@@ -32,9 +32,7 @@ public class GroupService {
         return response;
     }
 
-    public List<Group> findAll() {
-        return groupRepo.findAll();
-    }
+    public List<Group> findAll() { return groupRepo.findAll(); }
 
     public String leaveGroup(long id, long groupID) {
         groupRepo.leaveGroup(id, groupID);

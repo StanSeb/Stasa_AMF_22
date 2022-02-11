@@ -1,13 +1,17 @@
 package com.stasa;
 
+import com.stasa.controllers.InvitationController;
+import com.stasa.controllers.MemberController;
 import com.stasa.entities.Group;
 import com.stasa.services.GroupService;
+import com.stasa.services.MemberService;
 import com.stasa.services.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -21,17 +25,27 @@ class StasaProjectApplicationTests {
 	@Autowired
 	GroupService groupService;
 
+	@Autowired
+	MemberService memberService;
+
+	@Autowired
+	MemberController memberController;
+
+	@Autowired
+	InvitationController invitationController;
+
 	@Test
 	void contextLoads() {
 	}
 
-	@Test
+	/*@Test
 	public void testGetByUsername() throws IOException {
 		String username = "Sebbe";
-		String byUserName = userService.findByUserName(username);
+		Map<Long, String> byUserName = userService.findByUserName(username);
 
-		assertEquals("Sebbe", byUserName);
+		assertEquals("Sebbe", byUserName.get("username"));
 	}
+	 */
 
 	@Test
 	public void testGetEmail() {
@@ -77,6 +91,12 @@ class StasaProjectApplicationTests {
 
 		assertEquals("successful", responseGroup1);
 		assertEquals("failed", responseGroup2);
+	}
+
+	@Test
+	public void testGetInvitations() {
+		ArrayList<Map> userInvitations = invitationController.getUserInvitations(47L);
+		assertEquals(2, userInvitations.size());
 	}
 
 }

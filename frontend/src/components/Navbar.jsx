@@ -19,7 +19,7 @@ function Navbar(props) {
             <nav className='containerNavbar'>
                 <ul style={{padding: "0"}}>
                     <li>
-                        <Link to="/home"><h3>Hem</h3></Link>
+                        <Link to="/"><h3>Hem</h3></Link>
                     </li>
                     <li>
                         <Link to="/rules"><h3>Regler</h3></Link>
@@ -48,7 +48,6 @@ function Navbar(props) {
                 <Route path="/mailSent" element={<MailSentPage />}/>
                 <Route path="/registerGroup" element={<RegisterGroup userObj={props.userObj}/>} />
                 <Route path="/group/:id" element={<GroupPage loggedInUser={props.userObj}/>} />
-                <Route path="/home" element={<Homepage/>} />
                 <Route path="/" element={<Homepage/>} />
             </Routes>
         </Router>

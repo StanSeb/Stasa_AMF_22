@@ -44,7 +44,7 @@ function Login(props) {
                     const {id, username} = response.data
                     const userObject = {id: id, username: username}
                     props.storeId(userObject.id)
-                    navigate("/home");
+                    navigate("/");
                     window.location.reload(true);
                 }
                 else {

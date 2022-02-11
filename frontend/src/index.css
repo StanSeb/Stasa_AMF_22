@@ -194,10 +194,16 @@ code {
 
 /*#region user-dropdown*/
 .user-drop {
+	display: flex;
 	position: relative;
 	display: inline-block;
+	justify-content:center;
 }
-
+.user-drop-button{
+	font-size:1.2em;
+	height:1.5em;
+	margin-bottom: 0.5em;
+}
 .user-drop-content {
 	display: none;
 	position: absolute;
@@ -208,17 +214,20 @@ code {
 	width: 8vw;
 }
 
-.user-drop-content a {
+.user-drop-content>button{
+	border:none;
+	width:100%;
 	color: black;
 	text-decoration: none;
 	display: block;
+	font-size: 1.1em;
 }
 
-.user-drop-content a:nth-last-of-type(2n + 1) {
+.user-drop-content button:nth-last-of-type(2n + 1) {
 	background-color: rgb(220, 220, 220);
 }
 
-.user-drop-content a:hover {
+.user-drop-content button:hover {
 	background-color: rgb(200, 200, 200);
 }
 
@@ -394,19 +403,51 @@ code {
 }
 /*#endregion*/
 
+/*#region profile*/
 .profileContainer {
-	padding-top: 8em;
+    position: relative;
+    width: 50vw;
+    left: 25vw;
 }
 
-.profile-groups-list{
-	display: flex;
-	height: 2em;
-	align-items: center;
+.profile-group-container {
+    display: flex;
+    flex-direction: column;
+    width: 50vw;
+    margin-top: 1em;
+}
+
+.profile-groups-list {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border: 1px solid lightgray;
+    margin-top: 0.5em;
 }
 
 .profile-groups-list > * {
-	margin: .5em;
+    margin: 0.5em;
 }
+
+.profile-groups-list > * > a {
+    font-size: large;
+    font-weight: bold;
+}
+
+.profile-member-role {
+    text-transform: lowercase;
+}
+
+.profile-groups-list > button {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.profile-groups-list:nth-last-of-type(2n + 1) {
+    background-color: rgb(240, 240, 240);
+}
+/*#endregion*/
 
 /*#region Navbar*/
 nav {
@@ -541,4 +582,34 @@ footer::before {
 	margin: 5em 0 5em 0;
 }
 /*#endregion*/
+
+/*#region invitation-container*/
+
+.invitation-container{
+	position: fixed;
+    background-color:white;
+	border: 1px solid black;
+    top:25%;
+	left: 25%;
+    z-index: 5;
+}
+
+.btnRemovePopup{
+	background-color: white;
+	border: none;
+	font-size: 17px;
+	position: fixed;
+	text-align: left;
+	font-weight: bold;
+}
+
+.btnRemovePopup:hover{
+	cursor: pointer;
+}
+
+.sendInvite{
+	padding: 15px;
+}
+/*#endregion*/
+
 
