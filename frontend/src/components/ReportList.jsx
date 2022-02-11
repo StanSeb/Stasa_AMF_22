@@ -44,9 +44,18 @@ class ReportList extends React.Component {
 
     console.log("REPORTS:", reports);
 
+    if(!reports || reports.length === 0) {
+      return (
+        <div id="report-list-container">
+          <div>There are no reports to show.</div>
+        </div>
+      );
+    }
+
     return (
         <div id="report-list-container">
-            { this.renderReportItems() }
+          Here are all the reports!
+          { this.renderReportItems() }
         </div>
     );
 

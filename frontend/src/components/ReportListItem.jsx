@@ -31,7 +31,7 @@ class ReportListItem extends React.Component {
 
     handleReportAction(approveReport) {
 
-        if(!window.confirm(`Are you sure you want to ${ approveReport ? "approve" : "reject" } this report?"`)) {
+        if(!window.confirm(`Are you sure you want to ${ approveReport ? "approve" : "reject" } this report?`)) {
             return;
         }
 
@@ -45,6 +45,7 @@ class ReportListItem extends React.Component {
         } else {
             this.approveReport();
         }
+
     }
 
     deleteReport() {
@@ -55,11 +56,11 @@ class ReportListItem extends React.Component {
                 id: this.getReport().id
             }
         }).then(response => {
-            console.log("RESPONSE FROM DELETING REPORT:", response);
             if(response.data === true) {
+                window.location.reload();
                 return true;
-                // TODO: Uppdatera listan med reports.
             } else {
+                window.location.reload();
                 return false;
             }
         })
@@ -144,7 +145,6 @@ class ReportListItem extends React.Component {
     fetchReportTarget() {
         let report  = this.getReport();
         let targetTypeString = report.targetType.name;
-        let targetTypeId = report.targetType.id;
         let targetId = report.targetId;
 
         switch(targetTypeString) {
@@ -191,7 +191,7 @@ class ReportListItem extends React.Component {
                 let group = response.data;
                 this.setState({
                     targetObject: group,
-                    targetDescription: `Group with ID ${group.id} and title \"${group.title}\"`
+                    targetDescription: `Group with ID ${group.id} and title "${group.title}"`
                 });
             })
     }
@@ -202,7 +202,7 @@ class ReportListItem extends React.Component {
                 let thread = response.data;
                 this.setState({
                     targetObject: response.data,
-                    targetDescription: `Thread with ID ${thread.id} and title \"${thread.title}\"`
+                    targetDescription: `Thread with ID ${thread.id} and title "${thread.title}"`
                 })
             })
     }
