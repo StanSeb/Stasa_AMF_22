@@ -131,6 +131,7 @@ class Profile extends React.Component {
 				</div>
 
 				{RenderGroups(this.state.groups, this.state.userObj.id, this.fetchGroups, this.state.profileId, this.state.isAdmin)}
+				<ReportList />
 			</div>
 		);
 	}
@@ -154,6 +155,7 @@ function RenderGroups(groups, user_id, fetchGroups, profileId, isAdmin) {
 					</div>
 				</div>
 			);
+			
 		}
 		return groupList;
 	}

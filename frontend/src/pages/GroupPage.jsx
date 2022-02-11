@@ -393,5 +393,4 @@ function RenderThreads(
 		return threadList;
 	} else return null;
 }
-
 export default GroupPage;
