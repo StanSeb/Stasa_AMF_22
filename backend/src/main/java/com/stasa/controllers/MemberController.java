@@ -60,12 +60,10 @@ public class MemberController {
 
     @DeleteMapping("/delete/{groupId}/{userId}")
     public void deleteById(@PathVariable long groupId,@PathVariable long userId) {
-        System.out.println(groupId+" "+" "+userId);
          memberService.deleteById(groupId,userId);
     }
     @DeleteMapping("/deleteMember/{Id}")
     public void deleteByMemberId(@PathVariable int Id) {
-
         memberService.deleteByMemberId(Id);
     }
 

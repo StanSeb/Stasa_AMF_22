@@ -35,7 +35,6 @@ public class ThreadService {
     }
 
     public String postNewThread(Thread thread){
-        System.out.println(thread + " from service");
         threadRepo.save(thread);
         return "Post OK";
     }
@@ -66,8 +65,6 @@ public class ThreadService {
         }
     }
     public String deleteComment(long id) {
-        System.out.println(id);
-        System.err.println((commentRepo.findCommentById(id)));
         if(commentRepo.findCommentById(id) != null){
             Comment newComment = commentRepo.findCommentById(id);
             Date date = Calendar.getInstance().getTime();
@@ -82,7 +79,6 @@ public class ThreadService {
     }
 
     public List<Object> findCommentById(long id) {
-        System.out.println(commentRepo.findCommentsById(id));
        return commentRepo.findCommentsById(id);
     }
 

@@ -43,7 +43,6 @@ public class UserService {
 
     public void register(User user, String siteURL)
         throws UnsupportedEncodingException, MessagingException {
-        System.out.println(user);
             String verification = RandomString.make(50);
             user.setVerificationCode(verification);
             user.setEnabled(false);
@@ -75,8 +74,6 @@ public class UserService {
         helper.setText(content,true);
 
         mailSender.send(message);
-        System.out.println("Email sent to " + toAdress);
-        System.out.println("Verification code: " + user.getVerificationCode());
     }
 
 
@@ -173,7 +170,6 @@ public class UserService {
 
     public @Nullable User whoAmI() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println("EMAIL: " + email);
         return userRepo.findByEmail(email);
     }
 

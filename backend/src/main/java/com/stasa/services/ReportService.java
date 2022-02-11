@@ -66,9 +66,7 @@ public class ReportService {
         }
 
         try {
-            System.out.println("SAVING");
             var savedReport = reportRepository.save(report);
-            System.out.println("SAVED");
             return savedReport;
         } catch (Exception e) {
             // fixa bättre error handling?

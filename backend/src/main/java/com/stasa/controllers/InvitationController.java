@@ -16,7 +16,6 @@ public class InvitationController {
 
     @PostMapping("/rest/invite")
     public String inviteUserToGroup(@RequestBody Invitation invitation) {
-        System.out.println(invitation.toString());
         return invitationService.inviteUserToGroup(invitation);
     }
 
