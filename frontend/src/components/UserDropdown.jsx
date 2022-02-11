@@ -12,7 +12,7 @@ class UserDropdown extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			moderator: {
+			member: {
 				user: { id: "" },
 				memberRole: { id: "" },
 				group: { id: "" },
@@ -37,29 +37,28 @@ class UserDropdown extends React.Component {
 	}
 
 	updateMemberRole() {
-		let moderator;
-
-
+		let member;
 		if (this.props.user.role == "MEMBER") {
-			moderator = {
-				user: { id: this.props.user.id },
+			member = {
+				user: { id: this.props.user.user_id },
 				memberRole: { id: 3 }, // id av "moderator" i Tabellen member_roles i Databasen.
 				group: { id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1) },
 			};
 		} else if (this.props.user.role == "GROUPMODERATOR") {
-			moderator = {
-				user: { id: this.props.user.id },
+			member = {
+				user: { id: this.props.user.user_id },
 				memberRole: { id: 4 }, // id av "member" i Tabellen member_roles i Databasen.
 				group: { id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1) },
 			};
 		}
 
-		this.setState({ moderator }, () => {
+		this.setState({ member }, () => {
 			axios
-				.put("/rest/member/updateMemberRole", this.state.moderator)
+				.put("/rest/member/updateMemberRole", this.state.member)
 				.then((response) => {
-					alert(response.data);
-					//window.location.reload();
+					alert(response.data)
+					
+						this.props.fetchMembers();
 				})
 		});
 	}
@@ -89,9 +88,9 @@ class UserDropdown extends React.Component {
 					const loggedInUser = this.context.loggedInUser;
 					return (
 						<div className="user-drop">
-							{CheckUser(this.state.user)}
+							{CheckUser(this.props.user)}
 							<div className="user-drop-content">
-								{CheckYourrole(this.state.user, this.props.loggedInMember, this.updateMemberRole, this.deleteMember, this.handleReport, this.handleClick, showReportPopup, this.context.loggedInUser,this.props.isAdmin)}
+								{CheckYourrole(this.props.user, this.props.loggedInMember, this.updateMemberRole, this.deleteMember, this.handleReport, this.handleClick, showReportPopup, this.context.loggedInUser,this.props.isAdmin)}
 							</div>
 						</div>
 					);
@@ -126,7 +125,7 @@ function CheckUser(props) {
 function CheckYourrole(user, loggedInMember /*<- detta är en member, inte en user.*/, updateMemberRole, deleteMember, handleReport, handleClick, showReportPopup, realLoggedInUser,isAdmin) {
 	let dropdownOptions;
 	if (
-		isAdmin
+		isAdmin || loggedInMember.role ==="GROUPADMIN" && user.role !=="GROUPADMIN" && user.role !=="GROUPMODERATOR"
 	) {
 		dropdownOptions = (
 			<>
@@ -153,7 +152,7 @@ function CheckYourrole(user, loggedInMember /*<- detta är en member, inte en us
 			</>
 		);
 	} else if (
-		loggedInMember.role === "GROUPADMIN"
+		loggedInMember.role === "GROUPADMIN" && user.role==="GROUPMODERATOR"
 	) {
 		dropdownOptions = (
 			<>

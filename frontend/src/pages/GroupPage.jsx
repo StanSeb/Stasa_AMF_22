@@ -30,6 +30,7 @@ class GroupPage extends React.Component {
 		this.toggleInviteMember = this.toggleInviteMember.bind(this);
 		this.createMember = this.createMember.bind(this);
 		this.toggleInviteMember = this.toggleInviteMember.bind(this);
+		this.fetchMembers=this.fetchMembers.bind(this);
 	}
 
 	checkIfAdmin() {
@@ -40,6 +41,14 @@ class GroupPage extends React.Component {
 					this.setState({ isAdmin: response.data });
 				});
 		}
+	}
+	fetchMembers() {
+		console.log(this.state.group.id)
+		axios
+			.get("/rest/member/memberByGroupId/" + this.state.group.id)
+			.then((response) => {
+				this.setState({ members: response.data });
+			});
 	}
 
 	createMember() {
@@ -57,11 +66,7 @@ class GroupPage extends React.Component {
 			axios.post("/rest/member/join", this.state.member).then((response) => {
 				alert(response.data);
 				//window.location.reload();
-				axios
-					.get("/rest/member/memberByGroupId/" + member.group.id)
-					.then((response) => {
-						this.setState({ members: response.data });
-					});
+				this.fetchMembers()
 			});
 		});
 	}
@@ -85,9 +90,9 @@ class GroupPage extends React.Component {
 
 		const fourthResponse = await axios.get(
 			"/rest/member/getMemberByIdUserId/" +
-				this.state.loggedInUser.id +
-				"/" +
-				firstResponse.data[0].id
+			this.state.loggedInUser.id +
+			"/" +
+			firstResponse.data[0].id
 		);
 
 		this.setState({
@@ -104,7 +109,7 @@ class GroupPage extends React.Component {
 		});
 	}
 
-	RenderMembers(props, loggedInMember, isAdmin) {
+	RenderMembers(props, loggedInMember, isAdmin,fetchMembers) {
 		let members = Object.values(props);
 		let membersList = [];
 		for (let i = 0; i < members.length; i++) {
@@ -114,6 +119,7 @@ class GroupPage extends React.Component {
 					key={i}
 					loggedInMember={loggedInMember}
 					isAdmin={isAdmin}
+					fetchMembers={fetchMembers}
 				/>
 			);
 		}
@@ -212,7 +218,8 @@ class GroupPage extends React.Component {
 							{this.RenderMembers(
 								this.state.members,
 								this.state.loggedInMember,
-								this.state.isAdmin
+								this.state.isAdmin,
+								this.fetchMembers
 							)}
 						</div>
 
