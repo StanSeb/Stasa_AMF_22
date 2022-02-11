@@ -21,7 +21,7 @@ public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "reporter_id", nullable = false)
@@ -38,14 +38,6 @@ public class Report {
     private String description;
 
     @Column(name = "creation_timestamp")
-    @Generated(GenerationTime.INSERT) // Behövs för att få med det när värdet ändras
+    @Generated(GenerationTime.INSERT) // Behövs för att få med när värdet ändras
     private Instant creationTimestamp;
-
-    /** The reporter is set using whoAmI (eller inte för det funkar ej) */
-//    @JsonIgnore
-//    public void setReporter(User reporter) {
-//        this.reporter = reporter;
-//    }
-
-    // todo: returnera timestamp med rätt tidsformat (GMT)
 }

@@ -1,6 +1,8 @@
 import axios from "axios";
 import React from "react";
 import { Link } from "react-router-dom";
+import '../components/ReportPopup.scss';
+import ReportList from '../components/ReportList';
 
 class Profile extends React.Component {
 	constructor(props) {

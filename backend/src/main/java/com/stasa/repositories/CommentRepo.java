@@ -10,7 +10,6 @@ import java.util.List;
 @Repository
 public interface CommentRepo extends JpaRepository<Comment, Long> {
 
-
     @Query(value="SELECT * FROM comments WHERE comments.id =?1",nativeQuery = true)
     Comment findCommentById(long id);
 

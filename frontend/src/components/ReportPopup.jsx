@@ -100,6 +100,8 @@ class ReportPopup extends React.Component {
   }
 
   targetToString() {
+    // Används för att få en "description" av target. 
+    // Detta hamnar i högst upp i ReportPopup och säger exempelvis "Report User" om rapporten targetar en user.
     let targetType = this.context.targetType;
     let typeName = this.targetTypeName(targetType);
     let propertyType;
@@ -130,13 +132,14 @@ class ReportPopup extends React.Component {
     this.setState({ description: e.target.value });
   }
 
+  // För att se hur många character man har kvar att använda (så det inte blir för långt för databasen)
   descriptionInputSize() {
     let descriptionLength = this.state.description.length;
     return (descriptionLength + "/" + DESCRIPTION_MAX_LENGTH);
   }
 
   render() {
-    const { targetType, targetId, popupVisible } = this.context;
+    const { popupVisible } = this.context;
 
     let errorBox = null;
     let error = this.state.error;

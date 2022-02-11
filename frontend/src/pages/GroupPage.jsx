@@ -5,7 +5,10 @@ import ThreadPage from "../pages/ThreadPage";
 import UserDropdown from "../components/UserDropdown";
 import InviteMemberPopup from "../components/InviteMemberPopup";
 import NewThread from "../components/NewThread";
+import ReportButton from "../components/ReportButton";
 import { Navigate } from "react-router-dom";
+
+const targetType = 3;
 
 class GroupPage extends React.Component {
 	constructor(props) {
@@ -269,6 +272,7 @@ class GroupPage extends React.Component {
 						>
 							Skapa nytt inlägg
 						</button>
+						<ReportButton customText="Report this group" targetType={ targetType } targetId={window.location.href.substring(window.location.href.lastIndexOf("/") + 1) } />
 					</div>
 				</div>
 			);
