@@ -5,7 +5,7 @@ import ThreadPage from "../pages/ThreadPage";
 import UserDropdown from "../components/UserDropdown";
 import InviteMemberPopup from "../components/InviteMemberPopup";
 import NewThread from "../components/NewThread";
-import {Navigate} from "react-router-dom"
+import { Navigate } from "react-router-dom"
 
 class GroupPage extends React.Component {
 	constructor(props) {
@@ -14,18 +14,18 @@ class GroupPage extends React.Component {
 			members: [],
 			group: { title: "", description: "" },
 			loggedInUser: this.props.loggedInUser,
-			loggedInMember: "",
+			loggedInMember: { role: null },
 			threads: {},
 			clickedThread: 0,
 			invitePopup: false,
 			toggleNewThread: false,
 			isAdmin: false,
-			reload:false,
+			reload: false,
 		};
 		this.handleThreadClick = this.handleThreadClick.bind(this);
 		this.toggleNewThread = this.toggleNewThread.bind(this);
 		this.fetchThreads = this.fetchThreads.bind(this);
-		this.reloadPage= this.reloadPage.bind(this);
+		this.reloadPage = this.reloadPage.bind(this);
 		this.toggleInviteMember = this.toggleInviteMember.bind(this);
 	}
 
@@ -60,7 +60,7 @@ class GroupPage extends React.Component {
 	toggleInviteMember() {
 		this.setState({ invitePopup: !this.state.invitePopup });
 	}
-	componentDidMount() {
+	async componentDidMount() {
 		this.checkIfAdmin()
 
 		let groupId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
@@ -72,21 +72,33 @@ class GroupPage extends React.Component {
 			axios.get("/rest/threads/byGroup/" + groupId)
 		]);
 
-		const fourthResponse = await axios.get("/rest/member/getMemberByIdUserId/" + this.state.loggedInUser.id + "/" + firstResponse.data[0].id);
+		const fourthResponse = await axios.get("/rest/member/getMemberByIdUserId/" + this.state.loggedInUser.id + "/" + firstResponse.data[0].id)
+		
+
 
 		this.setState({
 			group: firstResponse.data[0],
 			members: secondResponse.data,
 			threads: thirdResponse.data,
-			loggedInMember: fourthResponse.data
+		})
+		this.setState((prevState) => {
+
+			let loggedInMember = prevState.loggedInMember
+			console.log(fourthResponse.data.length)
+			if(typeof(fourthResponse.data[0] !=="undefined" && fourthResponse.data.length>0)){
+				loggedInMember = fourthResponse.data[0]
+				console.log(fourthResponse.data[0])
+			}
+			console.log(loggedInMember)
+			return {loggedInMember}
 		})
 	}
-	RenderMembers(props, loggedInUser) {
+	RenderMembers(props, loggedInMember, isAdmin) {
 		let members = Object.values(props);
 		let membersList = [];
 		for (let i = 0; i < members.length; i++) {
 			membersList.push(
-				<UserDropdown user={members[i]} key={i} loggedInUser={loggedInUser} />
+				<UserDropdown user={members[i]} key={i} loggedInMember={loggedInMember} isAdmin={isAdmin} />
 			);
 		}
 		return membersList;
@@ -107,7 +119,7 @@ class GroupPage extends React.Component {
 	}
 
 	fetchThreads() {
-		if (typeof this.state.loggedInMember.role !== "undefined" &&this.state.loggedInMember.role !== '') {
+		if (typeof this.state.loggedInMember.role !== "undefined" && this.state.loggedInMember.role !== '') {
 			let threads;
 			axios
 				.get("/rest/threads/byGroup/" + this.state.group.id)
@@ -118,77 +130,83 @@ class GroupPage extends React.Component {
 				});
 		}
 	}
-	reloadPage(){
-		this.setState({reload:true})
+	reloadPage() {
+		this.setState({ reload: true })
 	}
 
 	render() {
-		if(this.state.reload){
+		if (this.state.reload) {
 			return <Navigate to="/home" />
-		}else{
-		return (
-			<div className="group-page">
-				
-				<div className="group-overlay"
-					style={{ display: this.state.toggleNewThread ? "block" : "none" }}>
-					<NewThread
-						cancelPost={this.toggleNewThread}
-						groupId={this.state.group.id}
-						loggedInUser={this.state.loggedInUser}
-						fetchThreads={this.fetchThreads}
-					/>
-				</div>
+		} else {
+			return (
+				<div className="group-page">
 
-				<div className="group-posts">
-					{ShowThread(
-						this.state.threads,
-						this.handleThreadClick,
-						this.state.clickedThread,
-						this.props.loggedInUser,
-						this.fetchThreads
-					)}
-				</div>
-
-				<div className="group-side-panel">
-					{this.state.invitePopup ? <InviteMemberPopup toggleProps={this.toggleInviteMember} loggedInUser={this.state.loggedInUser} groupId={this.state.group} memberId={this.state.members} /> : null}
-
-					<div className="group-info">
-						<h3>{this.state.group.title}</h3>
-						<p>{this.state.group.description}</p>
-
-						<button onClick={() => this.createMember()}>Bli medlem</button>
-						<button onClick={() => this.toggleInviteMember()}>Bjud in medlem</button>
+					<div className="group-overlay"
+						style={{ display: this.state.toggleNewThread ? "block" : "none" }}>
+						<NewThread
+							cancelPost={this.toggleNewThread}
+							groupId={this.state.group.id}
+							loggedInUser={this.state.loggedInUser}
+							fetchThreads={this.fetchThreads}
+						/>
 					</div>
 
-					<div className="group-members">
-						{this.RenderMembers(this.state.members, this.state.loggedInUser)}
+					<div className="group-posts">
+						{ShowThread(
+							this.state.threads,
+							this.handleThreadClick,
+							this.state.clickedThread,
+							this.props.loggedInUser,
+							this.fetchThreads
+						)}
 					</div>
 
-					<button
-						className="group-new-thread"
-						style={{
-							display:
-								typeof this.state.loggedInMember.role === "undefined" ? "none" : this.state.loggedInMember.role === ''
-									? "none"
-									: "block",
-						}}
-						onClick={() => this.toggleNewThread(true)}
-					>
-						Skapa nytt inlägg
-					</button>
-				</div>
-			</div>)
+					<div className="group-side-panel">
+						{this.state.invitePopup ? <InviteMemberPopup toggleProps={this.toggleInviteMember} loggedInUser={this.state.loggedInUser} groupId={this.state.group} memberId={this.state.members} /> : null}
+
+						<div className="group-info">
+							<h3>{this.state.group.title}</h3>
+							<p>{this.state.group.description}</p>
+							{RemoveGroupButton(this.state.isAdmin, this.state.loggedInMember, this.state.group, this.reloadPage)}
+							{/* {MemberButton(this.state.loggedInMember)} */}
+						</div>
+
+						<div className="group-members">
+							{this.RenderMembers(this.state.members, this.state.loggedInMember, this.state.isAdmin)}
+						</div>
+
+						<button
+							className="group-new-thread"
+							style={{
+								display:
+									this.state.loggedInMember.role === null ? "none" : "block"
+							}}
+							onClick={() => this.toggleNewThread(true)}
+						>
+							Skapa nytt inlägg
+						</button>
+					</div>
+				</div>)
+		}
 	}
 }
+function MemberButton(role) {
+	console.log(role.role)
+	if (typeof (role.role) === "undefined") {
+		return <button onClick={() => this.createMember()}>Bli medlem</button>
+	}
+	else {
+		return <button onClick={() => this.toggleInviteMember()}>Bjud in medlem</button>
+	}
 }
-function RemoveGroupButton(isAdmin, role,group,reloadPage) {
-	console.log(group)
-	if (isAdmin || role === 'GROUPADMIN') {
+function RemoveGroupButton(isAdmin, group, reloadPage) {
+
+	if (isAdmin) {
 		function removeGroup() {
-			
+
 			if (window.confirm('Är du säker på att du vill ta bort denna gruppen: ' + group.title))
 				axios
-					.put("/rest/groups/deleteGroup/" +group.id)
+					.put("/rest/groups/deleteGroup/" + group.id)
 					.then((response) => {
 						alert("Grupp med namnet: " + group.title + " har tagits bort")
 						reloadPage()
@@ -197,7 +215,7 @@ function RemoveGroupButton(isAdmin, role,group,reloadPage) {
 		return <button className="group-delete" onClick={removeGroup}>Ta bort grupp</button>
 	}
 	else {
-		return <>testar else</>
+		return <></>
 	}
 
 }

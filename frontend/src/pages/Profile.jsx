@@ -17,7 +17,7 @@ class Profile extends React.Component {
 		this.fetchGroups = this.fetchGroups.bind(this);
 	}
 
-	async accept(groupId, invitationId){
+	async accept(groupId, invitationId) {
 
 		const memberObject = {
 			user: { id: this.state.userId, },
@@ -25,25 +25,25 @@ class Profile extends React.Component {
 			group: { id: groupId },
 		}
 
-		await axios.post("/rest/member/join",  memberObject)
+		await axios.post("/rest/member/join", memberObject)
 
 		//DELETE: Ta bort invitation
-		await axios.delete("/rest/deleteInvitation/"+ invitationId)
-		.then((response) => console.log(response.data))
+		await axios.delete("/rest/deleteInvitation/" + invitationId)
+			.then((response) => console.log(response.data))
 
 		this.componentDidMount();
 	}
 
-	async deny(invitationId){
+	async deny(invitationId) {
 		//DELETE: Ta bort invitation
-		await axios.delete("/rest/deleteInvitation/"+ invitationId)
-		.then((response) => console.log(response.data))
+		await axios.delete("/rest/deleteInvitation/" + invitationId)
+			.then((response) => console.log(response.data))
 
 		this.componentDidMount();
 	}
 
 	checkIfSignedId(id) {
-		
+
 		const profileID = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
 
 		if (id == profileID || this.state.isAdmin) {
@@ -82,12 +82,12 @@ class Profile extends React.Component {
 			.then((data) => {
 				this.setState({ groups: data });
 			});
-		
-		await axios.get("/rest/invitations/" + this.state.userId)
-		.then((response) => {
-				this.setState({invitations: response.data})
+
+		axios.get("/rest/invitations/" + this.state.userId)
+			.then((response) => {
+				this.setState({ invitations: response.data })
 			}
-		);
+			);
 	}
 
 
@@ -107,10 +107,10 @@ class Profile extends React.Component {
 		const data = this.state.invitations
 		const listItems = data.map((d) => <li key={d.id}>
 			<h4>Inbjuden av: {d.username} </h4>
-			<p>Grupp: {d.title} 
-		
-			<button onClick={() => this.accept(d.groupId, d.id)}>Godkänn</button>
-			<button onClick={() => this.deny(d.id)}>Neka</button>
+			<p>Grupp: {d.title}
+
+				<button onClick={() => this.accept(d.groupId, d.id)}>Godkänn</button>
+				<button onClick={() => this.deny(d.id)}>Neka</button>
 			</p>
 		</li>);
 
@@ -123,7 +123,7 @@ class Profile extends React.Component {
 				{this.checkIfSignedId(this.state.userId)}
 				<button onClick={this.logOut}>Logga ut</button>
 
-				
+
 				<div>
 					{listItems}
 				</div>
@@ -147,62 +147,62 @@ class Profile extends React.Component {
 function RenderGroups(props, user_id) {
 
 
-function RenderGroups(groups, user_id, fetchGroups, profileId, isAdmin) {
-	if (typeof groups !== "undefined") {
+	function RenderGroups(groups, user_id, fetchGroups, profileId, isAdmin) {
+		if (typeof groups !== "undefined") {
 
-		let groupsValues = Object.values(groups);
+			let groupsValues = Object.values(groups);
 
-		let groupList = [];
-		for (let i = 0; i < groupsValues.length; i++) {
-			groupList.push(
-				<div key={i} className="profile-groups-list">
-					<div><Link to={`/group/${groupsValues[i].group.id}`}><span>{groupsValues[i].group.title}</span></Link> <br />
-						Description: <span>{groupsValues[i].group.description}</span> <br />
-						Role: <span>{groupsValues[i].memberRole.title}</span> <br />
+			let groupList = [];
+			for (let i = 0; i < groupsValues.length; i++) {
+				groupList.push(
+					<div key={i} className="profile-groups-list">
+						<div><Link to={`/group/${groupsValues[i].group.id}`}><span>{groupsValues[i].group.title}</span></Link> <br />
+							Description: <span>{groupsValues[i].group.description}</span> <br />
+							Role: <span>{groupsValues[i].memberRole.title}</span> <br />
+						</div>
+						{checkIfAdmin(groupsValues[i].memberRole.title, groupsValues[i].group, user_id, fetchGroups, profileId, isAdmin)}
+						<div className="profile-group-buttons">
+						</div>
 					</div>
-					{checkIfAdmin(groupsValues[i].memberRole.title, groupsValues[i].group, user_id, fetchGroups, profileId,isAdmin)}
-					<div className="profile-group-buttons">
-					</div>
-				</div>
-			);
+				);
+			}
+			return groupList;
 		}
-		return groupList;
 	}
-}
-function checkIfAdmin(role, group, userId, fetchGroups, profileId,isAdmin) {
-	if (userId == profileId||isAdmin) {
-		function leaveGroup(key) {
-			if (window.confirm('Är du säker på att du vill lämna gruppen: ' + group.title))
-				axios.delete(
-					"/rest/member/delete/" + key + "/" + userId
-				).then((response) => {
-					console.log(response.data)
-					fetchGroups()
-				})
-		}
-		function deleteGroup(id) {
-
-			if (window.confirm('Är du säker på att du vill ta bort denna gruppen: ' + group.title))
-				axios
-					.put("/rest/groups/deleteGroup/" + id)
-					.then((response) => {
-						alert("Grupp med namnet: " + group.title + " har tagits bort")
+	function checkIfAdmin(role, group, userId, fetchGroups, profileId, isAdmin) {
+		if (userId == profileId || isAdmin) {
+			function leaveGroup(key) {
+				if (window.confirm('Är du säker på att du vill lämna gruppen: ' + group.title))
+					axios.delete(
+						"/rest/member/delete/" + key + "/" + userId
+					).then((response) => {
+						console.log(response.data)
 						fetchGroups()
 					})
+			}
+			function deleteGroup(id) {
 
+				if (window.confirm('Är du säker på att du vill ta bort denna gruppen: ' + group.title))
+					axios
+						.put("/rest/groups/deleteGroup/" + id)
+						.then((response) => {
+							alert("Grupp med namnet: " + group.title + " har tagits bort")
+							fetchGroups()
+						})
+
+			}
+			if (role === 'GROUPADMIN' && isAdmin) {
+				return (
+					<button onClick={() => { deleteGroup(group.id) }}>Ta bort Grupp</button>
+				)
+			}
+			else if (!isAdmin) {
+				return (
+					<button onClick={() => { leaveGroup(group.id); }}>Lämna Grupp</button>)
+			}
+		} else {
+			return <></>;
 		}
-		if (role === 'GROUPADMIN' && isAdmin) {
-			return (
-				<button onClick={() => { deleteGroup(group.id) }}>Ta bort Grupp</button>
-			)
-		}
-		else if(!isAdmin) {
-			return (
-				<button onClick={() => { leaveGroup(group.id); }}>Lämna Grupp</button>)
-		}
-	} else {
-		return <></>;
 	}
 }
-
-export default Profile;
+	export default Profile
