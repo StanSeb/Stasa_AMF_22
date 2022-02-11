@@ -130,8 +130,8 @@ function EditButton(parent, comment, loggedInUser,fetchComments) {
 function DeleteButton(comment, loggedInUser, fetchComments,isAdmin) {
 	if (
 		comment.creatorId === loggedInUser.id ||
-		loggedInUser.privilege === "admin" ||
-		loggedInUser.privilege === "moderator"||
+		loggedInUser.role === "GROUPADMIN" ||
+		loggedInUser.role === "GROUPMODERATOR"||
 		isAdmin
 	) {
 		function handleClick() {

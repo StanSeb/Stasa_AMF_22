@@ -59,7 +59,7 @@ class UserDropdown extends React.Component {
 				.put("/rest/member/updateMemberRole", this.state.moderator)
 				.then((response) => {
 					alert(response.data);
-					window.location.reload();
+					//window.location.reload();
 				})
 		});
 	}
@@ -91,7 +91,7 @@ class UserDropdown extends React.Component {
 						<div className="user-drop">
 							{CheckUser(this.state.user)}
 							<div className="user-drop-content">
-								{CheckYourrole(this.state.user, this.state.loggedInMember, this.updateMemberRole, this.deleteMember, this.handleReport, this.handleClick, showReportPopup, this.context.loggedInUser,this.props.isAdmin)}
+								{CheckYourrole(this.state.user, this.props.loggedInMember, this.updateMemberRole, this.deleteMember, this.handleReport, this.handleClick, showReportPopup, this.context.loggedInUser,this.props.isAdmin)}
 							</div>
 						</div>
 					);

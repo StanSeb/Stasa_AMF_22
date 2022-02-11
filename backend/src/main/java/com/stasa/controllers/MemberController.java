@@ -17,6 +17,10 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
+    //Bli medlem i en group
+    @PostMapping("/join")
+    public String addMember(@RequestBody Member member) {return memberService.addMember(member); }
+
     //Update från user till moderator och vice-versa
     @PutMapping("/updateMemberRole")
     public String updateMemberRole(@RequestBody Member member) {return memberService.updateMemberRole(member); }
@@ -33,19 +37,19 @@ public class MemberController {
     //Get method to retrieve data from Members, Member roles, group and user
     @GetMapping("/getMembersByUserId/{userId}")
     public List <Member> getByUserId(@PathVariable long userId){
-        return memberService.getByUserId(userId);
-        }
+    return memberService.getByUserId(userId);
+    }
 
-        @PostMapping("/register/member")
-        public Member registerMember(@RequestBody Member member) {
-            return memberService.register(member);
-        }
+    @PostMapping("/register/member")
+    public Member registerMember(@RequestBody Member member) {
+        return memberService.register(member);
+    }
 
-        @DeleteMapping("/delete/{groupId}/{userId}")
-        public void deleteById(@PathVariable long groupId,@PathVariable long userId) {
-            System.out.println(groupId+" "+" "+userId);
-             memberService.deleteById(groupId,userId);
-}
+    @DeleteMapping("/delete/{groupId}/{userId}")
+    public void deleteById(@PathVariable long groupId,@PathVariable long userId) {
+        System.out.println(groupId+" "+" "+userId);
+         memberService.deleteById(groupId,userId);
+    }
     @DeleteMapping("/deleteMember/{Id}")
     public void deleteByMemberId(@PathVariable int Id) {
 
@@ -53,7 +57,7 @@ public class MemberController {
     }
 
     @GetMapping("/getMemberByIdUserId/{userId}/{groupId}")
-    public ArrayList<Map> getMemberIdByUserId(@PathVariable Long userId, @PathVariable Long groupId) {
+    public Map getMemberIdByUserId(@PathVariable Long userId, @PathVariable Long groupId) {
         return memberService.getMemberIdByUserId(userId, groupId);
     }
 

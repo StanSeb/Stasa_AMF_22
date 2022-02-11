@@ -40,7 +40,7 @@ public interface MemberRepo extends JpaRepository<Member, Integer> {
             " INNER JOIN member_roles r ON r.id = m.role_id" +
             " WHERE m.user_id = ?1" +
             " AND m.group_id = ?2", nativeQuery = true)
-    ArrayList<Map> getMemberIdByUserId(Long userId, Long groupId);
+    Map getMemberIdByUserId(Long userId, Long groupId);
 
     @Query(value= "DELETE FROM members WHERE members.group_id = ?1 AND members.user_id = ?2",nativeQuery = true)
     void deleteById(long groupId,long userId);

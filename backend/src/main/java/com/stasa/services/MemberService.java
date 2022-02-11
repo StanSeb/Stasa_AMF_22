@@ -51,8 +51,12 @@ public class MemberService {
         return memberRepo.save(member);
     }
 
-    public ArrayList<Map> getMemberIdByUserId(Long userId, Long groupId) {
-        return memberRepo.getMemberIdByUserId(userId, groupId);
+    public Map getMemberIdByUserId(Long userId, Long groupId) {
+        Map member = memberRepo.getMemberIdByUserId(userId, groupId);
+        if(member.size() > 0) {
+            return memberRepo.getMemberIdByUserId(userId, groupId);
+        }
+        else return null;
     }
 
     //Update från user till moderator och vice-versa

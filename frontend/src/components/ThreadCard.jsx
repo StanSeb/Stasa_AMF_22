@@ -23,11 +23,15 @@ class ThreadCard extends React.Component {
 
 	handleClick(target) {
 		if (target.innerText === "Comment") {
-			this.props.toggleComment(true)
+			this.props.toggleComment(true);
 			setTimeout(() => {
-				document.querySelector(".comment-newComment").childNodes[0].focus()
+				document.querySelector(".comment-newComment").childNodes[0].focus();
 			}, 50);
 		}
+	}
+
+	gotoThread(props) {
+		this.props.handleThreadClick(props);
 	}
 
 	handleReport(showReportPopup) {
@@ -36,85 +40,99 @@ class ThreadCard extends React.Component {
 
 	render() {
 		return (
-			<ReportContext.Consumer>{(context => {
-				const { showReportPopup } = context;
-				return (
-					<div className="thread">
-						<div className="thread-header">
-							<div className="thread-thread-header-buttons">
-								{EditButton(this, this.props.thread, this.props.loggedInUser,this.props.fetchThreads)}
-								{DeleteButton(this.props.thread, this.props.loggedInUser,this.props.isAdmin)}
+			<ReportContext.Consumer>
+				{(context) => {
+					const { showReportPopup } = context;
+					return (
+						<div className="thread">
+							<div
+								className="thread-header">
+								<div className="thread-thread-header-buttons">
+									{EditButton(
+										this,
+										this.props.thread,
+										this.props.loggedInUser,
+										this.props.fetchThreads
+									)}
+									{DeleteButton(
+										this.props.thread,
+										this.props.loggedInUser,
+										this.props.isAdmin
+									)}
+								</div>
+								<div className="thread-title" 
+								onClick={() => this.gotoThread(this.props.thread.id)}>
+									<ThreadTitle
+										title={this.state.title}
+										id={this.props.thread.id}
+										parent={this}
+										isEditable={this.state.isEditable}
+									/>
+								</div>
+								<span>/ {this.props.thread.creatorId}</span>
 							</div>
-							<div className="thread-title">
-								<ThreadTitle
-									title={this.state.title}
-									id={this.props.thread.id}
-									handleThreadClick={this.props.handleThreadClick}
-									parent={this}
-									isEditable={this.state.isEditable}
-								/>
+							<div className="thread-main">
+								{ThreadContent(this, this.state.isEditable)}
 							</div>
-							<span>/ {this.props.thread.creatorId}</span>
+							<div className="thread-footer">
+								<div className="thread-social-buttons">
+									<button
+										onClick={(e) => this.handleClick(e.target)}
+										className="thread-button"
+										style={{
+											display: this.props.showCommentButton ? "block" : "none",
+										}}
+									>
+										Comment
+									</button>
+									<a
+										href={"/thread/like/" + this.props.thread.id}
+										onClick={(e) => this.handleClick(e.target)}
+										className="thread-button"
+									>
+										Like
+									</a>
+									<a
+										href={"/thread/dislike/" + this.props.thread.id}
+										onClick={(e) => this.handleClick(e.target)}
+										className="thread-button"
+									>
+										Dislike
+									</a>
+									<a
+										href={"/thread/share/" + this.props.thread.id}
+										onClick={(e) => this.handleClick(e.target)}
+										className="thread-button"
+									>
+										Share
+									</a>
+									<a
+										onClick={(e) => this.handleReport(showReportPopup)}
+										className="thread-button"
+									>
+										Report
+									</a>
+								</div>
+								<div className="thread-tags">
+									<p>#tag1 </p>
+									<p>#tag2 </p>
+									<p>#tag3 </p>
+								</div>
+							</div>
 						</div>
-						<div className="thread-main">
-							{ThreadContent(this, this.state.isEditable)}
-						</div>
-						<div className="thread-footer">
-							<div className="thread-social-buttons" >
-								<button
-									onClick={(e) => this.handleClick(e.target)}
-									className="thread-button" style={{ display: this.props.showCommentButton ? 'block' : 'none' }}
-								>
-									Comment
-								</button>
-								<a
-									href={"/thread/like/" + this.props.thread.id}
-									onClick={(e) => this.handleClick(e.target)}
-									className="thread-button"
-								>
-									Like
-								</a>
-								<a
-									href={"/thread/dislike/" + this.props.thread.id}
-									onClick={(e) => this.handleClick(e.target)}
-									className="thread-button"
-								>
-									Dislike
-								</a>
-								<a
-									href={"/thread/share/" + this.props.thread.id}
-									onClick={(e) => this.handleClick(e.target)}
-									className="thread-button"
-								>
-									Share
-								</a>
-								<a
-									onClick={(e) => this.handleReport(showReportPopup)}
-									className="thread-button"
-								>
-									Report
-								</a>
-							</div>
-							<div className="thread-tags">
-								<p>#tag1 </p>
-								<p>#tag2 </p>
-								<p>#tag3 </p>
-							</div>
-						</div>
-					</div>
-				)
-			})}
+					);
+				}}
 			</ReportContext.Consumer>
 		);
 	}
 }
 
-function EditButton(parent, threadProp, loggedInUser,fetchThreads) {
+function EditButton(parent, threadProp, loggedInUser, fetchThreads) {
 	if (threadProp.creatorId === loggedInUser.id) {
 		if (parent.state.isEditable) {
 			function abortEdit() {
-				parent.setState({title:parent.props.thread.title})
-				parent.setState({content:parent.props.thread.content})
+				parent.setState({ title: parent.props.thread.title });
+				parent.setState({ content: parent.props.thread.content });
 				parent.setState({ isEditable: !parent.state.isEditable });
 				// props.setState({ isEditable: !props.state.isEditable });
 			}
@@ -129,8 +147,7 @@ function EditButton(parent, threadProp, loggedInUser,fetchThreads) {
 				axios
 					.put("http://localhost:8080/rest/threads/editThread/", thread)
 					.then((response) => {
-						
-						fetchThreads()
+						fetchThreads();
 						parent.setState({ isEditable: !parent.state.isEditable });
 					})
 					.catch((error) => {
@@ -163,16 +180,16 @@ function EditButton(parent, threadProp, loggedInUser,fetchThreads) {
 	}
 }
 
-function DeleteButton(threadProp, loggedInUser,isAdmin) {
+function DeleteButton(threadProp, loggedInUser, isAdmin) {
+	console.log(loggedInUser);
 	if (
 		threadProp.creatorId === loggedInUser.id ||
-		loggedInUser.privilege === "GROUPADMIN" ||
-		loggedInUser.privilege === "GROUPMODERATOR"||
+		loggedInUser.role === "GROUPADMIN" ||
+		loggedInUser.role === "GROUPMODERATOR" ||
 		isAdmin
 	) {
 		function handleClick() {
 			if (window.confirm("Are you sure you want to delete this")) {
-
 				axios
 					.put("/rest/threads/deleteThread/" + threadProp.id)
 					.then((response) => {
@@ -182,7 +199,6 @@ function DeleteButton(threadProp, loggedInUser,isAdmin) {
 						console.log(error);
 					});
 			}
-
 		}
 		return <button onClick={() => handleClick()}>Ta bort</button>;
 	} else {
@@ -204,13 +220,7 @@ function ThreadTitle(props) {
 			></input>
 		);
 	} else {
-		function handleClick() {
-			if (typeof props.handleThreadClick === "function") {
-				props.handleThreadClick(props);
-			}
-		}
-
-		return <span onClick={() => handleClick(props.title)}>{props.title}</span>;
+		return <span>{props.title}</span>;
 	}
 }
 
