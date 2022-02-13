@@ -80,11 +80,6 @@ class Profile extends React.Component {
 		window.location.assign("http://localhost:3000/");
 	}
 
-	componentDidMount() {
-		this.checkIfAdmin()
-		this.fetchGroups()
-	}
-
 	fetchGroups() {
 		axios
 			.get("/rest/member/getActiveDataByUserId/" + this.state.profileId)
@@ -93,15 +88,20 @@ class Profile extends React.Component {
 				this.setState({ groups: data });
 			});
 
-		axios.get("/rest/invitations/" + this.state.userId)
+		axios.get("/rest/invitations/" + this.props.userObj.id)
 			.then((response) => {
 				this.setState({ invitations: response.data })
 			}
 			);
 	}
 
-
-
+	/* Fetcha när userObj (inloggade användaren) har fått sitt värde. Blir annars error. */
+	componentDidUpdate(prevProps) {
+		if(this.props.userObj !== prevProps.userObj) {
+			this.checkIfAdmin();
+			this.fetchGroups();
+		}
+	}
 
 	checkIfAdmin() {
 		if (typeof (this.props.userObj.id) != "undefined") {

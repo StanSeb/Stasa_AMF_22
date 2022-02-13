@@ -2,6 +2,8 @@ import React from "react";
 import { ReportContext } from "../contexts/ReportContext";
 import ReportListItem from "./ReportListItem";
 import './ReportList.scss';
+import { AuthContext } from "../contexts/AuthContext";
+import { isCursorAtEnd } from "@testing-library/user-event/dist/utils";
 
 /*
 Should use properties from context.
@@ -19,17 +21,14 @@ class ReportList extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-    };
-  }
-
-  componentDidMount() {
   }
 
   renderReportItems() {
+    // ONLY RENDER THE REPORTS THAT ARE RELEVANT FOR THE USER!
+
     let reports = this.context.reports;
 
-    if(reports != null) {
+    if(reports) {
         let reportElements = new Array();
 
         for(let report of reports) {
@@ -40,23 +39,30 @@ class ReportList extends React.Component {
   }
 
   render() {
-    const { fetchReports, reports } = this.context;
-
-    console.log("REPORTS:", reports);
-
-    if(!reports || reports.length === 0) {
-      return (
-        <div id="report-list-container">
-          <div>There are no reports to show.</div>
-        </div>
-      );
-    }
-
     return (
-        <div id="report-list-container">
-          Here are all the reports!
-          { this.renderReportItems() }
-        </div>
+      <AuthContext.Consumer>
+        {({ isLoggedIn }) => {
+          if(isLoggedIn) {
+
+            const { reports } = this.context;
+
+            if(!reports || reports.length === 0) {
+              return (
+                <div id="report-list-container">
+                  <div>There are no reports to show.</div>
+                </div>
+              );
+            }
+
+            return (
+              <div id="report-list-container">
+                Here are all the reports!
+                { this.renderReportItems() }
+              </div>
+            )
+          }
+        }}
+        </AuthContext.Consumer>
     );
 
   }

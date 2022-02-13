@@ -4,7 +4,7 @@ import { ReportContext } from "../contexts/ReportContext";
 import { AuthContext } from "../contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 
-const reportType = 1; // user report type (in database)
+const reportType = 1; // member report type (in database)
 
 class UserDropdown extends React.Component {
 	static contextType = AuthContext;
@@ -91,16 +91,13 @@ class UserDropdown extends React.Component {
 	}
 
 	handleReport(showReportPopup) {
-		showReportPopup({ targetType: reportType, targetId: this.state.user.user_id });
+		showReportPopup({ targetType: reportType, targetId: this.props.user.id /* <-- member id */ });
 	}
 
 	render() {
 		if (this.state.clickedProfile) {
-
 			return <Navigate to={"/profile/" + this.state.user.user_id} />
 		} else {
-
-
 			return (
 				<ReportContext.Consumer>{(context => {
 					const { showReportPopup } = context;

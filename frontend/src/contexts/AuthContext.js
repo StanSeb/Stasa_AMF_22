@@ -1,11 +1,19 @@
 import React, { createContext, Component } from 'react';
-import Axios from "axios";
+import axios from "axios";
 
 export const AuthContext = createContext();
 
 class AuthContextProvider extends Component {
-    state = { 
-        loggedInUser: null
+
+    constructor(props) {
+        super(props);
+
+        this.state = { 
+            loggedInUser: null,
+            isAdmin: false,
+        }
+
+        this.checkIfAdmin = this.checkIfAdmin.bind(this);
     }
 
     setLoggedInUser = (user) => {
@@ -14,30 +22,46 @@ class AuthContextProvider extends Component {
          });
     }
 
+    isLoggedIn() {
+        return this.state.loggedInUser != null;
+    }
+
     componentDidMount() {
-        Axios
-			.get("/rest/whoami", {
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;Access-Control-Allow-Origin:*'
-				}
-			})
-			.then((response) => {
-				if (response.data !== '') {
-					const { id, username, enabled } = response.data;
-					const userObject = { id: id, username: username, enabled: enabled };
-					this.setState({ user: userObject });
-                    this.setLoggedInUser(userObject);
-				} else {
-					console.log("Status: " + response.status);
-				}
-			});
+        axios
+		.get("/rest/whoami", {
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;Access-Control-Allow-Origin:*'
+			}
+		})
+		.then((response) => {
+			if (response.data !== '') {
+				const { id, username, enabled } = response.data;
+				const userObject = { id: id, username: username, enabled: enabled };
+				this.setState({ user: userObject });
+                this.setLoggedInUser(userObject);
+                this.checkIfAdmin();
+			} else {
+				console.log("Status: " + response.status);
+			}
+		});
+    }
+
+    checkIfAdmin(onResponse) {
+        axios
+            .get("/rest/isAdmin/" + this.state.loggedInUser.id)
+            .then((response) => {
+                this.setState({ isAdmin: response.data });
+            });
     }
     
     render() { 
         return (
             <AuthContext.Provider value={{
                     ...this.state, 
-                    setLoggedInUser: this.setLoggedInUser
+                    setLoggedInUser: this.setLoggedInUser,
+                    isLoggedIn: this.isLoggedIn,
+                    checkIfAdmin: this.checkIfAdmin,
+                    onLoggedIn: this.onLoggedIn,
                 }}>
                 {this.props.children}
             </AuthContext.Provider>
