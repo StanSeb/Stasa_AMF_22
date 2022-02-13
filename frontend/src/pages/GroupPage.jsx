@@ -155,6 +155,7 @@ class GroupPage extends React.Component {
 		let members = Object.values(props);
 		let membersList = [];
 		for (let i = 0; i < members.length; i++) {
+			console.log("MEMBER: ", members[i])
 			membersList.push(
 				<UserDropdown
 					user={members[i]}

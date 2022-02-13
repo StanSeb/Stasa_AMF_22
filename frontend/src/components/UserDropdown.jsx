@@ -39,15 +39,18 @@ class UserDropdown extends React.Component {
 
 	updateMemberRole() {
 		let member;
+		console.log("USERRRRRR: ", this.props.user);
 		if (this.props.user.role == "MEMBER") {
 			member = {
-				user: { id: this.props.user.user_id },
+				user: { id: this.props.user.userId },
 				memberRole: { id: 3 }, // id av "moderator" i Tabellen member_roles i Databasen.
 				group: { id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1) },
 			};
+			console.log("MEMBER: ", member);
 		} else if (this.props.user.role == "GROUPMODERATOR") {
+			console.log("GROUPMODERATOR");
 			member = {
-				user: { id: this.props.user.user_id },
+				user: { id: this.props.user.userId },
 				memberRole: { id: 4 }, // id av "member" i Tabellen member_roles i Databasen.
 				group: { id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1) },
 			};
@@ -139,7 +142,7 @@ function CheckUser(props) {
 	return button;
 }
 
-function CheckYourrole(user, loggedInMember /*<- detta är en member, inte en user.*/, updateMemberRole,
+function CheckYourrole(user, loggedInMember, updateMemberRole,
 	deleteMember, handleReport, handleClick, showReportPopup, realLoggedInUser, isAdmin, sendMemberToBlacklist) {
 	let dropdownOptions;
 	if (

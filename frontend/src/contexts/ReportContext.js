@@ -1,9 +1,12 @@
 import axios from 'axios';
 import React, { createContext, Component } from 'react';
+import { AuthContext } from './AuthContext';
 
 export const ReportContext = createContext();
 
 class ReportContextProvider extends Component {
+    static contextType = AuthContext;
+
     constructor(props) {
         super(props);
 
@@ -14,6 +17,7 @@ class ReportContextProvider extends Component {
                 visible: false,
             },
             reports: null,
+            reportsFetched: false,
         }
 
         this.getRelevantReports = this.getRelevantReports.bind(this);
@@ -34,12 +38,27 @@ class ReportContextProvider extends Component {
     componentDidMount() {
         this.fetchReports();
     }
-
+ 
     fetchReports() {
-        axios.get("/reports")
+        const loggedInUser = this.context.loggedInUser;
+        if(!loggedInUser) return;
+
+        console.log("Logged in user: " , loggedInUser);
+
+        axios.get(`/reports/relevant/${loggedInUser.id}`)
             .then((response) => {
                 this.setState({ reports: response.data});
             });
+    }
+
+    componentDidUpdate() {
+        if(this.state.reportsFetched === false) {
+            if(this.context.loggedInUser) {
+                console.log("123 LOGGED IN USER IS: ", this.context.loggedInUser);
+                this.setState({ reportsFetched: true });
+                this.fetchReports();
+            }
+        }
     }
 
     /* 
@@ -108,6 +127,7 @@ class ReportContextProvider extends Component {
             // The user doesn't approve the report. Let's delete it and not do anything with the target (blacklist user etc).
             this.deleteReport(report, (deleted) => { // This is a callback. Will be called when report is deleted (or if it couldn't - then deleted will be false)
                 if(deleted) {
+                    this.fetchReports();
                     alert("The report was deleted.");
                 } else {
                     alert("The report could not be deleted.");

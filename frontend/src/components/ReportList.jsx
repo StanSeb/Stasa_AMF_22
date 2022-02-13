@@ -17,16 +17,33 @@ const TYPE_THREAD = 4;
 const DESCRIPTION_MAX_LENGTH = 500;
 
 class ReportList extends React.Component {
-  static contextType = ReportContext;
+  static contextType = AuthContext;
 
   constructor(props) {
     super(props);
   }
 
-  renderReportItems() {
-    // ONLY RENDER THE REPORTS THAT ARE RELEVANT FOR THE USER!
+  renderRenderAuthorizedReports(reports) {
+    // Renders all reports relevant for the logged in user.
 
-    let reports = this.context.reports;
+    if(!reports) {
+      return;
+    }
+
+    /*
+    för att visa user report behöver du vara:
+    * moderator/groupadmin för gruppen som member är med i
+    ATT HÄMTA: member.group
+
+    för att visa group report behöver du vara:
+    * superadmin
+
+    för att visa thread report behöver du vara:
+    * moderator/groupadmin
+
+    för att visa comment report behöver du vara:
+    * moderator/groupadmin
+    */
 
     if(reports) {
         let reportElements = new Array();
@@ -40,12 +57,9 @@ class ReportList extends React.Component {
 
   render() {
     return (
-      <AuthContext.Consumer>
-        {({ isLoggedIn }) => {
-          if(isLoggedIn) {
-
-            const { reports } = this.context;
-
+      <ReportContext.Consumer>
+        {({ reports }) => {
+          if(this.context.isLoggedIn) {
             if(!reports || reports.length === 0) {
               return (
                 <div id="report-list-container">
@@ -57,12 +71,12 @@ class ReportList extends React.Component {
             return (
               <div id="report-list-container">
                 Here are all the reports!
-                { this.renderReportItems() }
+                { this.renderRenderAuthorizedReports(reports) }
               </div>
             )
           }
         }}
-        </AuthContext.Consumer>
+        </ReportContext.Consumer>
     );
 
   }

@@ -77,8 +77,9 @@ class Profile extends React.Component {
 				"Content-Type": "application/x-www-form-urlencoded",
 			},
 			mode: "no-cors",
-		});
-		window.location.assign("http://localhost:3000/");
+		}).then(() => {
+			window.location.assign("http://localhost:3000/");
+		})
 	}
 
 	fetchGroups() {

@@ -4,7 +4,6 @@ import axios from "axios";
 export const AuthContext = createContext();
 
 class AuthContextProvider extends Component {
-
     constructor(props) {
         super(props);
 
@@ -14,6 +13,7 @@ class AuthContextProvider extends Component {
         }
 
         this.checkIfAdmin = this.checkIfAdmin.bind(this);
+        this.setLoggedInUser = this.setLoggedInUser.bind(this);
     }
 
     setLoggedInUser = (user) => {

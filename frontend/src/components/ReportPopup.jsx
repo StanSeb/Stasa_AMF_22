@@ -81,7 +81,6 @@ class ReportPopup extends React.Component {
       .then((response) => {
         this.setState({ success: { status: true, report: response.data } });
         this.context.fetchReports();
-        console.log("State: ", this.state);
       });
   }
 
