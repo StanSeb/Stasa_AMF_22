@@ -1,6 +1,7 @@
 package com.stasa.repositories;
 
 import com.stasa.entities.Member;
+import com.stasa.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -9,15 +10,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-public interface MemberRepo extends JpaRepository<Member, Integer> {
+public interface MemberRepo extends JpaRepository<Member, Long> {
 
     //Kollar om en user är redan member i en group
     @Query(value= "Select COUNT(id) FROM members WHERE user_id = ?1 AND group_id = ?2", nativeQuery = true)
     int isMember(long memberUserId, long memberGroupId);
+
     List<Member> getByUserId(long userId);
 
     //Hämtar alla member från en group UTOM members som finns i Blacklist
-    @Query(value= "SELECT m.user_id AS userId, u.username, m.group_id AS groupId, g.title, r.title AS role \n" +
+    @Query(value= "SELECT m.id, m.user_id AS userId, u.username, m.group_id AS groupId, g.title, r.title AS role \n" +
             "FROM members m\n" +
             "INNER JOIN users u on u.id = m.user_id\n" +
             "INNER JOIN `groups` g on g.id = m.group_id\n" +
@@ -32,8 +34,6 @@ public interface MemberRepo extends JpaRepository<Member, Integer> {
     //Update från user till moderator och vice-versa
     @Query(value= "UPDATE members SET role_id = ?1 WHERE user_id = ?2 AND group_id = ?3", nativeQuery = true)
     void updateMemberRole(long roleId, long userId, long groupId);
-
-    List<Member> getByUserId(int userId);
 
     @Query(value = "SELECT COUNT(user_id) FROM blacklist WHERE user_id= ?1", nativeQuery = true)
     int countBlockedTimes(long userId);

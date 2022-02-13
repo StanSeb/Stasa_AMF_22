@@ -22,6 +22,12 @@ public class ReportService {
     public UserService userService;
 
     @Autowired
+    public MemberService memberService;
+
+    @Autowired
+    public MemberRepo memberRepo;
+
+    @Autowired
     GroupRepo groupRepo;
 
     @Autowired
@@ -55,9 +61,9 @@ public class ReportService {
                 if(!doesThreadExist(targetId))
                     throw new Exception("Thread doesn't exist.");
                 break;
-            case USER:
-                if(!doesUserExist(targetId))
-                    throw new Exception("User doesn't exist.");
+            case MEMBER:
+                if(!doesMemberExist(targetId))
+                    throw new Exception("Member doesn't exist.");
                 if(reporterId == targetId)
                     throw new Exception("You can't report yourself");
                 break;
@@ -66,8 +72,7 @@ public class ReportService {
         }
 
         try {
-            var savedReport = reportRepository.save(report);
-            return savedReport;
+            return reportRepository.save(report);
         } catch (Exception e) {
             // fixa bättre error handling?
             throw new Exception("Could not submit report. This could be because you've already submitted one with the same target.");
@@ -76,6 +81,10 @@ public class ReportService {
 
     private boolean doesUserExist(long id) {
         return userService.findById(id).isPresent();
+    }
+
+    private boolean doesMemberExist(long id) {
+        return memberRepo.findById(id).isPresent();
     }
 
     private boolean doesCommentExist(long id) {

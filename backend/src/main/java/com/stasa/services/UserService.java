@@ -3,6 +3,7 @@ package com.stasa.services;
 import com.stasa.configurations.MyUserDetailsService;
 import com.stasa.entities.Member;
 import com.stasa.entities.User;
+import com.stasa.repositories.MemberRepo;
 import com.stasa.repositories.UserRepo;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class UserService {
 
     @Autowired
     private MyUserDetailsService detailsService;
+
+    @Autowired
+    private MemberRepo memberRepo;
 
     //test
     @Autowired

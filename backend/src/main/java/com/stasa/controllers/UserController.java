@@ -1,6 +1,5 @@
 package com.stasa.controllers;
 
-import com.stasa.entities.Member;
 import com.stasa.entities.User;
 import com.stasa.services.UserService;
 import lombok.SneakyThrows;

@@ -1,6 +1,7 @@
 package com.stasa.services;
 
 import com.stasa.entities.Member;
+import com.stasa.entities.User;
 import com.stasa.repositories.MemberRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -140,4 +141,7 @@ public class MemberService {
         return activeMember;
     }
 
+    public Member getMemberById(long id) {
+        return memberRepo.findById(id).orElse(null);
+    }
 }
