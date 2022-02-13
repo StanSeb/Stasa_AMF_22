@@ -74,7 +74,7 @@ class GroupPage extends React.Component {
 			"/" +
 			firstResponse.data[0].id
 		);
-	
+		
 		this.setState({
 			group: firstResponse.data[0],
 			members: secondResponse.data,
@@ -207,6 +207,13 @@ class GroupPage extends React.Component {
 		if (this.state.reload) {
 			return <Navigate to="/home" />;
 		} else {
+
+			let group = this.state.group;
+			let reportButton = null;
+			if(group.user_id) {
+				reportButton = <ReportButton customText="Report this group" targetType={ targetType } targetId={ group.user_id } targetObj={ group } />
+			}
+
 			return (
 				<div className="group-page">
 					<div
@@ -280,7 +287,7 @@ class GroupPage extends React.Component {
 						>
 							Skapa nytt inlägg
 						</button>
-						<ReportButton customText="Report this group" targetType={ targetType } targetId={window.location.href.substring(window.location.href.lastIndexOf("/") + 1) } />
+						{ reportButton }
 					</div>
 				</div>
 			);

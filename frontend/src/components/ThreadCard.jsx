@@ -19,6 +19,8 @@ class ThreadCard extends React.Component {
 			isEditable: false,
 			showCommentButton: this.props.showCommentButton,
 		};
+
+		this.handleReport = this.handleReport.bind(this);
 	}
 
 	handleClick(target) {
@@ -43,6 +45,7 @@ class ThreadCard extends React.Component {
 			<ReportContext.Consumer>
 				{(context) => {
 					const { showReportPopup } = context;
+					const authContext = this.context;
 					return (
 						<div className="thread">
 							<div
@@ -106,12 +109,7 @@ class ThreadCard extends React.Component {
 									>
 										Share
 									</a>
-									<a
-										onClick={(e) => this.handleReport(showReportPopup)}
-										className="thread-button"
-									>
-										Report
-									</a>
+									{ ReportButton(authContext, this.props.thread, showReportPopup, this.handleReport) }
 								</div>
 								<div className="thread-tags">
 									<p>#tag1 </p>
@@ -125,6 +123,24 @@ class ThreadCard extends React.Component {
 			</ReportContext.Consumer>
 		);
 	}
+}
+
+function ReportButton(authContext, thread, showReportPopup, handleReport) {
+	const loggedInUser = authContext.loggedInUser;
+
+	// If the thread is created by the logged in user, don't show a report button
+	if(loggedInUser.id === thread.creatorId) {
+		return;
+	}
+
+	return (
+		<a
+			onClick={() => handleReport(showReportPopup)}
+			className="thread-button"
+		>
+			Report
+		</a>
+	)
 }
 
 function EditButton(parent, threadProp, loggedInUser, fetchThreads) {

@@ -101,7 +101,6 @@ class UserDropdown extends React.Component {
 			return (
 				<ReportContext.Consumer>{(context => {
 					const { showReportPopup } = context;
-					const loggedInUser = this.context.loggedInUser;
 					return (
 						<div className="user-drop">
 							{CheckUser(this.props.user)}
@@ -240,6 +239,11 @@ function CheckYourrole(user, loggedInMember /*<- detta är en member, inte en us
 function ReportButton(realLoggedInUser, handleReport, showReportPopup, targetMember) {
 
 	if (realLoggedInUser == null) {
+		return;
+	}
+
+	// Don't show report button on yourself.
+	if(targetMember.userId === realLoggedInUser.id) {
 		return;
 	}
 

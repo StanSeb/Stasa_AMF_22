@@ -34,8 +34,11 @@ class CommentCard extends React.Component {
 		});
 	}
 
-
 	render() {
+		if(!this.state.comment) {
+			return null;
+		}
+
 		return (
 			<div className="comment-card">
 				{returnComments(this.state.comment,this.state.isEditable,this.updateContent)}
@@ -46,7 +49,7 @@ class CommentCard extends React.Component {
 					this.props.isAdmin
 				)}
 				{EditButton(this, this.state.comment, this.props.loggedInUser,this.props.fetchComments)}
-				<ReportButton targetType={ targetType } targetId={ this.state.comment.id } />
+				<ReportButton targetType={ targetType } targetId={ this.state.comment.id } targetObj={ this.state.comment } />
 				<div className="comment-social-buttons"></div>
 			</div>
 		);

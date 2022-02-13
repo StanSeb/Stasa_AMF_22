@@ -17,6 +17,7 @@ class Profile extends React.Component {
 		};
 
 		this.fetchGroups = this.fetchGroups.bind(this);
+		this.fetchAll = this.fetchAll.bind(this);
 	}
 
 	async accept(groupId, invitationId) {
@@ -95,11 +96,24 @@ class Profile extends React.Component {
 			);
 	}
 
+	fetchAll() {
+		this.checkIfAdmin();
+		this.fetchGroups();
+	}
+
 	/* Fetcha när userObj (inloggade användaren) har fått sitt värde. Blir annars error. */
 	componentDidUpdate(prevProps) {
 		if(this.props.userObj !== prevProps.userObj) {
-			this.checkIfAdmin();
-			this.fetchGroups();
+			this.fetchAll();
+		}
+	}
+
+	componentDidMount() {
+		// If you're on another page and the go to this one, we have to fetch everything again because this component was unmounted (and state reset).
+		// Although we don't want to fetch anything if user is not logged in (like when component mounts before logged in user has been set)
+		// If so, the fetching will be done in componentDidUpdate.
+		if(this.props.userObj.id) {
+			this.fetchAll();
 		}
 	}
 
