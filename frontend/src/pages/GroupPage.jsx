@@ -25,6 +25,7 @@ class GroupPage extends React.Component {
 			invitePopup: false,
 			toggleNewThread: false,
 			isAdmin: false,
+			isBlacklisted: true,
 			reload: false,
 		};
 		this.handleThreadClick = this.handleThreadClick.bind(this);
@@ -36,7 +37,8 @@ class GroupPage extends React.Component {
 		this.createMember = this.createMember.bind(this);
 		this.toggleInviteMember = this.toggleInviteMember.bind(this);
 		this.fetchMembers = this.fetchMembers.bind(this);
-		this.fetchBlackList=this.fetchBlackList.bind(this);
+		this.fetchBlackList = this.fetchBlackList.bind(this);
+		this.returnToGroup = this.returnToGroup.bind(this);
 	}
 
 	checkIfAdmin() {
@@ -71,7 +73,7 @@ class GroupPage extends React.Component {
 			axios.post("/rest/member/join", this.state.member).then((response) => {
 				alert(response.data);
 				//window.location.reload();
-				this.fetchMembers()
+				this.fetchMembers();
 			});
 		});
 	}
@@ -80,14 +82,24 @@ class GroupPage extends React.Component {
 		this.setState({ invitePopup: !this.state.invitePopup });
 	}
 	unlockMember(userId) {
-		if (window.confirm("Är du säker på att du vill avblockera den här användaren?")) {
+		if (
+			window.confirm(
+				"Är du säker på att du vill avblockera den här användaren?"
+			)
+		) {
 			axios
-				.delete("/rest/member/deleteUserBlacklist/" + userId + "/" + window.location.href.substring(window.location.href.lastIndexOf('/') + 1))
+				.delete(
+					"/rest/member/deleteUserBlacklist/" +
+						userId +
+						"/" +
+						window.location.href.substring(
+							window.location.href.lastIndexOf("/") + 1
+						)
+				)
 				.then((response) => {
-					alert(response.data);
-					this.fetchMembers()
-					this.fetchBlackList()
-				})
+					this.fetchMembers();
+					this.fetchBlackList();
+				});
 		}
 	}
 	async componentDidMount() {
@@ -106,41 +118,58 @@ class GroupPage extends React.Component {
 
 		const fourthResponse = await axios.get(
 			"/rest/member/getMemberByIdUserId/" +
-			this.state.loggedInUser.id +
-			"/" +
-			firstResponse.data[0].id
+				this.state.loggedInUser.id +
+				"/" +
+				firstResponse.data[0].id
 		);
+		this.setState(
+			(prevState) => {
+				this.fetchBlackList();
+				let loggedInMember = prevState.loggedInMember;
+				if (typeof fourthResponse.data !== "undefined") {
+					loggedInMember = fourthResponse.data;
+					let usersBlacklist;
+				}
+				return { loggedInMember };
+			},
+			() => {
+				const isBlacklisted = this.state.usersBlacklist.some((element) => {
+					if (element.username === this.state.loggedInMember.username) {
+						return true;
+					} else {
+						return false;
+					}
+				});
+				this.setState({ group: firstResponse.data[0], isBlacklisted });
 
-		this.setState({
-			group: firstResponse.data[0],
-			members: secondResponse.data,
-			threads: thirdResponse.data,
-		}
-			, () => {
-				this.fetchBlackList()
-			});
-		this.setState((prevState) => {
-			let loggedInMember = prevState.loggedInMember;
-			if (typeof fourthResponse.data !== "undefined") {
-				loggedInMember = fourthResponse.data;
-				let usersBlacklist;
-
+				if (
+					typeof this.state.loggedInMember.role !== "undefined" &&
+					this.state.loggedInMember.role !== null &&
+					!isBlacklisted
+				) {
+					{
+						this.setState({
+							members: secondResponse.data,
+							threads: thirdResponse.data,
+						});
+					}
+				}
 			}
-			return { loggedInMember };
-		});
+		);
 	}
-	fetchBlackList(){
+
+	fetchBlackList() {
 		let groupId = window.location.href.substring(
 			window.location.href.lastIndexOf("/") + 1
 		);
 		let usersBlacklist;
-					axios.get("/rest/balcklistByGroupId/" + groupId)
-						.then((response) => response.data)
-						.then((data) => {
-							usersBlacklist = data;
-							this.setState({ usersBlacklist });
-						}
-						);
+		axios
+			.get("/rest/balcklistByGroupId/" + groupId)
+			.then((response) => response.data)
+			.then((data) => {
+				usersBlacklist = data;
+				this.setState({ usersBlacklist });
+			});
 	}
 
 	RenderMembers(props, loggedInMember, isAdmin, fetchMembers) {
@@ -195,6 +224,11 @@ class GroupPage extends React.Component {
 		this.setState({ reload: true });
 	}
 
+	returnToGroup() {
+		console.log("WHAT")
+		this.setState({clickedThread: 0})
+	}
+
 	render() {
 		if (this.state.reload) {
 			return <Navigate to="/home" />;
@@ -219,7 +253,9 @@ class GroupPage extends React.Component {
 							this.handleThreadClick,
 							this.state.clickedThread,
 							this.state.loggedInUser,
-							this.fetchThreads
+							this.fetchThreads,
+							this.state.isAdmin,
+							this.returnToGroup
 						)}
 					</div>
 
@@ -232,7 +268,6 @@ class GroupPage extends React.Component {
 								memberId={this.state.members}
 							/>
 						) : null}
-
 						<div className="group-info">
 							<h3>{this.state.group.title}</h3>
 							<p>{this.state.group.description}</p>
@@ -245,11 +280,16 @@ class GroupPage extends React.Component {
 							{MemberButton(
 								this.state.loggedInMember,
 								this.createMember,
-								this.toggleInviteMember
+								this.toggleInviteMember,
+								this.state.isBlacklisted
 							)}
 						</div>
-
-						<div className="group-members">
+						<div
+							className="group-members"
+							style={{
+								display: this.state.isBlacklisted ? "none" : "block",
+							}}
+						>
 							{this.RenderMembers(
 								this.state.members,
 								this.state.loggedInMember,
@@ -258,21 +298,34 @@ class GroupPage extends React.Component {
 							)}
 						</div>
 						<div>
-							{CheckLoggedInMemberRole(this.state.loggedInMember, this.state.usersBlacklist, this.unlockMember)}
+							{CheckLoggedInMemberRole(
+								this.state.loggedInMember,
+								this.state.usersBlacklist,
+								this.unlockMember
+							)}
 						</div>
-
-
 						<button
 							className="group-new-thread"
 							style={{
-								display:
-									this.state.loggedInMember.role === null ? "none" : "block",
+								display: this.state.isBlacklisted ? "none" : "block",
 							}}
 							onClick={() => this.toggleNewThread(true)}
 						>
 							Skapa nytt inlägg
 						</button>
-						<ReportButton customText="Report this group" targetType={ targetType } targetId={window.location.href.substring(window.location.href.lastIndexOf("/") + 1) } />
+						<div
+							style={{
+								display: this.state.isBlacklisted ? "none" : "block",
+							}}
+						>
+							<ReportButton
+								customText="Report this group"
+								targetType={targetType}
+								targetId={window.location.href.substring(
+									window.location.href.lastIndexOf("/") + 1
+								)}
+							/>
+						</div>
 					</div>
 				</div>
 			);
@@ -280,11 +333,13 @@ class GroupPage extends React.Component {
 	}
 }
 
-function MemberButton(role, createMember, toggleInvite) {
-	if (role.role === null || typeof role.role === "undefined") {
-		return <button onClick={() => createMember()}>Bli medlem</button>;
-	} else {
-		return <button onClick={() => toggleInvite()}>Bjud in medlem</button>;
+function MemberButton(role, createMember, toggleInvite, isBlacklisted) {
+	if (!isBlacklisted) {
+		if (role.role === null || typeof role.role === "undefined") {
+			return <button onClick={() => createMember()}>Bli medlem</button>;
+		} else {
+			return <button onClick={() => toggleInvite()}>Bjud in medlem</button>;
+		}
 	}
 }
 
@@ -313,23 +368,32 @@ function RemoveGroupButton(isAdmin, role, group, reloadPage) {
 
 function CheckLoggedInMemberRole(loggedinMember, usersBlacklist, unlockMember) {
 	let div;
-	if (loggedinMember.role === "GROUPADMIN" || loggedinMember.role === "GROUPMODERATOR") {
+	if (
+		loggedinMember.role === "GROUPADMIN" ||
+		loggedinMember.role === "GROUPMODERATOR"
+	) {
 		div = (
 			<div className="group-members-blacklist">
-				<h6 className="blocked-users">Blockerade användare i den här gruppen:</h6>
-				<div className="blacklist-list">{usersBlacklist.map((blacklist) => (
-					<ul className="blacklist-ul" key={blacklist.id}>
-						<li className="blacklist-members">
-							<button onClick={() => unlockMember(blacklist.id)}>Aktivera</button>
-							<span className="blacklist-user">{blacklist.username} - </span>
-							<span className="blacklist-date">{blacklist.to_date}</span>
-						</li>
-					</ul>
-				))}</div>
+				<h6 className="blocked-users">
+					Blockerade användare i den här gruppen:
+				</h6>
+				<div className="blacklist-list">
+					{usersBlacklist.map((blacklist) => (
+						<ul className="blacklist-ul" key={blacklist.id}>
+							<li className="blacklist-members">
+								<button onClick={() => unlockMember(blacklist.id)}>
+									Aktivera
+								</button>
+								<span className="blacklist-user">{blacklist.username} - </span>
+								<span className="blacklist-date">{blacklist.to_date}</span>
+							</li>
+						</ul>
+					))}
+				</div>
 			</div>
 		);
 	} else {
-		div = (<div></div>);
+		div = <div></div>;
 	}
 	return div;
 }
@@ -340,7 +404,8 @@ function ShowThread(
 	clickedThread,
 	loggedInUser,
 	fetchThreads,
-	isAdmin
+	isAdmin,
+	returnToGroup
 ) {
 	if (clickedThread === 0) {
 		return (
@@ -356,13 +421,16 @@ function ShowThread(
 		);
 	} else {
 		return (
-			<ThreadPage
-				threadId={clickedThread}
-				loggedInUser={loggedInUser}
-				showCommentButton={true}
-				fetchThreads={fetchThreads}
-				isAdmin={isAdmin}
-			/>
+			<>
+				<button className="group-back-button" onClick={() => returnToGroup()}>Tillbaka</button>
+				<ThreadPage
+					threadId={clickedThread}
+					loggedInUser={loggedInUser}
+					showCommentButton={true}
+					fetchThreads={fetchThreads}
+					isAdmin={isAdmin}
+				/>
+			</>
 		);
 	}
 }

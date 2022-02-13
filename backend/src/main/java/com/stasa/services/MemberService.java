@@ -62,6 +62,7 @@ public class MemberService {
 
     //Update från user till moderator och vice-versa
     public String updateMemberRole(Member member) {
+        System.out.println(member);
         String response = null;
         long userId = member.getUser().getId();
         long groupId = member.getGroup().getId();
@@ -125,8 +126,14 @@ public class MemberService {
          memberRepo.deleteById(groupId,userId);
     }
 
-    public void deleteByMemberId(int id) {
-        memberRepo.deleteByMemberId(id);
+    public String deleteByMemberId(int id) {
+        try {
+            memberRepo.deleteByMemberId(id);
+            return "Deleted user";
+        }catch(Exception e){
+            System.err.println(e);
+        }
+        return "Could not delete user";
     }
 
     public List<Member> getActiveData(long userId) {

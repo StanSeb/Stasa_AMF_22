@@ -1,5 +1,5 @@
 import React from "react";
-import axios from 'axios';
+import axios from "axios";
 import { ReportContext } from "../contexts/ReportContext";
 import { AuthContext } from "../contexts/AuthContext";
 import { Navigate } from "react-router-dom";
@@ -32,24 +32,31 @@ class UserDropdown extends React.Component {
 	handleClick(event) {
 		let buttonClicked = event.target.innerText;
 		console.log(buttonClicked + ", " + this.state.user.username);
-		console.log(this.state.user.user_id)
-		this.setState({ clickedProfile: true })
-
+		console.log(this.state.user.userId);
+		this.setState({ clickedProfile: true });
 	}
 
 	updateMemberRole() {
 		let member;
 		if (this.props.user.role == "MEMBER") {
 			member = {
-				user: { id: this.props.user.user_id },
+				user: { id: this.props.user.userId },
 				memberRole: { id: 3 }, // id av "moderator" i Tabellen member_roles i Databasen.
-				group: { id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1) },
+				group: {
+					id: window.location.href.substring(
+						window.location.href.lastIndexOf("/") + 1
+					),
+				},
 			};
 		} else if (this.props.user.role == "GROUPMODERATOR") {
 			member = {
-				user: { id: this.props.user.user_id },
+				user: { id: this.props.user.userId },
 				memberRole: { id: 4 }, // id av "member" i Tabellen member_roles i Databasen.
-				group: { id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1) },
+				group: {
+					id: window.location.href.substring(
+						window.location.href.lastIndexOf("/") + 1
+					),
+				},
 			};
 		}
 
@@ -57,68 +64,86 @@ class UserDropdown extends React.Component {
 			axios
 				.put("/rest/member/updateMemberRole", this.state.member)
 				.then((response) => {
-					alert(response.data)
+					alert(response.data);
 
 					this.props.fetchMembers();
-				})
+				});
 		});
 	}
 
 	sendMemberToBlacklist() {
-	
 		let member = {
 			user: { id: this.state.user.userId },
 			memberRole: { id: 4 },
-			group: { id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1) },
+			group: {
+				id: window.location.href.substring(
+					window.location.href.lastIndexOf("/") + 1
+				),
+			},
 		};
 		this.setState({ member }, () => {
 			axios
 				.post("/rest/member/userToBlacklist", this.state.member)
 				.then((response) => {
 					alert(response.data);
-					this.props.fetchMembers()
-					this.props.fetchBlackList()
-				})
+					this.props.fetchMembers();
+					this.props.fetchBlackList();
+				});
 		});
 	}
 
 	deleteMember() {
-		let id = this.state.user.id; //id = member id, alltså id från Member entitet
-		console.log("this.state.user.id", this.state.user.id)
-		axios.delete("/rest/member/deleteMember/" + id)
-			.then(
-				console.log("member with username", this.state.user.username, "deleted"))
+		let id = this.state.user.userId; //id = member id, alltså id från Member entitet
+		console.log("this.state.user.id", id);
+		console.log(this.state.user);
+		if (window.confirm("Är du säger på att du vill ta bort " + this.state.user.username)) {
+			axios
+				.delete("/rest/member/delete/" + this.state.user.groupId + "/" + id)
+				.then((response) => {
+					this.props.fetchMembers();
+				});
+		}
 	}
 
 	handleReport(showReportPopup) {
-		showReportPopup({ targetType: reportType, targetId: this.state.user.user_id });
+		showReportPopup({
+			targetType: reportType,
+			targetId: this.state.user.userId,
+		});
 	}
 
 	render() {
 		if (this.state.clickedProfile) {
-
-			return <Navigate to={"/profile/" + this.state.user.user_id} />
+			return <Navigate to={"/profile/" + this.state.user.userId} />;
 		} else {
-
-
 			return (
-				<ReportContext.Consumer>{(context => {
-					const { showReportPopup } = context;
-					const loggedInUser = this.context.loggedInUser;
-					return (
-						<div className="user-drop">
-							{CheckUser(this.props.user)}
-							<div className="user-drop-content">
-								{CheckYourrole(this.props.user, this.props.loggedInMember, this.updateMemberRole,
-									this.deleteMember, this.handleReport, this.handleClick, showReportPopup,
-									this.context.loggedInUser, this.props.isAdmin, this.sendMemberToBlacklist)}
+				<ReportContext.Consumer>
+					{(context) => {
+						const { showReportPopup } = context;
+						const loggedInUser = this.context.loggedInUser;
+						return (
+							<div className="user-drop">
+								{CheckUser(this.props.user)}
+								<div className="user-drop-content">
+									{CheckYourrole(
+										this.props.user,
+										this.props.loggedInMember,
+										this.updateMemberRole,
+										this.deleteMember,
+										this.handleReport,
+										this.handleClick,
+										showReportPopup,
+										this.context.loggedInUser,
+										this.props.isAdmin,
+										this.sendMemberToBlacklist
+									)}
+								</div>
 							</div>
-						</div>
-					);
-				})}
+						);
+					}}
 				</ReportContext.Consumer>
 			);
-		}//test bracket
+		} //test bracket
 	}
 }
 
@@ -143,37 +168,24 @@ function CheckUser(props) {
 	return button;
 }
 
-function CheckYourrole(user, loggedInMember /*<- detta är en member, inte en user.*/, updateMemberRole,
-	deleteMember, handleReport, handleClick, showReportPopup, realLoggedInUser, isAdmin, sendMemberToBlacklist) {
+function CheckYourrole(
+	user,
+	loggedInMember /*<- detta är en member, inte en user.*/,
+	updateMemberRole,
+	deleteMember,
+	handleReport,
+	handleClick,
+	showReportPopup,
+	realLoggedInUser,
+	isAdmin,
+	sendMemberToBlacklist
+) {
 	let dropdownOptions;
 	if (
-		isAdmin || loggedInMember.role === "GROUPADMIN" && user.role !== "GROUPADMIN" && user.role !== "GROUPMODERATOR"
-	) {
-		dropdownOptions = (
-			<>
-				<button
-					href={"/user/profile/" + user.id}
-					onClick={(e) => handleClick(e)}>
-					Go to profile
-				</button>
-
-				<button
-					onClick={() => updateMemberRole()}>
-					Make moderator
-				</button>
-
-				<button
-					onClick={() => deleteMember()}>
-					Remove from group
-				</button>
-				<button onClick={() => sendMemberToBlacklist()}>
-					Blacklist
-				</button>
-				{ReportButton(realLoggedInUser, handleReport, showReportPopup, user)}
-			</>
-		);
-	} else if (
-		loggedInMember.role === "GROUPADMIN" && user.role === "GROUPMODERATOR"
+		isAdmin ||
+		(loggedInMember.role === "GROUPADMIN" &&
+			user.role !== "GROUPADMIN" &&
+			user.role !== "GROUPMODERATOR")
 	) {
 		dropdownOptions = (
 			<>
@@ -183,19 +195,29 @@ function CheckYourrole(user, loggedInMember /*<- detta är en member, inte en us
 				>
 					Go to profile
 				</button>
+
+				<button onClick={() => updateMemberRole()}>Make moderator</button>
+
+				<button onClick={() => deleteMember()}>Remove from group</button>
+				<button onClick={() => sendMemberToBlacklist()}>Blacklist</button>
+				{ReportButton(realLoggedInUser, handleReport, showReportPopup, user)}
+			</>
+		);
+	} else if (
+		loggedInMember.role === "GROUPADMIN" &&
+		user.role === "GROUPMODERATOR"
+	) {
+		dropdownOptions = (
+			<>
 				<button
-					onClick={() => updateMemberRole()}
+					href={"/user/profile/" + user.id}
+					onClick={(e) => handleClick(e)}
 				>
-					Remove Moderator
+					Go to profile
 				</button>
-				<button
-					onClick={() => deleteMember()}
-				>
-					Remove from group
-				</button>
-				<button onClick={() => sendMemberToBlacklist()}>
-					Blacklist
-				</button>
+				<button onClick={() => updateMemberRole()}>Remove Moderator</button>
+				<button onClick={() => deleteMember()}>Remove from group</button>
+				<button onClick={() => sendMemberToBlacklist()}>Blacklist</button>
 				{ReportButton(realLoggedInUser, handleReport, showReportPopup, user)}
 			</>
 		);
@@ -212,15 +234,8 @@ function CheckYourrole(user, loggedInMember /*<- detta är en member, inte en us
 				>
 					Go to profile
 				</button>
-				<button
-
-					onClick={() => deleteMember()}
-				>
-					Remove from group
-				</button>
-				<button onClick={() => sendMemberToBlacklist()}>
-					Blacklist
-				</button>
+				<button onClick={() => deleteMember()}>Remove from group</button>
+				<button onClick={() => sendMemberToBlacklist()}>Blacklist</button>
 				{ReportButton(realLoggedInUser, handleReport, showReportPopup, user)}
 			</>
 		);
@@ -240,19 +255,21 @@ function CheckYourrole(user, loggedInMember /*<- detta är en member, inte en us
 	return dropdownOptions;
 }
 
-function ReportButton(realLoggedInUser, handleReport, showReportPopup, targetMember) {
-
+function ReportButton(
+	realLoggedInUser,
+	handleReport,
+	showReportPopup,
+	targetMember
+) {
 	if (realLoggedInUser == null) {
 		return;
 	}
 
-	let isTargetLoggedInUser = realLoggedInUser.id === targetMember.user_id;
+	let isTargetLoggedInUser = realLoggedInUser.id === targetMember.userId;
 
 	if (realLoggedInUser !== null && !isTargetLoggedInUser) {
 		return (
-			<button onClick={(e) => handleReport(showReportPopup)}>
-				Report
-			</button>
+			<button onClick={(e) => handleReport(showReportPopup)}>Report</button>
 		);
 	}
 }
