@@ -26,6 +26,7 @@ class GroupPage extends React.Component {
 			toggleNewThread: false,
 			isAdmin: false,
 			isBlacklisted: true,
+			isMember: true,
 			reload: false,
 		};
 		this.handleThreadClick = this.handleThreadClick.bind(this);
@@ -151,6 +152,7 @@ class GroupPage extends React.Component {
 						this.setState({
 							members: secondResponse.data,
 							threads: thirdResponse.data,
+							isMember: false,
 						});
 					}
 				}
@@ -307,7 +309,7 @@ class GroupPage extends React.Component {
 						<button
 							className="group-new-thread"
 							style={{
-								display: this.state.isBlacklisted ? "none" : "block",
+								display: this.state.isMember ? "none" : "block",
 							}}
 							onClick={() => this.toggleNewThread(true)}
 						>
@@ -315,7 +317,7 @@ class GroupPage extends React.Component {
 						</button>
 						<div
 							style={{
-								display: this.state.isBlacklisted ? "none" : "block",
+								display: this.state.isMember ? "none" : "block",
 							}}
 						>
 							<ReportButton
