@@ -64,8 +64,8 @@ public class MemberController {
          memberService.deleteById(groupId,userId);
     }
     @DeleteMapping("/deleteMember/{Id}")
-    public void deleteByMemberId(@PathVariable int Id) {
-        memberService.deleteByMemberId(Id);
+    public String deleteByMemberId(@PathVariable int Id) {
+        return memberService.deleteByMemberId(Id);
     }
 
     @GetMapping("/getMemberByIdUserId/{userId}/{groupId}")

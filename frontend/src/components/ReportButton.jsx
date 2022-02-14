@@ -49,22 +49,24 @@ class ReportButton extends React.Component {
             // Don't show report button if user is not logged in.
             return null;
         }
+        const groupObject = this.props.targetObj;
+        if (typeof (groupObject) !== "undefined") {
 
-        // Target is a comment
-        if(targetType === 2) {
-            let messageObject = this.props.targetObj;
+            // Target is a comment
+            if (targetType === 2) {
+                let messageObject = this.props.targetObj;
 
-            // Don't show button if comment creator is logged in user.
-            if(messageObject.creatorId === loggedInUser.id) {
-                return null;
-            }
-        } else if(targetType === 3) {
-            // Target is a group.
-            const groupObject = this.props.targetObj;
+                // Don't show button if comment creator is logged in user.
+                if (messageObject.creatorId === loggedInUser.id) {
+                    return null;
+                }
+            } else if (targetType === 3) {
+                // Target is a group.
 
-            // Don't show button if logged in user is group owner.
-            if(groupObject.user_id === loggedInUser.id) {
-                return null;
+                // Don't show button if logged in user is group owner.
+                if (groupObject.user_id === loggedInUser.id) {
+                    return null;
+                }
             }
         }
 

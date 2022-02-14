@@ -58,9 +58,6 @@ public class GroupController {
     public List <Group> getAllActiveGroups(){
         return groupService.getAllActiveGroups();
     }
-
-
-
 }
 
 

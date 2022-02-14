@@ -49,5 +49,4 @@ public class ReportController {
     public List<Report> getRelevantReports(@PathVariable("user_id") long userId) throws Exception {
         return reportService.getRelevantReports(userId);
     }
-
 }

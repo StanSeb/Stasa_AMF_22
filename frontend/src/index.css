@@ -162,7 +162,7 @@ code {
 /*#region new-thread*/
 .new-thread {
 	width: 40vw;
-	height:30vh;
+	height:20vh;
 	display: flex;
 	flex-wrap: wrap;
 	border: 1px solid gray;
@@ -170,13 +170,13 @@ code {
 	background-color:rgb(240, 240, 240);
 	position:fixed;
 	left:30vw;
-	top:35vh;
+	top:40vh;
 }
 
 .new-thread-title {
 	resize: none;
 	width: 98%;
-	height: 1em;
+	height: 2em;
 	margin: 1%;
 }
 
@@ -190,6 +190,7 @@ code {
 .new-thread > label {
 	margin-left: 1%;
 }
+
 /*#endregion */
 
 /*#region user-dropdown*/
@@ -264,8 +265,6 @@ code {
 	overflow-y: auto;
 	overflow-x: hidden;
 	position: relative;
-
-
 }
 
 .blacklist-members {
@@ -397,6 +396,7 @@ code {
 	border: 1px solid gray;
 	background-color: rgba(100, 100, 100, 0.1);
 	width: 90%;
+	min-height: 5vh;
 	margin: 2px;
 	padding: 1em;
 	position: relative;

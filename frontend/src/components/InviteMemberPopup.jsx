@@ -29,7 +29,7 @@ function InviteMemberPopup(props) {
                 .then((response) => {
                     if (response.data !== '') {
                         //TODO: kolla om användaren redan har en invite
-                        axios.get("/rest/isInvited/" + props.groupId + "/" + response.data.id)
+                        axios.get("/rest/isInvited/" + props.groupId.id + "/" + response.data.id)
                             .then((res) => {
 
                                 //true
@@ -39,9 +39,9 @@ function InviteMemberPopup(props) {
                                 // false
                                 else {
                                     const inviteObj = {
-                                        fromMemberId: props.memberId,
+                                        fromMemberId: props.memberId.id,
                                         toUserId: response.data.id,
-                                        groupId: props.groupId
+                                        groupId: props.groupId.id
                                     }
 
                                     if (response.data.id !== "") {

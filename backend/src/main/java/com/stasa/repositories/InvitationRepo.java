@@ -14,7 +14,7 @@ public interface InvitationRepo extends JpaRepository<Invitation, Long> {
     @Query(value= "SELECT i.id, g.title, g.id AS groupId, u.username" +
             " FROM invitations i" +
             " INNER JOIN groups g ON g.id = i.group_id" +
-            " INNER JOIN users u ON u.id = g.user_id" +
+            " INNER JOIN users u ON u.id = (SELECT members.user_id FROM members WHERE members.id = i.from_member_id)" +
             " WHERE i.to_user_id = ?", nativeQuery = true )
     ArrayList<Map> getByUserId(long userId);
 
