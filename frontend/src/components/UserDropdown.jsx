@@ -4,7 +4,7 @@ import { ReportContext } from "../contexts/ReportContext";
 import { AuthContext } from "../contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 
-const reportType = 1; // user report type (in database)
+const reportType = 1; // member report type (in database)
 
 class UserDropdown extends React.Component {
 	static contextType = AuthContext;
@@ -39,15 +39,18 @@ class UserDropdown extends React.Component {
 
 	updateMemberRole() {
 		let member;
+		console.log("USERRRRRR: ", this.props.user);
 		if (this.props.user.role == "MEMBER") {
 			member = {
-				user: { id: this.props.user.user_id },
+				user: { id: this.props.user.userId },
 				memberRole: { id: 3 }, // id av "moderator" i Tabellen member_roles i Databasen.
 				group: { id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1) },
 			};
+			console.log("MEMBER: ", member);
 		} else if (this.props.user.role == "GROUPMODERATOR") {
+			console.log("GROUPMODERATOR");
 			member = {
-				user: { id: this.props.user.user_id },
+				user: { id: this.props.user.userId },
 				memberRole: { id: 4 }, // id av "member" i Tabellen member_roles i Databasen.
 				group: { id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1) },
 			};
@@ -91,20 +94,16 @@ class UserDropdown extends React.Component {
 	}
 
 	handleReport(showReportPopup) {
-		showReportPopup({ targetType: reportType, targetId: this.state.user.user_id });
+		showReportPopup({ targetType: reportType, targetId: this.props.user.id /* <-- member id */ });
 	}
 
 	render() {
 		if (this.state.clickedProfile) {
-
 			return <Navigate to={"/profile/" + this.state.user.user_id} />
 		} else {
-
-
 			return (
 				<ReportContext.Consumer>{(context => {
 					const { showReportPopup } = context;
-					const loggedInUser = this.context.loggedInUser;
 					return (
 						<div className="user-drop">
 							{CheckUser(this.props.user)}
@@ -143,7 +142,7 @@ function CheckUser(props) {
 	return button;
 }
 
-function CheckYourrole(user, loggedInMember /*<- detta är en member, inte en user.*/, updateMemberRole,
+function CheckYourrole(user, loggedInMember, updateMemberRole,
 	deleteMember, handleReport, handleClick, showReportPopup, realLoggedInUser, isAdmin, sendMemberToBlacklist) {
 	let dropdownOptions;
 	if (
@@ -243,6 +242,11 @@ function CheckYourrole(user, loggedInMember /*<- detta är en member, inte en us
 function ReportButton(realLoggedInUser, handleReport, showReportPopup, targetMember) {
 
 	if (realLoggedInUser == null) {
+		return;
+	}
+
+	// Don't show report button on yourself.
+	if(targetMember.userId === realLoggedInUser.id) {
 		return;
 	}
 

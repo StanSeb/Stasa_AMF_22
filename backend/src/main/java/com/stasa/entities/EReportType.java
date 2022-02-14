@@ -1,7 +1,7 @@
 package com.stasa.entities;
 
 public enum EReportType {
-    USER,
+    MEMBER,
     COMMENT,
     GROUP,
     THREAD

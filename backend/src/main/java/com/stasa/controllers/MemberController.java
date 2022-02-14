@@ -1,6 +1,7 @@
 package com.stasa.controllers;
 
 import com.stasa.entities.Member;
+import com.stasa.entities.User;
 import com.stasa.services.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -77,5 +78,10 @@ public class MemberController {
     @GetMapping("getActiveDataByUserId/{userId}")
     public List <Member> getActiveData(@PathVariable long userId){
         return memberService.getActiveData(userId);
+    }
+
+    @GetMapping("/{id}")
+    public Member getMemberById(@PathVariable long id) {
+        return memberService.getMemberById(id);
     }
 }

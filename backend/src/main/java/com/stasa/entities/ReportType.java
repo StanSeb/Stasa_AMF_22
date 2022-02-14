@@ -35,13 +35,13 @@ public class ReportType {
     }
 
     @JsonIgnore
-    public EReportType toEnum() throws Exception {
+    public EReportType toEnum() {
         return switch (id) {
-            case 1 -> EReportType.USER;
+            case 1 -> EReportType.MEMBER;
             case 2 -> EReportType.COMMENT;
             case 3 -> EReportType.GROUP;
             case 4 -> EReportType.THREAD;
-            default -> throw new Exception("ERROR");
+            default -> null;
         };
     }
 }

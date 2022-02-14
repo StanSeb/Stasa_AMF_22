@@ -45,4 +45,9 @@ public class ReportController {
         return reportService.getReportTypes();
     }
 
+    @GetMapping("/reports/relevant/{user_id}")
+    public List<Report> getRelevantReports(@PathVariable("user_id") long userId) throws Exception {
+        return reportService.getRelevantReports(userId);
+    }
+
 }

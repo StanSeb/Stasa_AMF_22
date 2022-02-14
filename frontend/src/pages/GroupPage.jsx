@@ -7,10 +7,13 @@ import InviteMemberPopup from "../components/InviteMemberPopup";
 import NewThread from "../components/NewThread";
 import ReportButton from "../components/ReportButton";
 import { Navigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 
 const targetType = 3;
 
 class GroupPage extends React.Component {
+	static contextType = AuthContext;
+
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -36,18 +39,61 @@ class GroupPage extends React.Component {
 		this.createMember = this.createMember.bind(this);
 		this.toggleInviteMember = this.toggleInviteMember.bind(this);
 		this.fetchMembers = this.fetchMembers.bind(this);
-		this.fetchBlackList=this.fetchBlackList.bind(this);
+		this.fetchBlackList = this.fetchBlackList.bind(this);
+		this.fetchAll = this.fetchAll.bind(this);
 	}
 
-	checkIfAdmin() {
-		if (typeof this.props.loggedInUser.id != "undefined") {
-			axios
-				.get("/rest/isAdmin/" + this.props.loggedInUser.id)
-				.then((response) => {
-					this.setState({ isAdmin: response.data });
-				});
+	async componentDidUpdate(prevProps) {
+		if(this.props.loggedInUser !== prevProps.loggedInUser) {
+			await this.fetchAll();
 		}
 	}
+
+	async componentDidMount() {
+		// Fetch all group stuff if user is already logged in. Otherwise do it in componentDidUpdate.
+		if(this.props.loggedInUser.id) {
+			await this.fetchAll();
+		}
+	}
+
+	async fetchAll() {
+		let groupId = window.location.href.substring(
+			window.location.href.lastIndexOf("/") + 1
+		);
+	
+		//Kör dessa först för att få rätt memberId när en bjuder in till gruppen
+		const [firstResponse, secondResponse, thirdResponse] = await Promise.all([
+			axios.get("/rest/groups/getGroupBy/" + groupId),
+			axios.get("/rest/member/memberByGroupId/" + groupId),
+			axios.get("/rest/threads/byGroup/" + groupId),
+		]);
+	
+		const fourthResponse = await axios.get(
+			"/rest/member/getMemberByIdUserId/" +
+			this.context.loggedInUser.id +
+			"/" +
+			firstResponse.data[0].id
+		);
+		
+		this.setState({
+			group: firstResponse.data[0],
+			members: secondResponse.data,
+			threads: thirdResponse.data,
+		}
+			, () => {
+				this.fetchBlackList()
+			});
+		this.setState((prevState) => {
+			let loggedInMember = prevState.loggedInMember;
+			if (typeof fourthResponse.data !== "undefined") {
+				loggedInMember = fourthResponse.data;
+				let usersBlacklist;
+	
+			}
+			return { loggedInMember };
+		});
+	}
+
 	fetchMembers() {
 		axios
 			.get("/rest/member/memberByGroupId/" + this.state.group.id)
@@ -90,45 +136,7 @@ class GroupPage extends React.Component {
 				})
 		}
 	}
-	async componentDidMount() {
-		this.checkIfAdmin();
 
-		let groupId = window.location.href.substring(
-			window.location.href.lastIndexOf("/") + 1
-		);
-
-		//Kör dessa först för att få rätt memberId när en bjuder in till gruppen
-		const [firstResponse, secondResponse, thirdResponse] = await Promise.all([
-			axios.get("/rest/groups/getGroupBy/" + groupId),
-			axios.get("/rest/member/memberByGroupId/" + groupId),
-			axios.get("/rest/threads/byGroup/" + groupId),
-		]);
-
-		const fourthResponse = await axios.get(
-			"/rest/member/getMemberByIdUserId/" +
-			this.state.loggedInUser.id +
-			"/" +
-			firstResponse.data[0].id
-		);
-
-		this.setState({
-			group: firstResponse.data[0],
-			members: secondResponse.data,
-			threads: thirdResponse.data,
-		}
-			, () => {
-				this.fetchBlackList()
-			});
-		this.setState((prevState) => {
-			let loggedInMember = prevState.loggedInMember;
-			if (typeof fourthResponse.data !== "undefined") {
-				loggedInMember = fourthResponse.data;
-				let usersBlacklist;
-
-			}
-			return { loggedInMember };
-		});
-	}
 	fetchBlackList(){
 		let groupId = window.location.href.substring(
 			window.location.href.lastIndexOf("/") + 1
@@ -147,6 +155,7 @@ class GroupPage extends React.Component {
 		let members = Object.values(props);
 		let membersList = [];
 		for (let i = 0; i < members.length; i++) {
+			console.log("MEMBER: ", members[i])
 			membersList.push(
 				<UserDropdown
 					user={members[i]}
@@ -199,6 +208,13 @@ class GroupPage extends React.Component {
 		if (this.state.reload) {
 			return <Navigate to="/home" />;
 		} else {
+
+			let group = this.state.group;
+			let reportButton = null;
+			if(group.user_id) {
+				reportButton = <ReportButton customText="Report this group" targetType={ targetType } targetId={ group.user_id } targetObj={ group } />
+			}
+
 			return (
 				<div className="group-page">
 					<div
@@ -272,7 +288,7 @@ class GroupPage extends React.Component {
 						>
 							Skapa nytt inlägg
 						</button>
-						<ReportButton customText="Report this group" targetType={ targetType } targetId={window.location.href.substring(window.location.href.lastIndexOf("/") + 1) } />
+						{ reportButton }
 					</div>
 				</div>
 			);

@@ -7,7 +7,7 @@ import { ReportContext } from "../contexts/ReportContext";
 Should use properties from context.
 */
 
-const TYPE_USER = 1;
+const TYPE_MEMBER = 1;
 const TYPE_COMMENT = 2;
 const TYPE_GROUP = 3;
 const TYPE_THREAD = 4;
@@ -47,8 +47,8 @@ class ReportPopup extends React.Component {
     this.clearData();
     e.preventDefault();
 
-    let targetType = this.context.targetType;
-    let targetId = this.context.targetId;
+    let targetType = this.context.reportPopup.targetType;
+    let targetId = this.context.reportPopup.targetId;
     let description = this.state.description;
     let loggedUserId = this.props.userObj.id;
 
@@ -80,7 +80,7 @@ class ReportPopup extends React.Component {
       })
       .then((response) => {
         this.setState({ success: { status: true, report: response.data } });
-        console.log("State: ", this.state);
+        this.context.fetchReports();
       });
   }
 
@@ -102,12 +102,12 @@ class ReportPopup extends React.Component {
   targetToString() {
     // Används för att få en "description" av target. 
     // Detta hamnar i högst upp i ReportPopup och säger exempelvis "Report User" om rapporten targetar en user.
-    let targetType = this.context.targetType;
+    let targetType = this.context.reportPopup.targetType;
     let typeName = this.targetTypeName(targetType);
     let propertyType;
 
     switch(targetType) {
-      case TYPE_USER:
+      case TYPE_MEMBER:
         propertyType = "name";
         break;
       case TYPE_GROUP:
@@ -139,7 +139,7 @@ class ReportPopup extends React.Component {
   }
 
   render() {
-    const { popupVisible } = this.context;
+    const { popupVisible } = this.context.reportPopup;
 
     let errorBox = null;
     let error = this.state.error;
