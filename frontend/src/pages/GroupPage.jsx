@@ -117,12 +117,15 @@ class GroupPage extends React.Component {
 			axios.get("/rest/threads/byGroup/" + groupId),
 		]);
 
+		this.setState({group: firstResponse.data[0]})
+
 		const fourthResponse = await axios.get(
 			"/rest/member/getMemberByIdUserId/" +
 				this.state.loggedInUser.id +
 				"/" +
 				firstResponse.data[0].id
 		);
+
 		this.setState(
 			(prevState) => {
 				this.fetchBlackList();
@@ -141,12 +144,12 @@ class GroupPage extends React.Component {
 						return false;
 					}
 				});
-				this.setState({ group: firstResponse.data[0], isBlacklisted });
+				this.setState({ isBlacklisted });
 
 				if (
 					typeof this.state.loggedInMember.role !== "undefined" &&
 					this.state.loggedInMember.role !== null &&
-					!isBlacklisted
+					!isBlacklisted || this.state.isAdmin
 				) {
 					{
 						this.setState({

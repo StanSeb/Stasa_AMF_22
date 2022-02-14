@@ -1,8 +1,8 @@
 import axios from "axios";
 import React from "react";
 import { Link } from "react-router-dom";
-import '../components/ReportPopup.scss';
-import ReportList from '../components/ReportList';
+import "../components/ReportPopup.scss";
+import ReportList from "../components/ReportList";
 
 class Profile extends React.Component {
 	constructor(props) {
@@ -12,7 +12,9 @@ class Profile extends React.Component {
 			userId: props.userObj.id,
 			invitations: [],
 			groups: [],
-			profileId: window.location.href.substring(window.location.href.lastIndexOf('/') + 1),
+			profileId: window.location.href.substring(
+				window.location.href.lastIndexOf("/") + 1
+			),
 			isAdmin: false,
 		};
 
@@ -20,51 +22,55 @@ class Profile extends React.Component {
 	}
 
 	async accept(groupId, invitationId) {
-
 		const memberObject = {
-			user: { id: this.state.userId, },
+			user: { id: this.state.userId },
 			memberRole: { id: 4 },
 			group: { id: groupId },
-		}
+		};
 
-		await axios.post("/rest/member/join", memberObject)
+		await axios.post("/rest/member/join", memberObject);
 
 		//DELETE: Ta bort invitation
-		await axios.delete("/rest/deleteInvitation/" + invitationId)
-			.then((response) => console.log(response.data))
+		await axios
+			.delete("/rest/deleteInvitation/" + invitationId)
+			.then((response) => console.log(response.data));
 
 		this.componentDidMount();
 	}
 
 	async deny(invitationId) {
 		//DELETE: Ta bort invitation
-		await axios.delete("/rest/deleteInvitation/" + invitationId)
-			.then((response) => console.log(response.data))
+		await axios
+			.delete("/rest/deleteInvitation/" + invitationId)
+			.then((response) => console.log(response.data));
 
 		this.componentDidMount();
 	}
 
 	checkIfSignedId(id) {
-
-		const profileID = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
+		const profileID = window.location.href.substring(
+			window.location.href.lastIndexOf("/") + 1
+		);
 
 		if (id == profileID || this.state.isAdmin) {
 			function terminateUserById() {
-				if(window.confirm("e du heeeeeeelt säker?"))
-				axios.put("/auth/terminateUser/" + profileID)
-					.then(response => {
-						alert(response.data)
-						fetch("/logout", {
-							headers: {
-								"Content-Type": "application/x-www-form-urlencoded",
-							},
-							mode: "no-cors",
+				if (window.confirm("e du heeeeeeelt säker?"))
+					axios
+						.put("/auth/terminateUser/" + profileID)
+						.then((response) => {
+							alert(response.data);
+							fetch("/logout", {
+								headers: {
+									"Content-Type": "application/x-www-form-urlencoded",
+								},
+								mode: "no-cors",
+							});
+							window.location.assign("http://localhost:3000/");
+						})
+						.catch((error) => {
+							console.log(error);
 						});
-						window.location.assign("http://localhost:3000/");
-					}).catch((error) => {
-						console.log(error)
-					})
-				}
+			}
 			return <button onClick={terminateUserById}>Stäng av kontot</button>;
 		}
 		return <></>;
@@ -81,8 +87,8 @@ class Profile extends React.Component {
 	}
 
 	componentDidMount() {
-		this.checkIfAdmin()
-		this.fetchGroups()
+		this.checkIfAdmin();
+		this.fetchGroups();
 	}
 
 	fetchGroups() {
@@ -93,36 +99,31 @@ class Profile extends React.Component {
 				this.setState({ groups: data });
 			});
 
-		axios.get("/rest/invitations/" + this.state.userId)
-			.then((response) => {
-				this.setState({ invitations: response.data })
-			}
-			);
+		axios.get("/rest/invitations/" + this.state.userId).then((response) => {
+			this.setState({ invitations: response.data });
+		});
 	}
 
-
-
-
 	checkIfAdmin() {
-		if (typeof (this.props.userObj.id) != "undefined") {
-			axios.get("/rest/isAdmin/" + this.props.userObj.id)
-				.then(response => {
-					this.setState({ isAdmin: response.data });
-				})
+		if (typeof this.props.userObj.id != "undefined") {
+			axios.get("/rest/isAdmin/" + this.props.userObj.id).then((response) => {
+				this.setState({ isAdmin: response.data });
+			});
 		}
 	}
 
 	render() {
-
-		const data = this.state.invitations
-		const listItems = data.map((d) => <li key={d.id}>
-			<h4>Inbjuden av: {d.username} </h4>
-			<p>Grupp: {d.title}
-
-				<button onClick={() => this.accept(d.groupId, d.id)}>Godkänn</button>
-				<button onClick={() => this.deny(d.id)}>Neka</button>
-			</p>
-		</li>);
+		const data = this.state.invitations;
+		const listItems = data.map((d) => (
+			<li key={d.id}>
+				<h4>Inbjuden av: {d.username} </h4>
+				<p>
+					Grupp: {d.title}
+					<button onClick={() => this.accept(d.groupId, d.id)}>Godkänn</button>
+					<button onClick={() => this.deny(d.id)}>Neka</button>
+				</p>
+			</li>
+		));
 
 		return (
 			<div className="profileContainer">
@@ -133,13 +134,21 @@ class Profile extends React.Component {
 				{this.checkIfSignedId(this.state.userId)}
 				<button onClick={this.logOut}>Logga ut</button>
 
+				<div>{listItems}</div>
 
-				<div>
-					{listItems}
+				{RenderGroups(
+					this.state.groups,
+					this.state.userObj.id,
+					this.fetchGroups,
+					this.state.profileId,
+					this.state.isAdmin
+				)}
+				<div 
+							style={{
+								display: this.state.isAdmin ? "block" : "none",
+							}}>
+					<ReportList />
 				</div>
-
-				{RenderGroups(this.state.groups, this.state.userObj.id, this.fetchGroups, this.state.profileId, this.state.isAdmin)}
-				<ReportList />
 			</div>
 		);
 	}
@@ -147,29 +156,36 @@ class Profile extends React.Component {
 
 function RenderGroups(groups, user_id, fetchGroups, profileId, isAdmin) {
 	if (typeof groups !== "undefined") {
-
 		let groupsValues = Object.values(groups);
 
 		let groupList = [];
 		for (let i = 0; i < groupsValues.length; i++) {
 			groupList.push(
 				<div key={i} className="profile-groups-list">
-					<div><Link to={`/group/${groupsValues[i].group.id}`}><span>{groupsValues[i].group.title}</span></Link> <br />
+					<div>
+						<Link to={`/group/${groupsValues[i].group.id}`}>
+							<span>{groupsValues[i].group.title}</span>
+						</Link>{" "}
+						<br />
 						Description: <span>{groupsValues[i].group.description}</span> <br />
 						Role: <span>{groupsValues[i].memberRole.title}</span> <br />
 					</div>
-					{checkIfAdmin(groupsValues[i].memberRole.title, groupsValues[i].group, user_id, fetchGroups, profileId, isAdmin)}
-					<div className="profile-group-buttons">
-					</div>
+					{checkIfAdmin(
+						groupsValues[i].memberRole.title,
+						groupsValues[i].group,
+						user_id,
+						fetchGroups,
+						profileId,
+						isAdmin
+					)}
+					<div className="profile-group-buttons"></div>
 				</div>
 			);
-			
 		}
 		return groupList;
 	}
 }
 function checkIfAdmin(role, group, userId, fetchGroups, profileId, isAdmin) {
-
 	if (userId == profileId || isAdmin) {
 		function leaveGroup(key) {
 			if (
@@ -221,4 +237,4 @@ function checkIfAdmin(role, group, userId, fetchGroups, profileId, isAdmin) {
 	}
 }
 
-export default Profile
+export default Profile;
