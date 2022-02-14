@@ -21,6 +21,42 @@ code {
 		monospace;
 }
 
+/*#region Homepage*/
+.homepage-container {
+	width: 80%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.homepage-title {
+	border-bottom: 1px solid rgb(201, 201, 201);
+}
+
+.homepage-container>ul {
+	margin-top: 3em;
+	padding: 0;
+}
+
+.homepage-container>ul>li {
+	list-style: none;
+	padding: 15px;
+}
+
+.homepage-container>ul>li>a {
+	color: black;
+	font-weight: bold;
+}
+
+.homepage-container>ul>li>a:hover {
+	color: grey;
+}
+
+.homepage-container>ul>li:nth-child(odd) {
+	background-color: rgb(240, 240, 240);
+}
+
+/*endregion*/
+
 /*#region Navbar*/
 .containerNavbar {
 	width: 100vw;
