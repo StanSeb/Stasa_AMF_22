@@ -148,8 +148,8 @@ public class ReportService {
         }
 
         for(Report report : allReports) {
-            var targetType = report.getTargetType().toEnum();
-            var targetId = report.getTargetId();
+            EReportType targetType = report.getTargetType().toEnum();
+            long targetId = report.getTargetId();
 
             boolean authorized = switch (targetType) {
                 case MEMBER -> isUserAuthorizedToHandleMemberReport(loggedInUser, targetId);
@@ -166,7 +166,7 @@ public class ReportService {
         return relevantReports;
     }
 
-    private boolean isUserAuthorizedToHandleCommentReport(User loggedInUser, Integer targetId) {
+    private boolean isUserAuthorizedToHandleCommentReport(User loggedInUser, long targetId) {
         // 1. get comment thread
         // 2. get thread group
         // 3. check if loggedInUser is member of thread group
@@ -221,11 +221,12 @@ public class ReportService {
         return userService.isAdmin(user.getId());
     }
 
-    private boolean isUserAuthorizedToHandleThreadReport(User loggedInUser, Integer targetId) {
+    private boolean isUserAuthorizedToHandleThreadReport(User loggedInUser, long targetId) {
         // User is authorized if he/she is a member in the group
         // with the provided ID and is ADMIN or has an authorized role.
 
-        var thread = threadRepo.findById(targetId);
+        var thread = threadRepo.findById(targetId).orElse(null);
+        if(thread == null) return false;
         var threadGroup = groupRepo.findById(thread.getGroupId());
 
         var userAsMember = getUserAsMember(loggedInUser, threadGroup);

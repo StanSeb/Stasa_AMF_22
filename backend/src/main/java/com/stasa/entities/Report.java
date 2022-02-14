@@ -32,7 +32,7 @@ public class Report {
     private ReportType targetType;
 
     @Column(name = "target_id", nullable = false)
-    private Integer targetId;
+    private Long targetId;
 
     @Column(name = "description", nullable = false, length = 500)
     private String description;
