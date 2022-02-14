@@ -38,7 +38,7 @@ class UserDropdown extends React.Component {
 
 	updateMemberRole() {
 		let member;
-		console.log("USERRRRRR: ", this.props.user);
+		// console.log("USERRRRRR: ", this.props.user);
 		if (this.props.user.role == "MEMBER") {
 			member = {
 				user: { id: this.props.user.userId },
@@ -49,9 +49,9 @@ class UserDropdown extends React.Component {
 					),
 				},
 			};
-			console.log("MEMBER: ", member);
+			// console.log("MEMBER: ", member);
 		} else if (this.props.user.role == "GROUPMODERATOR") {
-			console.log("GROUPMODERATOR");
+			// console.log("GROUPMODERATOR");
 			member = {
 				user: { id: this.props.user.userId },
 				memberRole: { id: 4 }, // id av "member" i Tabellen member_roles i Databasen.
@@ -76,7 +76,7 @@ class UserDropdown extends React.Component {
 
 	sendMemberToBlacklist() {
 		let member = {
-			user: { id: this.state.user.userId },
+			user: { id: this.props.user.userId },
 			memberRole: { id: 4 },
 			group: {
 				id: window.location.href.substring(
@@ -114,7 +114,7 @@ class UserDropdown extends React.Component {
 
 	render() {
 		if (this.state.clickedProfile) {
-			return <Navigate to={"/profile/" + this.state.user.user_id} />
+			return <Navigate to={"/profile/" + this.props.user.userId} />
 		} else {
 			return (
 				<ReportContext.Consumer>
@@ -181,6 +181,7 @@ function CheckYourrole(
 	sendMemberToBlacklist
 ) {
 	let dropdownOptions;
+	const userId = user.userId;
 	if (
 		isAdmin ||
 		(loggedInMember.role === "GROUPADMIN" &&
@@ -190,7 +191,7 @@ function CheckYourrole(
 		dropdownOptions = (
 			<>
 				<button
-					href={"/user/profile/" + user.id}
+					href={"/user/profile/" + userId}
 					onClick={(e) => handleClick(e)}
 				>
 					Go to profile
@@ -210,7 +211,7 @@ function CheckYourrole(
 		dropdownOptions = (
 			<>
 				<button
-					href={"/user/profile/" + user.id}
+					href={"/user/profile/" + userId}
 					onClick={(e) => handleClick(e)}
 				>
 					Go to profile
@@ -229,7 +230,7 @@ function CheckYourrole(
 		dropdownOptions = (
 			<>
 				<button
-					href={"/user/profile/" + user.id}
+					href={"/user/profile/" + userId}
 					onClick={(e) => handleClick(e)}
 				>
 					Go to profile
@@ -243,7 +244,7 @@ function CheckYourrole(
 		dropdownOptions = (
 			<>
 				<button
-					href={"/user/profile/" + user.id}
+					href={"/user/profile/" + userId}
 					onClick={(e) => handleClick(e)}
 				>
 					Go to profile

@@ -54,7 +54,6 @@ class GroupPage extends React.Component {
 
 	async componentDidMount() {
 		// Fetch all group stuff if user is already logged in. Otherwise do it in componentDidUpdate.
-		await this.fetchAll();
 		if (this.props.loggedInUser.id) {
 			await this.fetchAll();
 		}
@@ -76,7 +75,7 @@ class GroupPage extends React.Component {
 
 		const fourthResponse = await axios.get(
 			"/rest/member/getMemberByIdUserId/" +
-				this.state.loggedInUser.id +
+				this.props.loggedInUser.id +
 				"/" +
 				firstResponse.data[0].id
 		);
