@@ -43,8 +43,6 @@ class ReportContextProvider extends Component {
         const loggedInUser = this.context.loggedInUser;
         if(!loggedInUser) return;
 
-        console.log("Logged in user: " , loggedInUser);
-
         axios.get(`/reports/relevant/${loggedInUser.id}`)
             .then((response) => {
                 this.setState({ reports: response.data});
@@ -54,7 +52,6 @@ class ReportContextProvider extends Component {
     componentDidUpdate() {
         if(this.state.reportsFetched === false) {
             if(this.context.loggedInUser) {
-                console.log("123 LOGGED IN USER IS: ", this.context.loggedInUser);
                 this.setState({ reportsFetched: true });
                 this.fetchReports();
             }
